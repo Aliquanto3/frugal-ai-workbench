@@ -13,11 +13,11 @@ import json
 
 import pytest
 
-from wavelocalai.models.anthropic import AnthropicChatModel
-from wavelocalai.models.mistral import MistralChatModel
-from wavelocalai.models.ollama import OllamaChatModel
-from wavelocalai.models.openai_compat import OpenAICompatChatModel
-from wavelocalai.models.port import (
+from frugal_ai_workbench.models.anthropic import AnthropicChatModel
+from frugal_ai_workbench.models.mistral import MistralChatModel
+from frugal_ai_workbench.models.ollama import OllamaChatModel
+from frugal_ai_workbench.models.openai_compat import OpenAICompatChatModel
+from frugal_ai_workbench.models.port import (
     ChatMessage,
     ChatRequest,
     Done,
@@ -25,7 +25,7 @@ from wavelocalai.models.port import (
     TextDelta,
     ToolCall,
 )
-from wavelocalai.models.tool_format import ToolCallDeltas, parse_arguments
+from frugal_ai_workbench.models.tool_format import ToolCallDeltas, parse_arguments
 
 from ..fake_cloud import (
     FAKE_KEYS,

@@ -12,7 +12,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-STATIC = ROOT / "src" / "wavelocalai" / "web" / "static"
+STATIC = ROOT / "src" / "frugal_ai_workbench" / "web" / "static"
 TEXTS = STATIC / "i18n" / "fr"
 
 
@@ -30,7 +30,7 @@ def text_file_names() -> list[str]:
 def catalog() -> dict:
     """Le catalogue de textes entier, tel que le front le lit : les fichiers de `i18n/fr/` fusionnés,
     sans écrasement, plus les textes d'erreur générés depuis `errors.py` (source unique, C9)."""
-    from wavelocalai.errors import error_texts
+    from frugal_ai_workbench.errors import error_texts
 
     merged: dict = {}
     for path in sorted(TEXTS.glob("*.json")):

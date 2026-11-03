@@ -183,7 +183,7 @@ Versions lues sur PyPI le 2026-10-18 ; ne pas les figer sans installation réell
 | C. pydantic-ai (2.57.0, « Production/Stable », MIT) | Agents typés, outils, streaming, sortie structurée, multi-fournisseurs ; même famille que pydantic | Encore une abstraction ; le Crew reste à écrire ; vérifier les extras par fournisseur et le support Ollama | 2 à 3 jours |
 | D. LiteLLM (1.106.0) comme passerelle | Un seul format pour tous | Très gros, rythme de versions effréné, dépendances larges | Déconseillé |
 
-Recommandation : **B**. Le dépôt de référence fait déjà ainsi (`src/wavestack/tools/`, `models/openai_chat.py`, `models/anthropic_messages.py`). Les implémentations `_*_impl` de `agent_tools.py` sont déjà indépendantes de LangChain : seuls les décorateurs `@tool` (l. 670 et suivantes) disparaissent. Self-RAG (4 nœuds) devient une boucle bornée ; HyDE une fonction async.
+Recommandation : **B**. Le dépôt de référence fait déjà ainsi (`src/harness_lab/tools/`, `models/openai_chat.py`, `models/anthropic_messages.py`). Les implémentations `_*_impl` de `agent_tools.py` sont déjà indépendantes de LangChain : seuls les décorateurs `@tool` (l. 670 et suivantes) disparaissent. Self-RAG (4 nœuds) devient une boucle bornée ; HyDE une fonction async.
 Fonctionnalité visible conservée : agent seul, équipe multi-agents, outils, email validé par l'humain. Le schéma Graphviz de l'équipe passe côté front.
 
 ### 3.2 Base vectorielle : Chroma
@@ -228,7 +228,7 @@ Recommandation : **juge maison**, environ 250 lignes, 2 jours avec un jeu de cas
 | Réponse cloud | Formule EcoLogits recopiée à la main, calée sur l'ACV de Mistral Large 2 (`green_monitor.py:33-42`) | **ecologits** 0.11.3 (MPL-2.0) : `llm_impacts` par fournisseur et modèle, avec une fourchette. Vérifier la couverture de Groq |
 | Session | `GreenTracker` CodeCarbon, `measure_power_secs=1`, `atexit` (`green_monitor.py:272-283`) | Garder, dans un service unique, avec un seul fichier d'historique (corrige F6) |
 
-Recommandation : garder **CodeCarbon** (2 Mo, pycountry 22 Mo) pour le local, ajouter **ecologits** pour le cloud, sur le modèle de `wavestack/greenops.py` (imports paresseux, pas de réseau, une estimation qui échoue n'arrête jamais l'appel). Pas de perte visible ; le chiffre local devient enfin différent d'un modèle à l'autre.
+Recommandation : garder **CodeCarbon** (2 Mo, pycountry 22 Mo) pour le local, ajouter **ecologits** pour le cloud, sur le modèle de `harness_lab/greenops.py` (imports paresseux, pas de réseau, une estimation qui échoue n'arrête jamais l'appel). Pas de perte visible ; le chiffre local devient enfin différent d'un modèle à l'autre.
 
 ### 3.6 Autres briques
 
@@ -311,8 +311,8 @@ Générations en **SSE** plutôt qu'en WebSocket : flux unidirectionnel, reprise
 ### 5.2 Découpage
 
 ```
-src/wavelocalai/
-  config.py          # pydantic : wavelocalai.toml + .env, chargé une fois, sans effet de bord à l'import
+src/frugal_ai_workbench/
+  config.py          # pydantic : frugal-ai-workbench.toml + .env, chargé une fois, sans effet de bord à l'import
   errors.py          # erreurs typées → codes HTTP
   models/            # LLM
     port.py          # ChatModel : stream(messages, tools, format) -> événements
@@ -328,7 +328,7 @@ src/wavelocalai/
   store/             # SQLite unique : schéma, migrations
   web/
     app.py           # routes FastAPI
-    static/          # front web servi par le back (comme wavestack/web)
+    static/          # front web servi par le back (comme harness_lab/web)
 ```
 
 Règles : `web/` est le seul module qui connaît FastAPI ; les autres sont testables sans serveur. Imports lourds paresseux (`fastembed`, `codecarbon`).
@@ -351,7 +351,7 @@ Règles : `web/` est le seul module qui connaît FastAPI ; les autres sont testa
 | Jobs | `GET /api/jobs/{id}` (SSE de progression), `POST /api/jobs/{id}/cancel` | Pour ingestion, évaluation, équipe |
 | Fichiers produits | `GET /api/outputs/{name}` | Documents et graphiques des outils |
 
-### 5.4 Modèle de données (SQLite unique, `data/wavelocalai.db`)
+### 5.4 Modèle de données (SQLite unique, `data/frugal-ai-workbench.db`)
 
 | Table | Contenu |
 |---|---|
@@ -366,7 +366,7 @@ La table `runs` remplace le CSV d'émissions et l'historique dispersé (corrige 
 
 ### 5.5 Configuration
 
-- `wavelocalai.toml` versionné pour les valeurs par défaut (hôte Ollama, pays et PUE, tailles de découpe, modèle d'embedding, délais).
+- `frugal-ai-workbench.toml` versionné pour les valeurs par défaut (hôte Ollama, pays et PUE, tailles de découpe, modèle d'embedding, délais).
 - `.env` pour les secrets (clés API, SMTP) seulement.
 - Un objet `Settings` pydantic chargé au démarrage, injecté dans les services ; aucun `os.getenv` hors de `config.py`.
 - Hôte Ollama configurable partout (`OLLAMA_HOST`), écoute du serveur sur `127.0.0.1` par défaut (corrige F8).

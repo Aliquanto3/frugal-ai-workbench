@@ -9,9 +9,9 @@ import json
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.evaluation import prompts, scoring
-from wavelocalai.runs.eval_snapshot import (
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.evaluation import prompts, scoring
+from frugal_ai_workbench.runs.eval_snapshot import (
     METRICS,
     NOT_EVALUATED_STOPPED,
     aggregate,

@@ -7,11 +7,11 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.models.fake import fake_vector
-from wavelocalai.rag.index import NumpyIndex, SqliteVecIndex, VectorIndex, select_index
-from wavelocalai.store.db import Store, db_path
-from wavelocalai.store.migrate import discover
-from wavelocalai.store.vec import vec_table, vec_tables
+from frugal_ai_workbench.models.fake import fake_vector
+from frugal_ai_workbench.rag.index import NumpyIndex, SqliteVecIndex, VectorIndex, select_index
+from frugal_ai_workbench.store.db import Store, db_path
+from frugal_ai_workbench.store.migrate import discover
+from frugal_ai_workbench.store.vec import vec_table, vec_tables
 
 from ..conftest import needs_vec
 
@@ -116,7 +116,7 @@ def _search(store, index, text, k=4):
 def index_search(store, index, vector, k):
     conn = sqlite3.connect(store.path)
     try:
-        from wavelocalai.store.vec import load_vec
+        from frugal_ai_workbench.store.vec import load_vec
 
         load_vec(conn)
         return index.search(conn, vector, k)
@@ -180,7 +180,7 @@ def test_vectors_of_other_dimensions_do_not_mix(store, index):
     assert index_search(store, index, [1.0, 0.0], 10) == []  # dimension sans table
     conn = sqlite3.connect(store.path)
     try:
-        from wavelocalai.store.vec import load_vec
+        from frugal_ai_workbench.store.vec import load_vec
 
         load_vec(conn)
         assert index.count(conn) == 3 and index.count(conn, 16) == 2 and index.count(conn, 3) == 1

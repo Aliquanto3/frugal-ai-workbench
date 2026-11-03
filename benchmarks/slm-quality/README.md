@@ -2,7 +2,7 @@
 
 Instantané des résultats de benchmark publiés par le dépôt public
 [`Aliquanto3/slm-quality-bench`](https://github.com/Aliquanto3/slm-quality-bench),
-qui publie une release par campagne. wavelocalai ne produit plus de résultats de benchmark.
+qui publie une release par campagne. frugal-ai-workbench ne produit plus de résultats de benchmark.
 
 - `slm-quality-results.json` : l'asset de la dernière release, octets inchangés, validé contre le
   JSON Schema publié au même tag.

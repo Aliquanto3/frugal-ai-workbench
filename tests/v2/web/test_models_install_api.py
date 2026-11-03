@@ -12,12 +12,12 @@ from pathlib import Path
 import httpx
 import pytest
 
-from wavelocalai.hardware.memory import MemoryAdvisor, MemoryReading
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.store.db import Store, db_path
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor, MemoryReading
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.store.db import Store, db_path
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..pull_fake import GB, PullOllama, PullScript, download, layer, manifest, success
@@ -49,7 +49,7 @@ def reading(available_gb: float):
 async def install_app(tmp_path: Path, server: PullOllama, available_gb: float = 8.0):
     catalog = tmp_path / "catalog.json"
     catalog.write_text(json.dumps(CATALOG), encoding="utf-8")
-    config = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"})
+    config = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"})
     memory = reading(available_gb)
     registry = ModelRegistry(
         config,

@@ -10,9 +10,9 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.store import db as db_module
-from wavelocalai.store.db import DB_NAME, Store, db_path, utc_now_iso
-from wavelocalai.store.migrate import (
+from frugal_ai_workbench.store import db as db_module
+from frugal_ai_workbench.store.db import DB_NAME, Store, db_path, utc_now_iso
+from frugal_ai_workbench.store.migrate import (
     MIGRATIONS_DIR,
     DatabaseTooNewError,
     MigrationError,
@@ -56,7 +56,7 @@ def test_absent_database_is_created_with_the_hub_schema(tmp_path):
     assert not path.exists()
     store = Store.open(path)
     try:
-        assert path.name == DB_NAME == "wavelocalai.db"
+        assert path.name == DB_NAME == "frugal-ai-workbench.db"
         assert _tables(path) >= HUB_TABLES
         assert store.read("PRAGMA user_version")[0][0] == len(discover())
         assert not list(path.parent.glob("*.bak-*"))  # rien à sauvegarder sur une base neuve
@@ -141,7 +141,7 @@ def test_utc_now_iso_is_iso8601_with_z():
 
 
 def test_existing_database_is_backed_up_then_migrated(tmp_path):
-    path = tmp_path / "wavelocalai.db"
+    path = tmp_path / "frugal-ai-workbench.db"
     directory = _migrations_dir(tmp_path)
     assert migrate(path, directory) == 1
     conn = sqlite3.connect(path)
@@ -153,7 +153,7 @@ def test_existing_database_is_backed_up_then_migrated(tmp_path):
     assert migrate(path, directory) == 2
 
     bak = backup_path(path, 1)
-    assert bak.name == "wavelocalai.db.bak-1"
+    assert bak.name == "frugal-ai-workbench.db.bak-1"
     saved = sqlite3.connect(bak)
     try:
         assert saved.execute("PRAGMA user_version").fetchone()[0] == 1
@@ -167,7 +167,7 @@ def test_existing_database_is_backed_up_then_migrated(tmp_path):
 
 
 def test_failing_migration_is_rolled_back(tmp_path):
-    path = tmp_path / "wavelocalai.db"
+    path = tmp_path / "frugal-ai-workbench.db"
     directory = _migrations_dir(tmp_path)
     migrate(path, directory)
     (directory / "0002_bad.sql").write_text(
@@ -175,7 +175,7 @@ def test_failing_migration_is_rolled_back(tmp_path):
     )
     with pytest.raises(MigrationError, match="0002_bad.sql") as info:
         migrate(path, directory)
-    assert "wavelocalai.db.bak-1" in str(info.value)
+    assert "frugal-ai-workbench.db.bak-1" in str(info.value)
     conn = sqlite3.connect(path)
     try:
         assert conn.execute("PRAGMA user_version").fetchone()[0] == 1
@@ -225,7 +225,7 @@ def test_statement_splitter_keeps_triggers_and_comments_whole():
 def test_purge_is_checkpoint_vacuum_checkpoint_and_follows_the_commit_in_the_writer_queue(store):
     # AD-13 : après la transaction de `DELETE`, `wal_checkpoint(TRUNCATE)`, `VACUUM`, puis de
     # nouveau `wal_checkpoint(TRUNCATE)`, dans la même tâche de l'écrivain.
-    from wavelocalai.store.db import purge_free_space
+    from frugal_ai_workbench.store.db import purge_free_space
 
     assert store.write(lambda conn: conn.in_transaction, purge=True).result() is True
     assert store.write(lambda conn: conn.in_transaction).result() is True  # transaction ouverte
@@ -285,7 +285,7 @@ def test_a_purge_blocked_by_a_reader_is_reported_then_replayed(store):
 
 
 def test_a_failing_purge_does_not_undo_or_fail_the_committed_erase(store, monkeypatch):
-    import wavelocalai.store.db as db
+    import frugal_ai_workbench.store.db as db
 
     def broken(conn):
         raise sqlite3.OperationalError("disque plein")
@@ -315,28 +315,28 @@ def _copies(path: Path) -> list[str]:
 
 
 def test_only_the_last_copy_is_kept_and_the_previous_one_goes_after_the_next_migration(tmp_path):
-    path = tmp_path / "wavelocalai.db"
+    path = tmp_path / "frugal-ai-workbench.db"
     directory = _migrations_dir(tmp_path)
     migrate(path, directory)
     assert _copies(path) == []  # base neuve : rien à copier
     (directory / "0002_a.sql").write_text("CREATE TABLE a (n INTEGER);\n", encoding="utf-8")
     migrate(path, directory)
-    assert _copies(path) == ["wavelocalai.db.bak-1"]
+    assert _copies(path) == ["frugal-ai-workbench.db.bak-1"]
     (directory / "0003_b.sql").write_text("CREATE TABLE b (n INTEGER);\n", encoding="utf-8")
     migrate(path, directory)
-    assert _copies(path) == ["wavelocalai.db.bak-2"]  # celle de la migration 3 : une seule
+    assert _copies(path) == ["frugal-ai-workbench.db.bak-2"]  # celle de la migration 3 : une seule
     migrate(path, directory)  # rien à migrer : la copie reste, rien n'est supprimé
-    assert _copies(path) == ["wavelocalai.db.bak-2"]
+    assert _copies(path) == ["frugal-ai-workbench.db.bak-2"]
 
 
 def test_a_failed_migration_keeps_its_own_copy_for_the_recovery(tmp_path):
-    path = tmp_path / "wavelocalai.db"
+    path = tmp_path / "frugal-ai-workbench.db"
     directory = _migrations_dir(tmp_path, **{"0002_a.sql": "CREATE TABLE a (n INTEGER);\n"})
     migrate(path, directory)
     (directory / "0003_bad.sql").write_text("INSERT INTO absent VALUES (1);\n", encoding="utf-8")
     with pytest.raises(MigrationError):
         migrate(path, directory)
-    assert "wavelocalai.db.bak-2" in _copies(path)  # sa copie reste pour la reprise
+    assert "frugal-ai-workbench.db.bak-2" in _copies(path)  # sa copie reste pour la reprise
 
 
 def _database_with_a_copy_holding(tmp_path: Path, text: str) -> Path:

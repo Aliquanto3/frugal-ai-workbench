@@ -29,8 +29,13 @@ def github_issue_state(url: str) -> tuple[str, str] | None:
     owner, repo, _kind, number = m.groups()
     api = f"https://api.github.com/repos/{owner}/{repo}/issues/{number}"
     try:
-        req = urllib.request.Request(api, headers={"Accept": "application/vnd.github+json",
-                                                   "User-Agent": "wavelocalai-check-pending"})
+        req = urllib.request.Request(
+            api,
+            headers={
+                "Accept": "application/vnd.github+json",
+                "User-Agent": "frugal-ai-workbench-check-pending",
+            },
+        )
         with urllib.request.urlopen(req, timeout=15) as r:
             data = json.load(r)
         state = data.get("state", "?")
@@ -64,8 +69,11 @@ def main() -> int:
             result = github_issue_state(tracking)
             if result:
                 state, title = result
-                verdict = ("RÉSOLU — réessayez l'import" if state in ("closed", "merged")
-                           else "toujours ouvert")
+                verdict = (
+                    "RÉSOLU — réessayez l'import"
+                    if state in ("closed", "merged")
+                    else "toujours ouvert"
+                )
                 print(f"    État     : {state} ({verdict})")
                 print(f"               {title[:70]}")
                 ready += state in ("closed", "merged")

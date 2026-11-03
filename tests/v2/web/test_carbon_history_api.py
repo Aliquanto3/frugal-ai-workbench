@@ -9,7 +9,7 @@ import time
 import httpx
 import pytest
 
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, closed_port, make_settings
 from ..producers import produce_chat
@@ -172,7 +172,7 @@ async def test_reset_refuses_a_foreign_origin_and_leaves_the_session_alone(serve
 async def test_history_answers_under_300_ms_with_1000_runs_and_ollama_down(tmp_path):
     settings = make_settings(
         tmp_path,
-        environ={"WAVELOCALAI_TESTING": "1"},
+        environ={"FRUGAL_AI_TESTING": "1"},
         ollama={"host": f"http://127.0.0.1:{closed_port()}"},
     )
     app = create_app(settings)

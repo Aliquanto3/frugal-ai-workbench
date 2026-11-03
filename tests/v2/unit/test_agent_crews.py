@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.agents.crews import (
+from frugal_ai_workbench.agents.crews import (
     MAX_AGENTS,
     CrewAgent,
     CrewLibrary,
@@ -15,9 +15,9 @@ from wavelocalai.agents.crews import (
     load_crews,
     task_for,
 )
-from wavelocalai.agents.tools import AgentTool, ToolRegistry
-from wavelocalai.errors import AppError
-from wavelocalai.store.preferences import InMemoryPreferenceStore
+from frugal_ai_workbench.agents.tools import AgentTool, ToolRegistry
+from frugal_ai_workbench.errors import AppError
+from frugal_ai_workbench.store.preferences import InMemoryPreferenceStore
 
 REPO_FILE = Path(__file__).resolve().parents[3] / "config" / "agent_crews.json"
 
@@ -68,8 +68,8 @@ def fields(lib: CrewLibrary, agents, **kw) -> dict[str, str]:
 
 
 def test_the_versioned_file_holds_the_v1_crews_and_each_is_valid(tmp_path):
-    from wavelocalai.agents.tools import Workspace, build_registry
-    from wavelocalai.config import load_settings
+    from frugal_ai_workbench.agents.tools import Workspace, build_registry
+    from frugal_ai_workbench.config import load_settings
 
     settings = load_settings(
         toml_path=tmp_path / "x.toml", env_file=tmp_path / "x.env", environ={}, overrides={}
@@ -179,3 +179,22 @@ def test_an_unknown_crew_is_not_found(tmp_path):
         assert caught.value.code == "not_found"
     with pytest.raises(AppError):
         lib.save("zzz", [CrewAgent("A", "g")])
+
+
+def test_a_crew_stored_with_the_legacy_tool_id_still_runs(tmp_path):
+    """Équipe enregistrée avant le renommage (jusqu'à 2.0.0a8) avec `search_wavestone_internal` :
+    lue, validée et lancée sous `search_internal`."""
+
+    async def run(arguments):
+        return "ok"
+
+    registry = ToolRegistry([AgentTool("search_internal", "Cherche.", run)])
+    lib = library(tmp_path, registry=registry)
+    lib._preferences.put(
+        "agents.crews",
+        {"un": [{"role": "R", "goal": "g", "tools": ["search_wavestone_internal"]}]},
+    )
+    (agent,) = lib.effective_agents("un")
+    assert agent.tools == ("search_internal",)
+    assert fields(lib, [agent]) == {}
+    assert [t.id for t in registry.get(["search_wavestone_internal"])] == ["search_internal"]

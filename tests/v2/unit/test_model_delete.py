@@ -8,15 +8,15 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.errors import ERRORS
-from wavelocalai.models.defaults import AGENT_MIN_PARAMS_B, ModelDefaults, is_eligible
-from wavelocalai.models.facts import InMemoryFactsStore, facts_from_ollama
-from wavelocalai.models.facts_store import SqliteFactsStore
-from wavelocalai.models.ollama_api import OllamaUnavailableError
-from wavelocalai.models.ollama_delete import DeleteError, delete_model
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.store.db import Store, db_path
-from wavelocalai.store.preferences import InMemoryPreferenceStore
+from frugal_ai_workbench.errors import ERRORS
+from frugal_ai_workbench.models.defaults import AGENT_MIN_PARAMS_B, ModelDefaults, is_eligible
+from frugal_ai_workbench.models.facts import InMemoryFactsStore, facts_from_ollama
+from frugal_ai_workbench.models.facts_store import SqliteFactsStore
+from frugal_ai_workbench.models.ollama_api import OllamaUnavailableError
+from frugal_ai_workbench.models.ollama_delete import DeleteError, delete_model
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.store.db import Store, db_path
+from frugal_ai_workbench.store.preferences import InMemoryPreferenceStore
 
 from ..conftest import make_settings
 from .test_defaults import BIG, EMBED, MID, SMALL, FakeRegistry, info

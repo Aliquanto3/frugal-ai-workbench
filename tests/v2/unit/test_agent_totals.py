@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.runs.agent_totals import PARTIAL_REASON, agent_totals, duration_s, total_co2
+from frugal_ai_workbench.runs.agent_totals import (
+    PARTIAL_REASON,
+    agent_totals,
+    duration_s,
+    total_co2,
+)
 
 
 def leaf(mg, *, estimated=False, low=None, high=None):

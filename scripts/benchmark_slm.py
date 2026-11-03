@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-WaveLocalAI - Benchmark SLM Complet
+Frugal AI Workbench - Benchmark SLM Complet
 ===================================
 Script d'évaluation approfondie des Small Language Models (SLM) locaux et API.
 
@@ -11,7 +11,7 @@ Métriques mesurées :
 - Capacités fonctionnelles (tools, JSON, multilingue, raisonnement)
 - Robustesse du contexte (needle-in-haystack)
 
-Auteur: WaveLocalAI Team
+Auteur: Frugal AI Workbench Team
 Version: 2.0.0
 """
 
@@ -89,8 +89,7 @@ DEFAULT_RUNS = 1
 DEFAULT_COOLDOWN_TEMP_C = 65
 DEFAULT_COOLDOWN_MAX_S = 180
 # Valeurs de t de Student à 95 %, par degré de liberté (n-1).
-T95 = {1: 12.71, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 6: 2.447,
-       7: 2.365, 8: 2.306, 9: 2.262}
+T95 = {1: 12.71, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 6: 2.447, 7: 2.365, 8: 2.306, 9: 2.262}
 
 # Langues supportées pour les tests multilingues (Listes de synonymes acceptés)
 SUPPORTED_LANGUAGES = {
@@ -225,8 +224,10 @@ INSTRUCTION_TESTS = [
     {
         "id": "format_list",
         "prompt": "List exactly 3 colors. Format: one color per line, no numbers, no punctuation.",
-        "check": lambda r: len([ln for ln in r.strip().split("\n") if ln.strip()]) == 3
-        and not re.search(r"[\d.,;:]", r),
+        "check": lambda r: (
+            len([ln for ln in r.strip().split("\n") if ln.strip()]) == 3
+            and not re.search(r"[\d.,;:]", r)
+        ),
     },
     {
         "id": "format_uppercase",
@@ -257,16 +258,20 @@ INSTRUCTION_TESTS = [
         "id": "csv_constraints",
         "prompt": "Write exactly five even numbers between 10 and 30, separated by commas, on one line, in descending order. Write nothing else.",
         "check": lambda r: (
-            lambda nums: len(nums) == 5
-            and all(n % 2 == 0 and 10 <= n <= 30 for n in nums)
-            and nums == sorted(nums, reverse=True)
+            lambda nums: (
+                len(nums) == 5
+                and all(n % 2 == 0 and 10 <= n <= 30 for n in nums)
+                and nums == sorted(nums, reverse=True)
+            )
         )(_parse_int_list(r)),
     },
     {
         "id": "no_markdown",
         "prompt": "Explain gravity in exactly two sentences. Plain text only: no markdown, no bullet points, no headings.",
-        "check": lambda r: not re.search(r"(^|\n)\s*[-*#>]|\*\*", r)
-        and len([s for s in re.split(r"(?<=[.!?])\s+", r.strip()) if s.strip()]) == 2,
+        "check": lambda r: (
+            not re.search(r"(^|\n)\s*[-*#>]|\*\*", r)
+            and len([s for s in re.split(r"(?<=[.!?])\s+", r.strip()) if s.strip()]) == 2
+        ),
     },
 ]
 
@@ -965,11 +970,13 @@ class GpuPowerSampler:
         nvml = self._nvml
         while not self._stop.is_set():
             with contextlib.suppress(Exception):
-                self.samples.append((
-                    time.perf_counter(),
-                    nvml.nvmlDeviceGetPowerUsage(self._handle) / 1000,
-                    nvml.nvmlDeviceGetClockInfo(self._handle, nvml.NVML_CLOCK_SM),
-                ))
+                self.samples.append(
+                    (
+                        time.perf_counter(),
+                        nvml.nvmlDeviceGetPowerUsage(self._handle) / 1000,
+                        nvml.nvmlDeviceGetClockInfo(self._handle, nvml.NVML_CLOCK_SM),
+                    )
+                )
             self._stop.wait(self.interval_s)
 
     def __exit__(self, *exc) -> None:
@@ -993,8 +1000,13 @@ def wait_for_cooldown(target_c: float, max_wait_s: float) -> dict:
     """
     start_temp, start_clock = get_gpu_thermals()
     if not start_temp or start_temp <= target_c:
-        return {"waited_s": 0, "start_temp_c": start_temp, "end_temp_c": start_temp,
-                "clock_mhz": start_clock, "reached": True}
+        return {
+            "waited_s": 0,
+            "start_temp_c": start_temp,
+            "end_temp_c": start_temp,
+            "clock_mhz": start_clock,
+            "reached": True,
+        }
 
     begin = time.perf_counter()
     temp = start_temp
@@ -1004,8 +1016,13 @@ def wait_for_cooldown(target_c: float, max_wait_s: float) -> dict:
 
     waited = round(time.perf_counter() - begin, 1)
     _, clock = get_gpu_thermals()
-    return {"waited_s": waited, "start_temp_c": start_temp, "end_temp_c": temp,
-            "clock_mhz": clock, "reached": temp <= target_c}
+    return {
+        "waited_s": waited,
+        "start_temp_c": start_temp,
+        "end_temp_c": temp,
+        "clock_mhz": clock,
+        "reached": temp <= target_c,
+    }
 
 
 def dispersion(values: list[float], digits: int = 2) -> dict:
@@ -1023,7 +1040,7 @@ def dispersion(values: list[float], digits: int = 2) -> dict:
 
     mean = statistics.mean(values)
     sd = statistics.stdev(values)
-    half = T95.get(n - 1, 1.96) * sd / (n ** 0.5)
+    half = T95.get(n - 1, 1.96) * sd / (n**0.5)
     return {
         "n": n,
         "mean": round(mean, digits),
@@ -1165,7 +1182,7 @@ class ModelTester:
             # LOGGING: Entrée
             input_text = messages[-1].get("content", "")
             logger.info(
-                f"\n   📥 [INPUT] {self.model_tag}:\n{input_text[:300]}{'...' if len(input_text)>300 else ''}"
+                f"\n   📥 [INPUT] {self.model_tag}:\n{input_text[:300]}{'...' if len(input_text) > 300 else ''}"
             )
 
             kwargs = {"model": self.model_tag, "messages": messages}
@@ -1191,7 +1208,7 @@ class ModelTester:
             # LOGGING: Sortie
             log_content = content if content else (str(tool_calls) if tool_calls else "<Empty>")
             logger.info(
-                f"   📤 [OUTPUT] {self.model_tag}:\n{log_content[:300]}{'...' if len(log_content)>300 else ''}\n"
+                f"   📤 [OUTPUT] {self.model_tag}:\n{log_content[:300]}{'...' if len(log_content) > 300 else ''}\n"
             )
 
             return {
@@ -1213,7 +1230,7 @@ class ModelTester:
             # LOGGING: Entrée
             input_text = messages[-1].get("content", "")
             logger.info(
-                f"\n   📥 [API INPUT] {self.model_tag}:\n{input_text[:300]}{'...' if len(input_text)>300 else ''}"
+                f"\n   📥 [API INPUT] {self.model_tag}:\n{input_text[:300]}{'...' if len(input_text) > 300 else ''}"
             )
 
             kwargs = {"model": self.model_tag, "messages": messages}
@@ -1229,7 +1246,7 @@ class ModelTester:
             # LOGGING: Sortie
             log_content = content if content else (str(tool_calls) if tool_calls else "<Empty>")
             logger.info(
-                f"   📤 [API OUTPUT] {self.model_tag}:\n{log_content[:300]}{'...' if len(log_content)>300 else ''}\n"
+                f"   📤 [API OUTPUT] {self.model_tag}:\n{log_content[:300]}{'...' if len(log_content) > 300 else ''}\n"
             )
 
             return {
@@ -1518,7 +1535,7 @@ class ModelTester:
                 if expected_code in content:
                     found = True
 
-            pos_label = f"{int(pos*100)}%"
+            pos_label = f"{int(pos * 100)}%"
             if found:
                 success_count += 1
                 logger.debug(f"            Pos {pos_label}: ✅ Found")
@@ -2081,20 +2098,29 @@ def update_model_json(
         by_run.setdefault(r.get("run_id", 1), []).append(r)
     common_ctx = min(max(r.get("context_size", 0) for r in rows) for rows in by_run.values())
     per_run = [
-        max((r for r in rows if r.get("context_size", 0) <= common_ctx),
-            key=lambda x: x.get("context_size", 0))
+        max(
+            (r for r in rows if r.get("context_size", 0) <= common_ctx),
+            key=lambda x: x.get("context_size", 0),
+        )
         for rows in by_run.values()
     ]
 
     # Pour le débit, le palier doit en plus être mesurable dans chaque exécution.
-    speed_ctxs = set.intersection(*(
-        {r.get("context_size", 0) for r in rows if _speed_measurable(r)} for rows in by_run.values()
-    ))
+    speed_ctxs = set.intersection(
+        *(
+            {r.get("context_size", 0) for r in rows if _speed_measurable(r)}
+            for rows in by_run.values()
+        )
+    )
     speed_ctx = max(speed_ctxs) if speed_ctxs else None
-    speed_rows = [
-        next(r for r in rows if r.get("context_size", 0) == speed_ctx and _speed_measurable(r))
-        for rows in by_run.values()
-    ] if speed_ctx else []
+    speed_rows = (
+        [
+            next(r for r in rows if r.get("context_size", 0) == speed_ctx and _speed_measurable(r))
+            for rows in by_run.values()
+        ]
+        if speed_ctx
+        else []
+    )
     tps_stats = dispersion([r.get("tokens_per_second") for r in speed_rows])
     if tps_stats:
         tps_stats["ctx"] = speed_ctx
@@ -2103,14 +2129,19 @@ def update_model_json(
         "tokens_per_second": tps_stats,
         "reasoning": dispersion([r.get("reasoning_score", 0) for r in per_run], digits=3),
         "instruction_following": dispersion(
-            [r.get("instruction_following_score", 0) for r in per_run], digits=3),
+            [r.get("instruction_following_score", 0) for r in per_run], digits=3
+        ),
         "gpu_clock_mhz": dispersion([r.get("gpu_clock_mhz", 0) for r in per_run], digits=0),
         # Tous paliers entièrement sur GPU confondus : c'est là que le plafond
         # variable du portable se lit (débit « bimodal » d'une génération à l'autre).
-        "gpu_power_plateau_w": dispersion([
-            r["gpu_power_plateau_w"] for r in timed
-            if r.get("gpu_power_plateau_w") and r.get("gpu_offload_pct") == 100
-        ], digits=0),
+        "gpu_power_plateau_w": dispersion(
+            [
+                r["gpu_power_plateau_w"]
+                for r in timed
+                if r.get("gpu_power_plateau_w") and r.get("gpu_offload_pct") == 100
+            ],
+            digits=0,
+        ),
     }
     plateaus = runs_stats["gpu_power_plateau_w"]
     if plateaus.get("n", 0) > 1 and plateaus["max"] - plateaus["min"] > GPU_POWER_SPREAD_W:
@@ -2125,7 +2156,8 @@ def update_model_json(
     # reviendrait à publier un tirage au lieu de la tendance.
     reasoning_avg = runs_stats["reasoning"].get("mean", best.get("reasoning_score", 0))
     instruction_avg = runs_stats["instruction_following"].get(
-        "mean", best.get("instruction_following_score", 0))
+        "mean", best.get("instruction_following_score", 0)
+    )
 
     # 2. Calcul des nouvelles métriques intelligentes
     ux_rating = _get_ux_rating(avg_ttft)
@@ -2330,7 +2362,7 @@ def generate_markdown_report(db: dict):
 
     # --- CONSTRUCTION DU RAPPORT ---
     lines = [
-        "# 📊 WaveLocalAI - Rapport d'Aide à la Décision\n",
+        "# 📊 Frugal AI Workbench - Rapport d'Aide à la Décision\n",
         f"> **Date du rapport** : {datetime.now().strftime('%d/%m/%Y à %H:%M')}\n",
         f"> **Contexte** : {len(models_data)} modèles évalués sur {TOTAL_RAM_GB} GB RAM\n",
         "\n---\n",
@@ -2345,7 +2377,7 @@ def generate_markdown_report(db: dict):
             f"### 🧠 {title_perf} (Capacités cognitives)\n",
             f"{format_names(top_reasoning) if top_reasoning else 'N/A'}\n",
             (
-                f"- Score de raisonnement : **{best_reasoning_score*100:.0f}%**\n"
+                f"- Score de raisonnement : **{best_reasoning_score * 100:.0f}%**\n"
                 if top_reasoning
                 else ""
             ),
@@ -2372,7 +2404,7 @@ def generate_markdown_report(db: dict):
         [
             f"### 🌱 {title_eco} (RSE & Green IT)\n",
             f"{format_names(top_eco) if top_eco else 'N/A'}\n",
-            f"- Impact : **{best_eco_score*1000:.4f} gCO₂** / 1k tokens\n" if top_eco else "",
+            f"- Impact : **{best_eco_score * 1000:.4f} gCO₂** / 1k tokens\n" if top_eco else "",
             "- *Recommandé pour : Traitement de fond (batch), IoT, Usage massif.*\n\n",
         ]
     )
@@ -2390,7 +2422,7 @@ def generate_markdown_report(db: dict):
     for m in models_data:
         tools_icon = "✅" if m["tools"] else "❌"
         json_icon = "✅" if m["json"] else "❌"
-        reasoning_str = f"{m['reasoning']*100:.0f}%"
+        reasoning_str = f"{m['reasoning'] * 100:.0f}%"
 
         lines.append(
             f"| **{m['name'][:25]}** | {m['type']} | {m['size']} | {m['ux_rating']} | {reasoning_str} | {m['efficiency']} | {tools_icon} | {json_icon} |\n"
@@ -2408,7 +2440,7 @@ def generate_markdown_report(db: dict):
 
     for m in models_data:
         co2_g = m["co2"] * 1000
-        equiv = f"{co2_g/4:.2f} emails" if co2_g > 0 else "?"
+        equiv = f"{co2_g / 4:.2f} emails" if co2_g > 0 else "?"
         lines.append(f"| {m['name']} | {m['ctx']} tokens | **{co2_g:.4f} g** | {equiv} |\n")
 
     lines.extend(
@@ -2418,7 +2450,7 @@ def generate_markdown_report(db: dict):
             "- **UX Rating** : Basé sur le TTFT (Time To First Token). <300ms est imperceptible.\n",
             "- **Efficience RSE** : Ratio entre la qualité de réponse et le coût carbone.\n",
             "- **Méthodologie** : Tests réalisés en local via Ollama + CodeCarbon.\n",
-            "\n*Généré par WaveLocalAI v2.1*",
+            "\n*Généré par Frugal AI Workbench v2.1*",
         ]
     )
 
@@ -2429,7 +2461,7 @@ def generate_markdown_report(db: dict):
 # --- MAIN ---
 def main():
     parser = argparse.ArgumentParser(
-        description="🔬 WaveLocalAI - Benchmark SLM Complet",
+        description="🔬 Frugal AI Workbench - Benchmark SLM Complet",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemples d'utilisation:
@@ -2658,9 +2690,9 @@ Exemples d'utilisation:
 
     # Exécuter les benchmarks
     for i, (name, data) in enumerate(models_to_test, 1):
-        logger.info(f"\n{'='*60}")
+        logger.info(f"\n{'=' * 60}")
         logger.info(f"[{i}/{len(models_to_test)}] 🔬 {name}")
-        logger.info(f"{'='*60}")
+        logger.info(f"{'=' * 60}")
 
         try:
             all_results = []

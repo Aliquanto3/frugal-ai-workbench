@@ -8,10 +8,10 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-9.md'
 warnings: []
 deferred:
@@ -19,19 +19,19 @@ deferred:
       Écart nouveau, non couvert par les décisions du 2026-10-19 : variante conservatrice gardée. Le critère d'`epics.md` veut que `hardware/` calcule `fits` avec la RAM libre, **la VRAM (NVML)** et **une marge de contexte (cache KV)**. Livré : la RAM libre et la mémoire des modèles chargés (que le garde-fou de la 4.8 compte comme libre, Ollama les déchargeant à la demande), sur la même règle que le garde-fou (besoin × 1,1 + 0,5 Go). La VRAM n'entre pas dans `fits` : le garde-fou ne la lit pas, et un « Oui » du catalogue que le garde-fou refuserait au premier message serait une fausse promesse ; l'élargir aux deux demande de toucher au garde-fou (story 4.8, déjà relue). La marge de contexte n'est pas ajoutée à part : l'empreinte mesurée du catalogue (`measured_loaded_gb`, 23 modèles sur 31) l'est déjà au contexte de 16 384 (`measured_at_ctx`), et l'estimation par la taille du téléchargement garde le facteur 1,25 de la v1 ; une formule du cache KV exigerait couches, têtes et dimensions de `/api/show`, que `model_facts` ne garde pas (migration). À trancher : VRAM et KV dans `fits` et dans le garde-fou ensemble, ou rester sur la règle actuelle.
     evidence: |-
       `hardware/memory.py::MemoryAdvisor.assess` (`reclaimable_gb`), `models/registry.py::installable`, `tests/v2/web/test_models_install_api.py::test_a_loaded_model_counts_as_free_memory_like_the_guard_does`, `tests/v2/unit/test_pull.py`.
-    location: src/wavelocalai/hardware/memory.py
+    location: src/frugal_ai_workbench/hardware/memory.py
     severity: medium
   - summary: >-
       Choix de conception à confirmer, variante conservatrice dans chaque cas. (1) La colonne « Mémoire nécessaire » du catalogue montre `required_gb` (mémoire à avoir de libre, marge et réserve comprises : le chiffre de `ram_guard` et du sélecteur), pas l'empreinte brute `needed_gb` ; « Ne tient pas : 6,1 Go nécessaires, 4,8 Go libres » dit le même chiffre. (2) Un modèle chargé s'affiche « Oui » à « Tient en mémoire » (il est en mémoire : la RAM libre ne le compte plus) ; la règle est d'affichage, le chargé vient du flux système. (3) Nom accessible de « Installer » : « Installer <tag> » (le critère ne fixe que celui d'« Installer quand même », en tag aussi). (4) `wl-progress-bytes` n'est pas un composant partagé enregistré : c'est `screens/models-progress.js`, que la 5.5 (reranker) importe, avec son CSS dans `models.css` (aucune feuille de composant ajoutée, donc aucune ligne en commun avec la 5.1 dans `index.html`, `components/index.js` et les fixtures). (5) Pas de raccourci Échap pour annuler : « Annuler » est un bouton (la règle « Action longue » d'EXPERIENCE.md parle de `wl-run-status`, que cette ligne de tableau n'utilise pas). (6) Les tags distants (`…:cloud`, `…-cloud`) sont refusés par `POST /api/models/pull` (`403 cloud_not_allowed`) : « installer » un modèle distant n'est pas un téléchargement et ferait sortir les données du poste. (7) `#/modeles/<tag>` n'a plus de paramètre de chemin en attendant la fiche (5.6) : l'adresse renvoie à l'Accueil comme une route inconnue. (8) Le disque libre n'est pas contrôlé avant l'installation : Ollama refuse (cause `interrupted`, message technique replié). (9) `run_ended` d'un run `pull` interrompu par un redémarrage porte l'enveloppe `pull_failed` (cause `interrupted`), les autres genres gardent `error: null` : changement de `runs/repo.py::interrupt_orphans`.
     evidence: |-
       `screens/models-catalog.js`, `screens/models-installed.js`, `screens/models-progress.js`, `inference/pull.py::clean_tag`, `runs/repo.py::_interruption_error`, `tests/v2/e2e/test_models_install.py`, `tests/v2/web/test_models_install_api.py::test_a_pull_interrupted_by_a_restart_says_why_when_it_is_replayed`.
-    location: src/wavelocalai/web/static/screens/models.js
+    location: src/frugal_ai_workbench/web/static/screens/models.js
     severity: low
   - summary: >-
       Rien n'a été installé pour de vrai (aucun téléchargement, consigne du run) : l'installation d'un vrai modèle par le vrai Ollama reste à jouer par une personne (Flow 3). Le flux de `/api/pull` d'Ollama est celui que la documentation d'Ollama décrit (lignes `pulling manifest`, `pulling <empreinte>` avec `total` et `completed`, `verifying sha256 digest`, `writing manifest`, `success`, ou `{"error": …}`) ; le faux Ollama des tests le reproduit, pas le serveur réel. À vérifier à la recette : les couches déjà reçues sont reprises, et le texte d'erreur d'un nom inconnu contient « file does not exist » (c'est ce qui le range en `not_found`).
     evidence: |-
       `models/ollama_pull.py` (`NOT_FOUND_MARKERS`, `parse_line`), `tests/v2/pull_fake.py`.
-    location: src/wavelocalai/models/ollama_pull.py
+    location: src/frugal_ai_workbench/models/ollama_pull.py
     severity: medium
 ---
 

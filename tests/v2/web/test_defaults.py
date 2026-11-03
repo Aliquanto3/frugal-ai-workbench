@@ -8,11 +8,11 @@ import time
 import httpx
 from fastapi.testclient import TestClient
 
-from wavelocalai.hardware.memory import MemoryAdvisor, MemoryReading
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.store.preferences import InMemoryPreferenceStore
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor, MemoryReading
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.store.preferences import InMemoryPreferenceStore
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, closed_port, make_settings
 

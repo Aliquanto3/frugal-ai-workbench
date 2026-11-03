@@ -9,10 +9,10 @@ import asyncio
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.models.ollama import OllamaChatModel
-from wavelocalai.models.ollama_metrics import ollama_result
-from wavelocalai.models.port import (
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.models.ollama import OllamaChatModel
+from frugal_ai_workbench.models.ollama_metrics import ollama_result
+from frugal_ai_workbench.models.port import (
     ChatMessage,
     ChatModel,
     ChatRequest,

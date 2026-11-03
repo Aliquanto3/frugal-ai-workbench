@@ -8,9 +8,9 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-5-3.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-5-4.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-5-5.md'
@@ -20,13 +20,13 @@ deferred:
       Aucun résultat réel `qb.results/1` n'est synchronisé sur `master` (décision Q7 : la story part sans eux) : `benchmarks/slm-quality/` ne contient que son README, et la story n'y crée ni n'y édite rien (AGENTS.md). La lecture du format est faite contre le schéma publié par slm-quality-bench (`docs/schemas/qb.results-1.schema.json`, dépôt frère) et testée avec une fixture `tests/v2/fixtures/slm-quality-results.sample.json`, qui valide ce schéma (`jsonschema`). Variante conservatrice : sans résultat publié, la fiche dit « Références indisponibles » et ce qui manque ; `ModelInfo.accuracy` reste `null` (la règle du juge d'après la précision de la 1.6 ne s'active qu'avec un vrai fichier). À vérifier à la première synchro réelle : la jointure `(model, digest)` (empreinte complète d'Ollama contre empreinte du banc), le choix du poste « PC pro » et les unités (`*_mib`).
     evidence: |-
       `models/bench_results.py`, `tests/v2/unit/test_bench_results.py`, `tests/v2/web/test_model_card_api.py`, `tests/v2/e2e/test_models_card.py`.
-    location: src/wavelocalai/models/bench_results.py
+    location: src/frugal_ai_workbench/models/bench_results.py
     severity: medium
   - summary: >-
       Écarts non couverts par les décisions du 2026-10-19 : variante conservatrice gardée. (1) Lecture dans `models/bench_results.py`, pas dans `models/catalog.py` (AD-22 le nomme, mais `catalog.py` lit `config/models_catalog.json` et le banc sert aussi les stories 5.7 et 5.8) ; `BenchReferences` se relit à la modification du fichier (date et taille), dans un fil. (2) « Les trois postes de référence » : le fichier publie une liste `machines[]` ; la fiche en montre six au plus, le PC pro d'abord, et dit quand aucun poste de 16 Go sans GPU n'est publié. « PC pro » = aucune carte graphique et de 14 à 18 Gio de mémoire vive. (3) Plusieurs résultats pour un même poste : la piste `think_off`, puis le résultat complet, puis la campagne la plus récente. (4) `accuracy` = médiane de `quality.global.score` sur les mêmes poids (même empreinte) seulement : jamais le score d'une autre version (AD-22) ; un modèle « autre version » a ses débits affichés avec la mention, pas de précision. (5) Licence : `/api/show` la publie en texte intégral, que `model_facts` ne garde pas (une colonne et une relecture des lignes déjà en cache seraient nécessaires) ; la fiche lit un champ facultatif `license` du catalogue (absent aujourd'hui : « inconnu »). À reprendre avec une migration si la licence doit s'afficher pour tout modèle installé. (6) Bande passante mémoire : aucune source sur ce poste ; `bandwidth_gb_s` reste `null` et la phrase de « Pourquoi ce débit ? » dit qu'elle n'est pas mesurée, sans plafond théorique. La VRAM vient de la dernière lecture du GPU du flux système (`SystemSampler.last_gpu`), `null` avant la première lecture ou sans GPU. (7) Routeur : `core/router.js` gagne un `update(host, params)` facultatif d'un écran, pour qu'un changement de `#/modeles/<tag>` ne remonte pas l'écran (installation, listes et défauts gardés) ; sans lui, le comportement est celui d'avant. (8) Le bouton « Fiche du modèle » est posé par un observateur du document (`components/model-card-launcher.js`) à côté de chaque `wl-model-picker`, y compris ceux des Epics 6 et 7 : `wl-model-picker.js` n'a pas grandi, et un sélecteur peut s'en passer avec `data-no-card`. En mode `multi` (l'Arène), un bouton « Fiche : <nom> » par modèle choisi. Le panneau est flottant et non modal (aside étiqueté, Échap le ferme et rend le focus) ; il ne porte pas « Installer » : l'installation reste dans l'écran Modèles, auquel un lien mène. (9) Un modèle du catalogue : les mémoires viennent de la même estimation que `GET /api/models/catalog` (modèles chargés comptés comme libres) ; un modèle cloud a une fiche presque vide, sans « Pourquoi ce débit ? ».
     evidence: |-
       `models/card.py`, `models/registry.py::card_source`, `web/routes_models.py::model_card`, `components/model-card-*.js`, `screens/models-card.js`, `core/router.js`, `contrat-api.md` (« Modèles : fiche »).
-    location: src/wavelocalai/models/card.py
+    location: src/frugal_ai_workbench/models/card.py
     severity: low
 ---
 

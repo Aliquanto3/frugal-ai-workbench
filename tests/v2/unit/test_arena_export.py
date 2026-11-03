@@ -7,7 +7,7 @@ from __future__ import annotations
 import csv
 import io
 
-from wavelocalai.runs.arena_export import CSV_COLUMNS, export_document, to_csv, to_markdown
+from frugal_ai_workbench.runs.arena_export import CSV_COLUMNS, export_document, to_csv, to_markdown
 
 KEY = "sk-secret-0123456789abcdef"
 CO2_LOCAL = {
@@ -109,7 +109,7 @@ def document(**overrides):
 
 def test_the_document_has_per_model_results_and_the_proof_of_the_measure():
     doc = document()
-    assert doc["format"] == "wavelocalai.arena/1" and doc["app_version"] == "2.0.0a3"
+    assert doc["format"] == "frugal-ai-workbench.arena/1" and doc["app_version"] == "2.0.0a3"
     first, second = doc["models"]
     assert first["model"] == "qwen2.5:1.5b" and first["score"] == 64 and first["tps"] == 38.4
     assert first["tps_source"] == "ollama_eval" and first["digest"] == "sha256:abc123"
@@ -160,7 +160,7 @@ def test_a_text_that_would_start_a_formula_is_written_as_text_in_the_csv():
 def test_the_markdown_has_the_table_the_proof_and_the_definitions():
     text = to_markdown(document())
     for part in (
-        "# Comparaison wavelocalai",
+        "# Comparaison Frugal AI Workbench",
         "> Que pèse un nuage ?",
         "> Explique.",
         "| qwen2.5:1.5b | local | 64/100 |",

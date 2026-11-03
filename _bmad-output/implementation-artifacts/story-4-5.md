@@ -8,9 +8,9 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-4.md'
 warnings: []
 deferred:
@@ -24,37 +24,37 @@ deferred:
       Le pied de réponse montre le CO₂ de la feuille de génération (événement `metrics`), pas la somme avec la feuille d'embedding de la question : l'addition mêlerait mesuré et estimé (cloud) et serait un calcul du front (AD-20). Le CO₂ de l'embedding reste compté dans la session (`carbon_updated`). Si la somme est voulue, c'est le serveur qui la porte (`metrics.co2` d'un run `rag`, ou une ligne de plus).
     evidence: |-
       `components/wl-chat-thread.js` (`#finalFoot`), `rag/query.py` (`metrics_extra`).
-    location: src/wavelocalai/rag/query.py
+    location: src/frugal_ai_workbench/rag/query.py
     severity: medium
   - summary: >-
       Réglages avancés minimaux : une seule stratégie (`naive`, « Recherche directe »), pas de nombre d'extraits ni de stratégie par défaut. `GET /api/rag/settings` (story 4.3, en parallèle) et les stratégies HyDE et Self-RAG (4.6) viendront les alimenter ; l'écran ne lit donc aucun réglage du serveur et envoie `strategy: "naive"`.
     evidence: |-
       `screens/documents.js::STRATEGIES`, `strategy` du corps de `POST /api/rag/runs`.
-    location: src/wavelocalai/web/static/screens/documents.js
+    location: src/frugal_ai_workbench/web/static/screens/documents.js
     severity: low
   - summary: >-
       Garde-fou mémoire (story 4.8, fusionnée) : l'écran branche `core/ram-guard.js` comme le Chat. Sur un `run_ended` en erreur `ram_guard`, la question revient dans le champ (sauf si la personne a déjà tapé autre chose) ; « Prendre un modèle plus petit » choisit `detail.suggested_model` dans le sélecteur, met à jour l'avertissement cloud et annonce le choix (`discussion.model_changed`), sans relancer. Le serveur applique le garde-fou à la réponse RAG.
     evidence: |-
       `screens/documents.js::submit` (`error.error = envelopeOf(...)`).
-    location: src/wavelocalai/web/static/screens/documents.js
+    location: src/frugal_ai_workbench/web/static/screens/documents.js
     severity: low
   - summary: >-
       Une conversation rouverte rejoue le flux de chaque réponse finie (`connectRun`, run fini, un flux par réponse) pour retrouver ses sources et ses mesures, que `GET /api/conversations/{id}` ne porte pas (report de la 4.4). Correct et borné (délai de 10 s par flux), mais un flux par réponse pour une longue conversation. Si cela pèse, `conversation_view` peut porter `sources` et `metrics` du run (additif).
     evidence: |-
       `screens/documents.js::replay`, `::showConversation`, `test_discussion.py::test_a_reopened_conversation_...`.
-    location: src/wavelocalai/runs/conversations.py
+    location: src/frugal_ai_workbench/runs/conversations.py
     severity: low
   - summary: >-
       Joindre une question déjà en cours (`409 run_busy`) rejoue la réponse sans la question de l'autre onglet : le fil montre la réponse seule, comme le Chat libre. La question n'est pas dans le flux (AD-7).
     evidence: |-
       `test_discussion.py::test_a_question_already_running_is_joined_without_an_error`.
-    location: src/wavelocalai/web/static/screens/documents.js
+    location: src/frugal_ai_workbench/web/static/screens/documents.js
     severity: low
   - summary: >-
       Écart à la maquette : le passage surligné est un aplat violet sous texte blanc (`primary-fill`, A19, en plus du gras), non un fond `surface-alt` souligné, que le fond de page rendait presque invisible. Le panneau est un `details` dont le titre est un `h2` dans le `summary` (toujours ouvert dès 1 024 px, sans repli ; le `summary` quitte alors l'ordre de tabulation).
     evidence: |-
       `components.css` (`.wl-source-mark`), `test_discussion_static.py::test_the_passage_highlight_is_...`.
-    location: src/wavelocalai/web/static/components.css
+    location: src/frugal_ai_workbench/web/static/components.css
     severity: low
 ---
 
@@ -91,8 +91,8 @@ deferred:
 
 ## Fichiers
 
-- `src/wavelocalai/web/static/screens/documents.js` (nouveau), `components/wl-source-panel.js` (nouveau), `components/wl-chat-thread.js`, `components/wl-run-status.js`, `components/index.js`, `core/api.js`, `core/format.js`, `core/registry.js`, `screens/documents-import-row.js`, `components.css`, `documents.css`, `i18n/fr.json`
-- `src/wavelocalai/web/routes_test.py`
+- `src/frugal_ai_workbench/web/static/screens/documents.js` (nouveau), `components/wl-source-panel.js` (nouveau), `components/wl-chat-thread.js`, `components/wl-run-status.js`, `components/index.js`, `core/api.js`, `core/format.js`, `core/registry.js`, `screens/documents-import-row.js`, `components.css`, `documents.css`, `i18n/fr.json`
+- `src/frugal_ai_workbench/web/routes_test.py`
 - Tests : `tests/v2/e2e/test_discussion.py` (nouveau), `tests/v2/unit/test_discussion_static.py` (nouveau), `tests/v2/web/test_rag_run_api.py` (route de test) ; réalignés : `tests/v2/unit/test_shell_static.py`, `tests/v2/e2e/test_home.py`, `test_shell.py`, `test_documents.py` (la Discussion est disponible, l'Accueil y mène)
 
 ## Vérification

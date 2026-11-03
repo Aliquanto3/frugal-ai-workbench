@@ -14,9 +14,9 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.models.fake import FAKE_REF, Sleep
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.models.fake import FAKE_REF, Sleep
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from .test_agent_api import LEAF_CO2_METHODS, call, error_of, steps, tool, turns
@@ -56,7 +56,7 @@ CREWS = {
 async def crew_app(tmp_path, **settings):
     (tmp_path / "config").mkdir()
     (tmp_path / "config" / "agent_crews.json").write_text(json.dumps(CREWS), encoding="utf-8")
-    app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, **settings))
+    app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, **settings))
     async with app.router.lifespan_context(app):
         app.state.agent_tools.register(tool())
 

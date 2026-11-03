@@ -8,12 +8,12 @@ import json
 import re
 from pathlib import Path
 
-from wavelocalai.inference.arena import LANE_STATUSES
+from frugal_ai_workbench.inference.arena import LANE_STATUSES
 
 from .static_files import catalog, read_static
 
 ROOT = Path(__file__).resolve().parents[3]
-STATIC = ROOT / "src" / "wavelocalai" / "web" / "static"
+STATIC = ROOT / "src" / "frugal_ai_workbench" / "web" / "static"
 CATALOG = catalog()
 NEW_SCRIPTS = [
     "screens/arena.js",
@@ -150,8 +150,8 @@ def test_the_arena_css_is_linked_and_the_front_files_stay_under_the_size_budget(
 
 
 def test_the_criteria_bounds_and_default_texts_are_the_servers():
-    from wavelocalai.inference.arena import MAX_CRITERIA, MAX_CRITERION_CHARS
-    from wavelocalai.inference.judge_port import DEFAULT_CRITERIA
+    from frugal_ai_workbench.inference.arena import MAX_CRITERIA, MAX_CRITERION_CHARS
+    from frugal_ai_workbench.inference.judge_port import DEFAULT_CRITERIA
 
     judge = source("screens/arena-judge.js")
     assert f"MAX_CRITERIA = {MAX_CRITERIA};" in judge

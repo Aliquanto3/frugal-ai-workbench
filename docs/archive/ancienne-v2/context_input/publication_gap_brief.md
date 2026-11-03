@@ -3,7 +3,7 @@
 > Translated from the owner's French gap-analysis notes, with corrections from the owner's decisions taken 2026-09-06 (see inline amendments and the "Decisions taken 2026-09-06" section below). Kept as source material for AIDD framing, not a spec.
 
 ## Context
-This repository must serve as the basis for a series of publications (blog/Wavestone article first; arXiv optional; JOSS later-optional) on running SLMs on personal and professional PCs. The audience is changing: in addition to the PRD's client-side engineer, there is now an academic reviewer. Whatever the PRD does not cover must be added as AIDD epics and stories, not implemented right away.
+This repository must serve as the basis for a series of publications (blog article first; arXiv optional; JOSS later-optional) on running SLMs on personal and professional PCs. The audience is changing: in addition to the PRD's client-side engineer, there is now an academic reviewer. Whatever the PRD does not cover must be added as AIDD epics and stories, not implemented right away.
 
 Do not code anything in this session. Read the existing PRD, epics, and stories, then produce with the aidd-pm plugin:
 1. a gap-by-gap diagnosis (what already exists, what is missing, which existing epic carries the seam),
@@ -71,5 +71,5 @@ The epic `any-open-ended-output-carries-two-judges-or-an-honest-flag` plans Goog
 - Gap 6: `measured_wall` / wattmeter channel is out of scope — dropped. Keep the honest estimated-CPU-energy limitation documented.
 - Gap 8: code stays MIT; suite items and the reference bundle gain CC-BY 4.0.
 - Gap 9: judge pair is Z.ai GLM-5.3-Flash + DeepSeek V4-Flash via direct APIs; paid budget of ~$10 confirmed; GPT-5.6 Luna calibration judge on a 10% subsample published as an agreement figure. Google and Mistral become subjects only, never judges again.
-- Venue: blog/Wavestone article first, arXiv optional, JOSS later-optional.
+- Venue: blog article first, arXiv optional, JOSS later-optional.
 - All three machines (tower, laptop, professional PC) are available now.

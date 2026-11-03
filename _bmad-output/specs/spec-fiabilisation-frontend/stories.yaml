@@ -10,7 +10,7 @@
     Aucune dépendance. Toutes les stories suivantes dépendent de celle-ci : la suite de tests
     doit en sortir entièrement verte dans un environnement sans Ollama ni data/.
 - id: "2"
-  title: "Thème Wavestone, icônes et accessibilité"
+  title: "Thème générique, icônes et accessibilité"
   description: >-
     Couvre CAP-6 côté visuel : thème DESIGN.md par config.toml, icônes Material, aucun hex en dur,
     outils de l'agent tous visibles, boutons nommés, API width= à la place de use_container_width.

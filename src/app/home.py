@@ -99,7 +99,7 @@ def main():
 
     # --- PIED DE PAGE ---
     st.divider()
-    st.caption(f"© {date.today().year} {APP_NAME} · Wavestone")
+    st.caption(f"© {date.today().year} {APP_NAME}")
 
 
 main()

@@ -2,15 +2,15 @@
 
 L'app est la vraie (hub, registre, service de l'Arène, juge, sémaphore) ; les modèles et le juge
 sont des `FakeChatModel`. Les prix de ces tests sont fictifs : ils servent à vérifier le calcul,
-la vraie table de `wavelocalai.toml` est vide tant qu'aucun prix sourcé n'est relevé.
+la vraie table de `frugal-ai-workbench.toml` est vide tant qu'aucun prix sourcé n'est relevé.
 """
 
 from __future__ import annotations
 
 import json
 
-from wavelocalai.models.fake import FakeChatModel, Sleep
-from wavelocalai.models.port import ModelRef
+from frugal_ai_workbench.models.fake import FakeChatModel, Sleep
+from frugal_ai_workbench.models.port import ModelRef
 
 from .test_arena_api import _ended, _events, _post, arena_app, children, cloud, local, say
 

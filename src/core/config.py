@@ -1,4 +1,5 @@
 import os
+import warnings
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -27,9 +28,28 @@ SYSTEM_RAM_BUFFER_GB = 0.5
 # Configuration API
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 
+
+def env_with_legacy(name: str, default: str, environ=None) -> str:
+    """Lit `FRUGAL_AI_<name>`, sinon l'ancien `WAVELOCAL_<name>` (dépréciation signalée), sinon
+    `default`."""
+    env = os.environ if environ is None else environ
+    value = env.get(f"FRUGAL_AI_{name}")
+    if value:
+        return value
+    legacy = env.get(f"WAVELOCAL_{name}")
+    if legacy:
+        warnings.warn(
+            f"La variable WAVELOCAL_{name} est dépréciée : renommez-la en FRUGAL_AI_{name}.",
+            FutureWarning,
+            stacklevel=2,
+        )
+        return legacy
+    return default
+
+
 # --- CONFIGURATION GREEN IT (Restaurée) ---
-DEFAULT_COUNTRY_ISO_CODE = os.getenv("WAVELOCAL_COUNTRY_ISO", "FRA")
-DEFAULT_PUE = float(os.getenv("WAVELOCAL_PUE", "1.1"))
+DEFAULT_COUNTRY_ISO_CODE = env_with_legacy("COUNTRY_ISO", "FRA")
+DEFAULT_PUE = float(env_with_legacy("PUE", "1.1"))
 
 
 def get_emissions_path() -> str:

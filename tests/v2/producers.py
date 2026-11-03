@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.runs.models import Co2, LeafResult, RunHandle
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.runs.models import Co2, LeafResult, RunHandle
 
 LOCAL_CO2 = Co2(mg=1.5, method="codecarbon", estimated=False)
 

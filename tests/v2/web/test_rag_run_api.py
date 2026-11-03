@@ -16,14 +16,14 @@ from datetime import UTC, datetime
 import httpx
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.models.fake import FAKE_EMBED_REF, FAKE_REF, Sleep, fake_vector
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.port import TextDelta
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.rag import repo
-from wavelocalai.rag.split import ChunkDraft
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.models.fake import FAKE_EMBED_REF, FAKE_REF, Sleep, fake_vector
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.port import TextDelta
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.rag import repo
+from frugal_ai_workbench.rag.split import ChunkDraft
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..fake_cloud import MODELS, SETTINGS_CLOUD, Plan, factories, stream_for
@@ -87,7 +87,7 @@ def _script(app, *deltas: str):
 
 @contextlib.asynccontextmanager
 async def rag_app(tmp_path, **settings):
-    app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, **settings))
+    app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, **settings))
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(transport=transport, base_url=BASE) as client:
@@ -255,7 +255,7 @@ async def test_only_ready_documents_are_queried_even_when_a_pending_one_matches_
 
 async def test_a_cloud_model_needs_allow_cloud(tmp_path):
     fake = _fake("openai", Plan(stream_for("openai", ["Réponse", " cloud"], usage=(11, 200))))
-    environ = {"WAVELOCALAI_TESTING": "1", "OPENAI_API_KEY": "sk-test-0123456789abcdef"}
+    environ = {"FRUGAL_AI_TESTING": "1", "OPENAI_API_KEY": "sk-test-0123456789abcdef"}
     config = make_settings(tmp_path, environ=environ, cloud=SETTINGS_CLOUD)
     server = FakeOllama()
     registry = ModelRegistry(
@@ -489,9 +489,9 @@ async def test_a_foreign_origin_cannot_ask_a_question(served):
 async def test_the_whole_path_works_with_the_numpy_fallback_index(tmp_path, monkeypatch):
     """Sans sqlite-vec (CPython sans chargement d'extensions, CI macOS) : `NumpyIndex`, partagé par
     l'import et la question, et une lecture sans extension."""
-    from wavelocalai.rag.index import NumpyIndex
+    from frugal_ai_workbench.rag.index import NumpyIndex
 
-    monkeypatch.setattr("wavelocalai.web.app.select_index", lambda available: NumpyIndex())
+    monkeypatch.setattr("frugal_ai_workbench.web.app.select_index", lambda available: NumpyIndex())
     async with rag_app(tmp_path, rag={"top_k": 1}) as (app, client):
         await _import(client, **{"voitures.txt": CARS, "chats.txt": CATS})
         _plant(app, "d-encours", "encours.txt", "indexing", QUESTION)  # non prêt : écarté

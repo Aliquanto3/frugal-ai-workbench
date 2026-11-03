@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.config import DEFAULT_TOML, ConfigError, load_settings
+from frugal_ai_workbench.config import DEFAULT_TOML, ConfigError, load_settings
 
 from ..conftest import make_settings
 
-SRC = Path(__file__).resolve().parents[3] / "src" / "wavelocalai"
+SRC = Path(__file__).resolve().parents[3] / "src" / "frugal_ai_workbench"
 
 
 def test_versioned_toml_gives_the_documented_defaults():
@@ -27,17 +27,17 @@ def test_versioned_toml_gives_the_documented_defaults():
 
 
 def test_toml_then_env_then_overrides(tmp_path):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text("[server]\nport = 9100\n[carbon]\npue = 1.4\n", encoding="utf-8")
     env = tmp_path / ".env"
-    env.write_text("OPENAI_API_KEY=sk-test-1234567890\nWAVELOCALAI_PORT=9200\n", encoding="utf-8")
+    env.write_text("OPENAI_API_KEY=sk-test-1234567890\nFRUGAL_AI_PORT=9200\n", encoding="utf-8")
 
     from_env = load_settings(toml, env, environ={})
     assert from_env.server.port == 9200  # .env prime sur le .toml
     assert from_env.carbon.pue == 1.4
     assert from_env.api_keys["openai"].get_secret_value() == "sk-test-1234567890"
 
-    process = load_settings(toml, env, environ={"WAVELOCALAI_PORT": "9300"})
+    process = load_settings(toml, env, environ={"FRUGAL_AI_PORT": "9300"})
     assert process.server.port == 9300  # l'environnement prime sur .env
 
     forced = load_settings(toml, env, environ={}, overrides={"server": {"port": 9400}})
@@ -45,7 +45,7 @@ def test_toml_then_env_then_overrides(tmp_path):
 
 
 def test_relative_data_dir_follows_the_toml(tmp_path):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text('[data]\ndir = "donnees"\n', encoding="utf-8")
     settings = load_settings(toml, tmp_path / "absent.env", environ={})
     assert settings.data_dir == (tmp_path / "donnees").resolve()
@@ -70,7 +70,7 @@ def test_cloud_providers_read_from_settings_without_leaking_keys(tmp_path):
     ],
 )
 def test_invalid_settings_are_refused_in_french(tmp_path, content):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text(content, encoding="utf-8")
     with pytest.raises(ConfigError):
         load_settings(toml, tmp_path / "absent.env", environ={})

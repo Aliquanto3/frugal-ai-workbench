@@ -10,14 +10,14 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.inference.local_slot import LocalSlot
-from wavelocalai.inference.streaming import stream_into_run
-from wavelocalai.models.fake import FAKE_REF, FakeChatModel, Sleep
-from wavelocalai.models.ollama import OllamaChatModel
-from wavelocalai.models.port import ChatMessage, ChatRequest, ModelRef, TextDelta
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.inference.local_slot import LocalSlot
+from frugal_ai_workbench.inference.streaming import stream_into_run
+from frugal_ai_workbench.models.fake import FAKE_REF, FakeChatModel, Sleep
+from frugal_ai_workbench.models.ollama import OllamaChatModel
+from frugal_ai_workbench.models.port import ChatMessage, ChatRequest, ModelRef, TextDelta
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..fake_ollama import FakeOllama, Plan, final, part
 

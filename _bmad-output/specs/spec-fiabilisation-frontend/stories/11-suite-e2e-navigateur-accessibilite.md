@@ -9,7 +9,7 @@ followup_review_recommended: false
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/docs/audits/frontend-2026-09/SYNTHESE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
 warnings: []
 deferred:
   - summary: >-
@@ -118,7 +118,7 @@ deferred:
   - `[medium]` `[patch]` (edge) sélection par sous-chaîne qui choisit un autre modèle — tag, puis nom exact, échec si ambigu.
   - `[medium]` `[defer]` (blind) axe en sombre en échec sur #6A4DE6 — décision DESIGN.md ; échec gardé, documenté.
   - `[low]` `[patch]` (edge, verification-gap) tags comparés bruts — `normalize_tag` des deux côtés.
-  - `[low]` `[patch]` (edge, verification-gap) `WAVELOCALAI_E2E_TIMEOUT_S` à double sens — `WAVELOCALAI_E2E_SHORT_TIMEOUT_S`.
+  - `[low]` `[patch]` (edge, verification-gap) `FRUGAL_AI_E2E_TIMEOUT_S` à double sens — `FRUGAL_AI_E2E_SHORT_TIMEOUT_S`.
   - `[low]` `[patch]` (edge) délais nuls, négatifs ou non numériques — `pytest.fail` nommant la variable.
   - `[low]` `[patch]` (edge) IndexError sur message d'erreur vide — repli sur `repr(e)`.
   - `[low]` `[patch]` (edge) seul le processus meneur tué après SIGTERM — `killpg(SIGKILL)`.

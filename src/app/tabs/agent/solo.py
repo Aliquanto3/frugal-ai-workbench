@@ -525,7 +525,7 @@ def render_agent_solo_tab(sorted_labels: list, display_to_tag: dict, menu: Model
                 # Construit dans le try : une clé d'API manquante est un échec affiché.
                 engine = AgentEngine(selected_tag, enabled_tools=st.session_state.selected_tools)
                 # Assuming system prompt is hidden/default for Sprint 2 to save space
-                sys_prompt = "Tu es un assistant expert Wavestone. Réponds en Markdown propre."
+                sys_prompt = "Tu es un assistant expert. Réponds en Markdown propre."
                 stream = engine.run_stream(final_prompt, history, system_prompt=sys_prompt)
 
                 current_tool_log = None  # Pour gérer l'ajout d'un seul log par tool_call

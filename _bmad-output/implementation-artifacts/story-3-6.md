@@ -8,8 +8,8 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-3-5.md'
 warnings: []
 deferred:
@@ -17,37 +17,37 @@ deferred:
       Écart §7(d) n° 7, non tranché : l'adresse n'est pas réécrite à la fin d'un run (`history.replaceState` vers `…/<run_id>`), l'Arène de la maquette le fait, l'Équipe non. Variante la plus conservatrice (critère actuel, qui ne la demande pas) : l'adresse de la comparaison en cours reste `#/arene/comparer`, changer le `hash` démonterait l'écran et casserait le flux (story 3.2). La porte d'entrée pour rouvrir est la liste « Comparaisons précédentes » de l'écran (`GET /api/arena/runs`) et l'adresse `#/arene/comparer/<run_id>` elle-même, qui marche déjà. À reprendre quand l'écart sera tranché.
     evidence: |-
       `sprint-change-proposal-2026-10-19.md` §7(d) n° 7 ; `screens/arena-history.js`.
-    location: src/wavelocalai/web/static/screens/arena.js
+    location: src/frugal_ai_workbench/web/static/screens/arena.js
     severity: low
   - summary: >-
       Écart §7(d) n° 8, non tranché : l'affichage d'un résultat effacé rouvert par son adresse. Variante la plus conservatrice : seul l'identifiant inconnu rend `404 run_not_found` (critère actuel et contrat) ; une Arène effacée rend `200` avec `erased: true` et `config: null`, et l'écran affiche le même titre « Résultat introuvable » avec une phrase distincte (« a été effacée : seules ses mesures de CO₂ restent au registre carbone »), sans écran « effacé » séparé. Son export rend `404 run_not_found` (plus rien à exporter). À trancher par Anaël : écran « effacé » distinct qui montre le CO₂ gardé (maquette, AD-13), ou `run_not_found` pour tout résultat sans texte.
     evidence: |-
       `runs/snapshot.py` (`erased`), `screens/arena-reopen.js`, `contrat-api.md` (Runs), `sprint-change-proposal-2026-10-19.md` §7(d) n° 8.
-    location: src/wavelocalai/web/static/screens/arena-reopen.js
+    location: src/frugal_ai_workbench/web/static/screens/arena-reopen.js
     severity: medium
   - summary: >-
       Écart §7(d) n° 3, non tranché : l'icône de l'Arène (`leaderboard` de DESIGN.md, ou `swords` du code livré et de la maquette). La carte « Démo recommandée » reprend l'icône du registre des écrans (`swords`), comme le menu et le lien de module de l'Accueil : un seul endroit à changer quand l'écart sera tranché.
     evidence: |-
       `core/registry.js` (`arena.icon`), `screens/home-demo.js`.
-    location: src/wavelocalai/web/static/core/registry.js
+    location: src/frugal_ai_workbench/web/static/core/registry.js
     severity: low
   - summary: >-
       Relancer une comparaison dont un modèle n'est plus installé (ou un modèle cloud sans « Autoriser le cloud ») : le front reprend la configuration telle qu'elle était et laisse le serveur refuser (`model_not_found`, `cloud_not_allowed`), dont l'enveloppe est affichée. Aucun contrôle préalable côté écran : le sélecteur ne sait pas qu'un tag a disparu avant la commande.
     evidence: |-
       `screens/arena-actions.js` (`reuseConfig`), `inference/arena.py` (`_resolve`).
-    location: src/wavelocalai/web/static/screens/arena-actions.js
+    location: src/frugal_ai_workbench/web/static/screens/arena-actions.js
     severity: low
   - summary: >-
       La liste « Comparaisons précédentes » montre les 20 plus récentes, sans pagination ni recherche, et les modèles par leur nom lu dans le sélecteur (le tag tant que la liste des modèles n'est pas arrivée). Une liste plus longue demande un critère d'interface (Epic 5 : historique).
     evidence: |-
       `runs/snapshot.py` (`list_arena_runs`), `screens/arena-history.js`.
-    location: src/wavelocalai/runs/snapshot.py
+    location: src/frugal_ai_workbench/runs/snapshot.py
     severity: low
   - summary: >-
       L'export ne contient pas le texte des réponses des modèles (ni leur raisonnement) : le critère demande les mesures, la note, la raison du juge et la preuve. Les réponses se relisent en rouvrant la comparaison. Les ajouter demande de rejouer les `token` du run dans l'export (volume, et le texte quitte l'écran).
     evidence: |-
       `runs/arena_export.py`.
-    location: src/wavelocalai/runs/arena_export.py
+    location: src/frugal_ai_workbench/runs/arena_export.py
     severity: low
   - summary: >-
       Tag annoté `v2.0.0-alpha.3` et release GitHub non créés : à faire par Anaël après la recette (notes et recette en brouillon dans le rapport de la story). La version `2.0.0a3` est posée dans `pyproject.toml`, `uv.lock` et `CITATION.cff` ; `date-released` de `CITATION.cff` n'est pas touchée (comme pour a2) : à la date de la release.

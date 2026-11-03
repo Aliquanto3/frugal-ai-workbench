@@ -7,7 +7,7 @@ baseline_commit: '54e43c5'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-7.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-8.md'
 warnings: []
@@ -16,19 +16,19 @@ deferred:
       « Réessayer » (panneau Ollama) n'interroge pas Ollama de force : il rouvre le flux si la connexion est perdue, sinon il attend le prochain état du flux (2 s au plus). Une route qui force la sonde n'existe pas et `models/` n'est pas touché par cette story.
     evidence: |-
       `OllamaProbe.status()` ne sait que servir son cache ou relancer une sonde ; `core/system.js` `recheck()`.
-    location: src/wavelocalai/web/static/core/system.js
+    location: src/frugal_ai_workbench/web/static/core/system.js
     severity: low
   - summary: >-
       Le flux système ne se met pas en pause quand l'onglet est masqué (`visibilitychange`). La pause est demandée pour les cartes d'état de l'Accueil (UX-DR24, story suivante) ; la barre haute, elle, reste branchée (un seul flux, 2 s).
     evidence: |-
       Critères de la story 1.9 : pas de pause demandée ; UX-DR24 la place sur les cartes de l'Accueil.
-    location: src/wavelocalai/web/static/core/sse.js
+    location: src/frugal_ai_workbench/web/static/core/sse.js
     severity: low
   - summary: >-
       Les textes de `errors.ollama_down` sont recopiés dans `fr.json` (le panneau Ollama n'a pas d'enveloppe d'API à afficher : l'état vient du flux). Un test compare la copie à `errors.py`, mais deux sources existent tant qu'aucune route n'expose le catalogue d'erreurs.
     evidence: |-
       `test_the_ollama_down_text_mirrors_errors_py` ; AD-20 « textes dans fr.json ».
-    location: src/wavelocalai/web/static/i18n/fr.json
+    location: src/frugal_ai_workbench/web/static/i18n/fr.json
     severity: low
 ---
 

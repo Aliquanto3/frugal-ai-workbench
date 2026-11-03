@@ -9,7 +9,7 @@ from typing import Any
 import httpx
 import pytest
 
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 
@@ -18,8 +18,8 @@ BASE = f"http://127.0.0.1:{TEST_PORT}"
 
 @pytest.fixture
 async def served(tmp_path) -> AsyncIterator[tuple[Any, httpx.AsyncClient]]:
-    """(app, client) avec `WAVELOCALAI_TESTING=1` : route de test et modèle `fake` actifs."""
-    app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}))
+    """(app, client) avec `FRUGAL_AI_TESTING=1` : route de test et modèle `fake` actifs."""
+    app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}))
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(transport=transport, base_url=BASE) as client:

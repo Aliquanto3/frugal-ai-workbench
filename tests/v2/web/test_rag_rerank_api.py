@@ -11,8 +11,8 @@ from __future__ import annotations
 import asyncio
 import socket
 
-from wavelocalai.models.fake import FAKE_REF
-from wavelocalai.rag import rerank
+from frugal_ai_workbench.models.fake import FAKE_REF
+from frugal_ai_workbench.rag import rerank
 
 from .conftest import served  # noqa: F401 - fixture
 from .test_rag_run_api import (

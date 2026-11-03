@@ -15,8 +15,8 @@ from fastapi.testclient import TestClient
 from starlette.routing import Mount
 from starlette.staticfiles import StaticFiles
 
-from wavelocalai.config import Settings
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import Settings
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, closed_port, make_settings
 from .route_discovery import discover, read_paths, static_samples

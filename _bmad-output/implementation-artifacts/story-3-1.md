@@ -7,7 +7,7 @@ baseline_commit: 'a43ff7d'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-3.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-2-1.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-2-4.md'
@@ -17,25 +17,25 @@ deferred:
       Depuis la fusion de la story 2.3 (revue), chaque lane locale est mesurée par son propre tracker CodeCarbon, démarré et arrêté sous la place Ollama par `stream_into_run` (AD-10, AD-11), annulation comprise (`amend_cancelled_leaf`) ; `carbon_updated` suit chaque feuille. Le `co2` d'une lane cloud reste « non mesurable » jusqu'à l'estimation ecologits (story 2.5), qui passera par le même chemin.
     evidence: |-
       `test_two_local_lanes_and_a_cloud_lane_compose_one_run` (`codecarbon` sur les lanes locales, un tracker par lane, jamais deux à la fois ; `unmeasurable` sur la lane cloud), `test_cancelling_the_parent_cancels_every_lane_and_keeps_the_partials`, `integration/test_arena_ollama.py` (vrai CodeCarbon).
-    location: src/wavelocalai/inference/streaming.py
+    location: src/frugal_ai_workbench/inference/streaming.py
     severity: low
   - summary: >-
       `judge` et `criteria` sont acceptés et bornés ; le tag du juge va dans `runs.params` de la racine, les critères (texte saisi) dans l'événement `question` avec la question (AD-7) ; le juge est seulement résolu (`cloud_not_allowed` avant tout run). La notation, `lane_status: judging` et `judge_score` sont la story 3.3 ; le verdict de l'instantané `GET /api/runs/{id}` la 3.5.
     evidence: |-
       `test_the_prompt_lives_in_run_events_never_in_run_params`.
-    location: src/wavelocalai/inference/arena.py
+    location: src/frugal_ai_workbench/inference/arena.py
     severity: low
   - summary: >-
       Ajouts au contrat d'API, à valider avec la story 3.6 (rouvrir) : l'événement `question {text}` (la question d'une Arène vit dans `run_events`, faute de conversation) et la clé `error` de `lane_status` pour `timeout` et `failed`. Une Arène n'ouvre pas de conversation (`conversations.kind` n'admet pas `arena`) : `POST /api/arena/runs` rend `{run_id}` seul.
     evidence: |-
       `contrat-api.md` (tables « Événements de run ») ; `test_two_local_lanes_...`.
-    location: _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
+    location: _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
     severity: low
   - summary: >-
       `metrics` et `lane_status: done` d'une lane locale sont publiés juste après la libération du sémaphore (le chemin commun publie les métriques hors de la place) : le `generating` de la lane suivante peut précéder de quelques millisecondes le `done` de la précédente dans le flux. Ses jetons, eux, suivent toujours la dernière sortie de la première. Le déplacer dans la place est un changement du chemin commun que la story 2.3 (mesure dans la place) touche aussi.
     evidence: |-
       `test_locals_run_in_sequence_under_the_slot_and_the_cloud_runs_at_once` (ordre des jetons, pas des `done`).
-    location: src/wavelocalai/inference/streaming.py
+    location: src/frugal_ai_workbench/inference/streaming.py
     severity: low
 ---
 
@@ -56,11 +56,11 @@ deferred:
 
 ## Fichiers
 
-- `src/wavelocalai/inference/arena.py` : `ArenaService`, `ArenaCommand` (orchestration, `lane_status`)
-- `src/wavelocalai/inference/streaming.py` : `stream_into_run(publish_to=, on_phase=)` rend le `LeafResult` ; une feuille publie sur son parent
-- `src/wavelocalai/runs/hub.py` : `set_cancel_hook`
-- `src/wavelocalai/web/routes_arena.py`, `web/app.py` : `POST /api/arena/runs`, `app.state.arena`
-- `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md` : événement `question`, `error` de `lane_status`
+- `src/frugal_ai_workbench/inference/arena.py` : `ArenaService`, `ArenaCommand` (orchestration, `lane_status`)
+- `src/frugal_ai_workbench/inference/streaming.py` : `stream_into_run(publish_to=, on_phase=)` rend le `LeafResult` ; une feuille publie sur son parent
+- `src/frugal_ai_workbench/runs/hub.py` : `set_cancel_hook`
+- `src/frugal_ai_workbench/web/routes_arena.py`, `web/app.py` : `POST /api/arena/runs`, `app.state.arena`
+- `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md` : événement `question`, `error` de `lane_status`
 - Tests : `tests/v2/web/test_arena_api.py`, `tests/v2/integration/test_arena_ollama.py`
 
 ## Reports

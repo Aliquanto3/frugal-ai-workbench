@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.rag.extract import IngestError, Page, extract_pages, validate_path
-from wavelocalai.rag.split import split_pages, split_text
-from wavelocalai.rag.staging import StagedFile, clean_name, stage_upload
+from frugal_ai_workbench.rag.extract import IngestError, Page, extract_pages, validate_path
+from frugal_ai_workbench.rag.split import split_pages, split_text
+from frugal_ai_workbench.rag.staging import StagedFile, clean_name, stage_upload
 
 from ..rag_files import make_blank_pdf, make_docx, make_encrypted_text_pdf, make_pdf
 

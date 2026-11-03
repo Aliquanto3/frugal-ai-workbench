@@ -12,14 +12,14 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.agents import outbox
-from wavelocalai.agents.outbox import EmailAction, check_draft, deliver
-from wavelocalai.agents.tools import ToolError
-from wavelocalai.config import SmtpSettings
+from frugal_ai_workbench.agents import outbox
+from frugal_ai_workbench.agents.outbox import EmailAction, check_draft, deliver
+from frugal_ai_workbench.agents.tools import ToolError
+from frugal_ai_workbench.config import SmtpSettings
 
 from ..fake_smtp import FakeSmtp
 
-SRC = Path(__file__).resolve().parents[3] / "src" / "wavelocalai"
+SRC = Path(__file__).resolve().parents[3] / "src" / "frugal_ai_workbench"
 GOOD = ("client@example.org", "Objet", "Corps du message")
 
 

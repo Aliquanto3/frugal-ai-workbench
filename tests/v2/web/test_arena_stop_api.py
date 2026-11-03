@@ -8,8 +8,8 @@ import asyncio
 
 import pytest
 
-from wavelocalai.models.fake import Sleep
-from wavelocalai.models.port import ChatResult, Done, TextDelta
+from frugal_ai_workbench.models.fake import Sleep
+from frugal_ai_workbench.models.port import ChatResult, Done, TextDelta
 
 from .test_arena_api import _ended, _events, _until, arena_app, children, local, say, statuses
 
@@ -248,8 +248,8 @@ async def _drain(model, request):
 
 
 async def test_a_stop_requested_before_the_attempt_starts_skips_the_call():
-    from wavelocalai.inference.arena import _RecordingModel
-    from wavelocalai.models.port import ChatMessage, ChatRequest
+    from frugal_ai_workbench.inference.arena import _RecordingModel
+    from frugal_ai_workbench.models.port import ChatMessage, ChatRequest
 
     fake = local("fake:a", say("jamais"))
     model = _RecordingModel(fake)
@@ -262,8 +262,8 @@ async def test_a_stop_requested_before_the_attempt_starts_skips_the_call():
 
 
 async def test_a_stop_after_the_real_done_keeps_its_metrics_and_is_refused():
-    from wavelocalai.inference.arena import _RecordingModel
-    from wavelocalai.models.port import ChatMessage, ChatRequest
+    from frugal_ai_workbench.inference.arena import _RecordingModel
+    from frugal_ai_workbench.models.port import ChatMessage, ChatRequest
 
     real = Done(ChatResult(finish_reason="stop", output_tokens=2, tps=42.0, tps_source="native"))
     model = _RecordingModel(local("fake:a", [*say("A "), real]))

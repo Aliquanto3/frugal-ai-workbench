@@ -3,7 +3,7 @@ Markdown et du code ; vrais positifs sur une phrase ou un paragraphe répétés.
 
 from __future__ import annotations
 
-from wavelocalai.inference.loop_detector import LoopDetector, repeated_tail
+from frugal_ai_workbench.inference.loop_detector import LoopDetector, repeated_tail
 
 MIN_REPEATS = 4
 WINDOW = 200

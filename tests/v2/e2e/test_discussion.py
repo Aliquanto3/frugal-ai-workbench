@@ -74,7 +74,7 @@ def script_model(page, server, *steps) -> None:
 
 def delete_document(backend, source: str) -> None:
     """Retire le document comme le ferait « Supprimer » (5.x) : extraits et ligne, sans le serveur."""
-    with sqlite3.connect(backend.data_dir / "wavelocalai.db", timeout=10) as conn:
+    with sqlite3.connect(backend.data_dir / "frugal-ai-workbench.db", timeout=10) as conn:
         conn.execute(
             "DELETE FROM chunks WHERE document_id IN (SELECT id FROM documents WHERE source = ?)",
             (source,),
@@ -203,7 +203,7 @@ def test_an_empty_base_leads_to_the_document_base(backend, page):
 
 def test_the_header_the_model_and_the_collapsed_settings(docs):
     page, _, _ = docs
-    assert page.title() == "Discussion · WaveLocalAI"
+    assert page.title() == "Discussion · Frugal AI Workbench"
     assert page.locator("h1").filter(has_text="Discussion").is_visible()
     tabs = page.locator("[data-screen='documents-chat'] nav.screen-tabs")
     assert tabs.get_by_role("link", name="Discussion").get_attribute("aria-current") == "page"

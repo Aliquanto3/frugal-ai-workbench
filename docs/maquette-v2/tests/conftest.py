@@ -1,5 +1,5 @@
 """Banc de la maquette : un http.server dans un thread (serveur.py), Edge ou Chromium piloté par
-Playwright. Rien n'est téléchargé : l'exécutable vient de WAVELOCALAI_E2E_CHROMIUM, sinon d'Edge
+Playwright. Rien n'est téléchargé : l'exécutable vient de FRUGAL_AI_E2E_CHROMIUM, sinon d'Edge
 installé à son emplacement habituel, sinon du Chromium de Playwright s'il est déjà là. Toute
 requête hors de 127.0.0.1 est bloquée et fait échouer le test ; toute exception JavaScript ou
 erreur de console aussi.
@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT))
 
 from serveur import make_server  # noqa: E402
 
-CHROMIUM_ENV = "WAVELOCALAI_E2E_CHROMIUM"
+CHROMIUM_ENV = "FRUGAL_AI_E2E_CHROMIUM"
 EDGE_PATHS = (
     r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
     r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",

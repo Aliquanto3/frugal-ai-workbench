@@ -11,7 +11,7 @@ import re
 
 import pytest
 
-from wavelocalai.runs.models import LeafResult
+from frugal_ai_workbench.runs.models import LeafResult
 
 from ..producers import LOCAL_CO2, produce_arena, produce_chat
 from .conftest import parse_sse

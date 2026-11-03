@@ -91,7 +91,7 @@
       "accelerator": "Accélérateur",
       "os": "Système",
       "ollama": "Version d'Ollama",
-      "app": "Version de WaveLocalAI",
+      "app": "Version de Frugal AI Workbench",
       "country": "Réseau électrique pris en compte",
       "ollama_unknown": "inconnue (Ollama ne répond pas)",
       "memory_value": "{total} de mémoire vive"

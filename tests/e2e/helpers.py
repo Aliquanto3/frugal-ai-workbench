@@ -22,7 +22,7 @@ import weakref
 import pytest
 
 # Délais (ms). Une génération réelle sur un petit modèle, premier chargement compris, tient
-# largement dans GENERATION_TIMEOUT_MS ; WAVELOCALAI_E2E_TIMEOUT_S le change (conftest.py).
+# largement dans GENERATION_TIMEOUT_MS ; FRUGAL_AI_E2E_TIMEOUT_S le change (conftest.py).
 PAGE_TIMEOUT_MS = 120_000
 GENERATION_TIMEOUT_MS = 300_000
 

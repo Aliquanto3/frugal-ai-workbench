@@ -11,7 +11,7 @@ from pathlib import Path
 from .static_files import catalog, read_static
 
 ROOT = Path(__file__).resolve().parents[3]
-STATIC = ROOT / "src" / "wavelocalai" / "web" / "static"
+STATIC = ROOT / "src" / "frugal_ai_workbench" / "web" / "static"
 SOURCES = {
     "picker": read_static("components/wl-model-picker.js"),
     "run_status": (STATIC / "components/wl-run-status.js").read_text(encoding="utf-8"),

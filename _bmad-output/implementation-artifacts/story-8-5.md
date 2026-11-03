@@ -52,10 +52,10 @@ context:
 - `tests/v2/e2e/test_shell.py:82-118` -- `shell_timings` et `test_shell_renders_under_300_ms_without_waiting_for_the_api_ollama_stopped` : déjà 1 échauffement puis deuxième meilleur de 5 ; à aligner sur le helper commun.
 - `tests/v2/web/test_read_budget.py:24,65-92` -- `BUDGET_S = 0.3`, meilleur de trois sur app neuve : modèle à réutiliser, ne pas changer son comportement.
 - `tests/v2/e2e/test_arena.py:1472-1497` -- test axe à quatre modèles : `fake:a` dort 2,5 s, attente `.arena-summary` visible (15 s dépassées à 1440 px).
-- `src/wavelocalai/web/static/screens/arena.js:62,166-177,411` -- `showSummary = running()` ; `run_ended` remet la configuration. `arena-summary.js:1-3` : rôle du résumé. Diagnostiquer pourquoi le résumé n'apparaît que 0,3 à 0,5 s, ou pas du tout, alors que `fake:a` tourne encore.
+- `src/frugal_ai_workbench/web/static/screens/arena.js:62,166-177,411` -- `showSummary = running()` ; `run_ended` remet la configuration. `arena-summary.js:1-3` : rôle du résumé. Diagnostiquer pourquoi le résumé n'apparaît que 0,3 à 0,5 s, ou pas du tout, alors que `fake:a` tourne encore.
 - `tests/v2/e2e/test_models_manage.py:254-279` -- focus lu par `evaluate(document.activeElement…)` sans attente ; remplacer par `expect(locator).to_be_focused()`.
 - `tests/v2/web/test_arena_api.py:203-213` -- `test_lane_timeout_counts_from_the_slot_not_from_the_wait` : 0,25 s par lane pour un délai de 0,4 s (marge de 0,15 s).
-- `src/wavelocalai/inference/streaming.py:125` -- délai de lane par `asyncio.timeout(timeout_s)`, horloge de la boucle ; `arena.py:137,154,203` utilise `time.monotonic()`. Ne pas changer le code de production pour ce test.
+- `src/frugal_ai_workbench/inference/streaming.py:125` -- délai de lane par `asyncio.timeout(timeout_s)`, horloge de la boucle ; `arena.py:137,154,203` utilise `time.monotonic()`. Ne pas changer le code de production pour ce test.
 - `tests/v2/e2e/test_accessibilite.py:723-733` -- un `h1` et un titre distinct par écran ; fixture `app` sur `server` de scope module (`tests/v2/e2e/conftest.py:167`), `browser` de scope session (`:255`). Échoue après d'autres tests (vu sur `/documents/base`, `run-autonome.md:125`).
 - `.github/workflows/tests.yml`, `.github/workflows/e2e-nocturne.yml` -- jobs existants ; nocturne déjà en `workflow_dispatch` sans entrées.
 - `_bmad-output/implementation-artifacts/run-autonome.md:45` -- liste des tests instables connus à vider.
@@ -66,7 +66,7 @@ context:
 - [x] `tests/v2/latency.py` (nouveau, ou `tests/v2/conftest.py`) -- helper de mesure : un échauffement, cinq mesures, deuxième meilleur comparé au budget, message d'échec avec toutes les mesures -- un seul endroit pour la règle.
 - [x] `_bmad-output/planning-artifacts/epics.md:1957` -- remplacer « la médiane de plusieurs appels après un appel d'échauffement » par « le deuxième meilleur de cinq appels après un appel d'échauffement » -- décision du 2026-10-23.
 - [x] `tests/v2/web/test_conversations_api.py`, `tests/v2/web/test_model_card_api.py`, `tests/v2/e2e/test_shell.py` -- utiliser le helper ; ajouter un test qui ralentit la route (et le chargement de la coquille, par route Playwright retardée) et vérifie l'échec du helper -- preuve que le test mord encore.
-- [x] `src/wavelocalai/web/static/screens/arena.js` et/ou `tests/v2/e2e/test_arena.py` -- diagnostiquer, puis corriger l'écran si le résumé disparaît trop tôt ; sinon attendre un état stable (`expect(...).to_be_visible()`, attribut d'état) -- respecte D-16. Diagnostic : pas de défaut d'écran (le backend attend toutes les lanes avant `run_ended`) ; cause trouvée à la revue : « mot » répété 400 fois déclenchait le détecteur de répétition (story 9.2), qui arrêtait les lanes aussitôt ; texte sans répétition, `fake:a` qui ne finit pas seul et run arrêté par « Arrêter » après l'audit, délai par défaut rendu.
+- [x] `src/frugal_ai_workbench/web/static/screens/arena.js` et/ou `tests/v2/e2e/test_arena.py` -- diagnostiquer, puis corriger l'écran si le résumé disparaît trop tôt ; sinon attendre un état stable (`expect(...).to_be_visible()`, attribut d'état) -- respecte D-16. Diagnostic : pas de défaut d'écran (le backend attend toutes les lanes avant `run_ended`) ; cause trouvée à la revue : « mot » répété 400 fois déclenchait le détecteur de répétition (story 9.2), qui arrêtait les lanes aussitôt ; texte sans répétition, `fake:a` qui ne finit pas seul et run arrêté par « Arrêter » après l'audit, délai par défaut rendu.
 - [x] `tests/v2/e2e/test_models_manage.py` -- attentes de focus par `expect(...).to_be_focused()`.
 - [x] `tests/v2/web/test_arena_api.py` -- marges proportionnelles : durée de lane et délai tels que « compté depuis l'attente » dépasse nettement et « compté depuis la place » reste nettement en dessous (ex. 1 s par lane, délai 1,5 s), sans changer la production.
 - [x] `tests/v2/e2e/conftest.py` et/ou `test_accessibilite.py` -- trouver l'état partagé fautif, l'isoler par fixture ; le test passe seul et en suite.
@@ -168,7 +168,7 @@ Constats medium du second avis et de l'orchestrateur corrigés, sauf le budget d
 
 **Commands:**
 - `.venv\Scripts\python -m pytest tests/v2/web/test_conversations_api.py tests/v2/web/test_model_card_api.py tests/v2/web/test_arena_api.py -q --tb=short` -- expected: vert
-- `.venv\Scripts\python -m pytest tests/v2/e2e/test_shell.py tests/v2/e2e/test_arena.py tests/v2/e2e/test_models_manage.py tests/v2/e2e/test_accessibilite.py -m e2e -q --tb=short` (avec `WAVELOCALAI_E2E_CHROMIUM` sur Edge) -- expected: vert
+- `.venv\Scripts\python -m pytest tests/v2/e2e/test_shell.py tests/v2/e2e/test_arena.py tests/v2/e2e/test_models_manage.py tests/v2/e2e/test_accessibilite.py -m e2e -q --tb=short` (avec `FRUGAL_AI_E2E_CHROMIUM` sur Edge) -- expected: vert
 - `.venv\Scripts\python .claude/cost-kit/controle_rapide.py` -- expected: aucun défaut
 - `stabilite.yml` se lance seul sur la PR (déclencheur `pull_request` filtré sur le fichier) ; `gh run watch <id> --interval 60` -- expected: vert sur les trois OS -- not yet run (rien poussé dans cette session) ; preuve à constater sur la PR avant fusion.
 

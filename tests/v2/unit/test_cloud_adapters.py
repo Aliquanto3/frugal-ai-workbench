@@ -10,11 +10,11 @@ import logging
 
 import pytest
 
-from wavelocalai.errors import ProviderError, build_envelope
-from wavelocalai.models.anthropic import AnthropicChatModel
-from wavelocalai.models.mistral import MistralChatModel
-from wavelocalai.models.openai_compat import OpenAICompatChatModel
-from wavelocalai.models.port import ChatMessage, ChatRequest, Done, ModelRef, TextDelta
+from frugal_ai_workbench.errors import ProviderError, build_envelope
+from frugal_ai_workbench.models.anthropic import AnthropicChatModel
+from frugal_ai_workbench.models.mistral import MistralChatModel
+from frugal_ai_workbench.models.openai_compat import OpenAICompatChatModel
+from frugal_ai_workbench.models.port import ChatMessage, ChatRequest, Done, ModelRef, TextDelta
 
 from ..fake_cloud import (
     FAKE_KEYS,
@@ -252,8 +252,8 @@ async def test_an_error_event_inside_the_stream_is_cloud_error(provider, tag, _)
 def test_unexpected_error_log_and_envelope_mask_a_raw_mistral_key(tmp_path):
     # Revue 2.4 : une clé sans préfixe reconnaissable (Mistral) citée par une exception non
     # traduite est masquée dans le journal (trace comprise) et dans l'enveloppe `internal`.
-    from wavelocalai.inference.streaming import _error_envelope
-    from wavelocalai.store.logs import close_logging, setup_logging
+    from frugal_ai_workbench.inference.streaming import _error_envelope
+    from frugal_ai_workbench.store.logs import close_logging, setup_logging
 
     key = FAKE_KEYS["mistral"]
     log_file = setup_logging(tmp_path, console=False, secrets=(key,))

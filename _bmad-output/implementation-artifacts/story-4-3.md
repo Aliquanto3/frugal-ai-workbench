@@ -8,8 +8,8 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-1.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-2.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-4.md'
@@ -19,37 +19,37 @@ deferred:
       Écart ouvert n° 13 de `sprint-change-proposal-2026-10-19.md` §7(d), non tranché (Supprimer et Vider désactivés pendant un import, comme la maquette, ou `409` affiché, comme le contrat). Variante la plus conservatrice gardée : le contrat. Aucun bouton n'est désactivé par le front ; pendant un import ou une question, le serveur répond `409 base_in_use` et `wl-error` l'affiche. Passer à la maquette = désactiver `.docs-delete`, `.docs-clear` et le formulaire de réglages quand `busy()` (une ligne chacun, avec la phrase « Disponible à la fin de l'import. »). Seul « Supprimer » d'un document `indexing` n'existe pas (« Annuler l'import » l'arrête).
     evidence: |-
       `documents-manage.js` (en-tête), `test_clearing_during_an_import_shows_the_409_and_deletes_nothing`, `test_a_document_being_indexed_has_no_delete_button`.
-    location: src/wavelocalai/web/static/screens/documents-manage.js
+    location: src/frugal_ai_workbench/web/static/screens/documents-manage.js
     severity: medium
   - summary: >-
       Interprétation de « document visé par un run actif » (AD-13) : un document est refusé (`409 base_in_use`) s'il est `indexing` (son import tourne) ou si un run `rag` est actif (la question lit toute la base) ; un document `ready` ou `failed` se supprime pendant l'import d'autres fichiers. « Vider » et le changement d'embedding refusent tout run `ingest` ou `rag` actif (AD-16). À durcir (refuser tout effacement pendant un import) si Anaël préfère la lecture la plus stricte.
     evidence: |-
       `rag/manage.py` (`delete_document`, `clear`, `update_settings`).
-    location: src/wavelocalai/rag/manage.py
+    location: src/frugal_ai_workbench/rag/manage.py
     severity: low
   - summary: >-
       Report 4.1/4.2/4.4 « refus explicite sans sqlite-vec » : variante conservatrice. Le repli `NumpyIndex` reste utilisable (aucune régression : tests, CI macOS), mais (1) une question sur une base « prête » dont les vecteurs ont disparu (redémarrage) est refusée avant tout run par `409 vector_index_lost` (au lieu de « aucun document prêt ») ; (2) `GET /api/rag/settings` expose `index.persistent` et l'écran affiche, dans les réglages, que l'index est en mémoire et que les documents seront à réimporter après un redémarrage. Un import n'est pas refusé sans sqlite-vec : `sqlite-vec` étant une dépendance épinglée, le cas exige un CPython sans `enable_load_extension` ; refuser l'import hors `testing` (nouveau code, pas de repli silencieux) reste à décider.
     evidence: |-
       `rag/query.py::_check_vectors`, `test_a_base_whose_vectors_were_lost_is_refused_with_its_own_message`, `index.persistent`.
-    location: src/wavelocalai/rag/query.py
+    location: src/frugal_ai_workbench/rag/query.py
     severity: low
   - summary: >-
       Quatre codes dans `errors.py`, pas trois : `embedding_change_needs_clear`, `base_count_stale`, `base_in_use` (les trois refus de la story : modèle sur base non vide, `expected_count` périmé, document ou base utilisés par un run actif ; `base_in_use` sert aussi à « Vider » et au changement d'embedding pendant un run, plutôt que `run_busy` dont l'action « Rejoignez-la » ne convient pas), et `vector_index_lost` (report ci-dessus). `embedding_locked` (4.1, import d'un autre modèle) reste tel quel.
     evidence: |-
       `errors.py`, `contrat-api.md` (codes).
-    location: src/wavelocalai/errors.py
+    location: src/frugal_ai_workbench/errors.py
     severity: low
   - summary: >-
       Maquette non reprise : la ligne « reclassement » des réglages (reranker, AD-17) et les stratégies `hyde` et `self_rag` (liste des stratégies fournie par le serveur, `naive` seule jusqu'aux stories 4.6 et 4.7). Les bornes de l'API sont celles de `RagSettings` (extraits 100 à 8 000 caractères, `top_k` 1 à 20), plus larges que celles de la maquette (200 à 2 000, 1 à 5) ; le formulaire les lit du serveur.
     evidence: |-
       `GET /api/rag/settings` (`strategies`, `limits`), `documents-settings.js`.
-    location: src/wavelocalai/web/static/screens/documents-settings.js
+    location: src/frugal_ai_workbench/web/static/screens/documents-settings.js
     severity: low
   - summary: >-
       Purge incomplète (AD-13) : si un lecteur tient le journal au moment de `wal_checkpoint(TRUNCATE)`, la suppression est validée et rend 200 mais le texte reste dans le `-wal` jusqu'à la prochaine écriture (`Store.purge_pending`, mécanisme de la story 2.6). Aucun signal n'est rendu à l'écran. Le test d'octets ne le provoque pas (aucun lecteur concurrent).
     evidence: |-
       `store/db.py::purge_free_space`, `test_a_purge_blocked_by_a_reader_is_reported_then_replayed`.
-    location: src/wavelocalai/store/db.py
+    location: src/frugal_ai_workbench/store/db.py
     severity: low
   - summary: >-
       La liste des modèles d'embedding du formulaire vient d'Ollama (modèles installés, `kind == "embedding"`) : Ollama arrêté, elle est vide et le formulaire ne propose que « Par défaut » et le modèle de la base. Changer de modèle d'embedding de bout en bout n'est donc pas couvert par l'E2E (un seul modèle `fake`) : le refus du serveur est prouvé côté web (second modèle `fake-other:8`), l'affichage du refus et du bouton « Vider » côté navigateur (réponse `409` simulée).
@@ -72,7 +72,7 @@ Maîtriser ce que contient la base documentaire : supprimer un document (prêt o
 3. **Test d'octets et résidu vectoriel** : le texte du document supprimé est absent des octets du `.db` et du `-wal` (le test le voit avant), le `-wal` fait 0 octet, le document voisin est intact. **Résidu vectoriel dans le blob vec0 (point différé de la spine)** : constaté avec sqlite-vec 0.1.9, **aucun** : ni le vecteur entier (16 `float32` du `fake`, 768 pour `nomic-embed-text` réel) ni un fragment de 16 octets ne se retrouvent dans le fichier après la suppression, alors que le vecteur du voisin y est (vec0 met à zéro le vecteur supprimé, le `VACUUM` réécrit le fichier). Preuve : `test_the_deleted_text_is_in_neither_the_database_nor_the_journal`, `test_the_vector_residue_state_in_the_vec0_blob_after_a_delete_by_rowid`, et `integration/test_rag_manage_ollama.py` (vrais vecteurs).
 4. **Vider (dialogue)** : « Vider la base documentaire » (au-dessus du tableau, dès qu'un document existe, un document en échec compris) ouvre le même dialogue : « Vider la base documentaire ? », « 340 extraits de 12 documents seront supprimés. » (« 1 extrait de 1 document sera supprimé. »), focus sur « Annuler », « Annuler » ne supprime rien (« Opération annulée : la base documentaire est inchangée. », test sur le serveur), confirmer appelle `DELETE /api/rag/base?expected_count=340` et annonce « Base documentaire vidée : 340 extraits de 12 documents supprimés. » (même verbe) ; le focus passe à « Choisir des fichiers » et l'état vide revient. Preuve : `test_clear_asks_with_the_numbered_consequence_then_cancel_deletes_nothing`, `test_confirming_clears_the_base_and_says_so_with_the_same_verb`.
 5. **`DELETE /api/rag/base?expected_count=`** : dans une seule transaction, compare `expected_count` au nombre réel d'extraits (`count(*)` de `chunks`), supprime les extraits et **tous** les documents (statuts compris), puis `VectorIndex.clear` **supprime et recrée** la table vec0 (`DROP TABLE` puis `CREATE`, ou `clear()` du repli), suivi de la même purge. Rend `{documents_removed, chunks_removed}`. Un `expected_count` périmé rend `409 base_count_stale` (`detail.expected`, `detail.actual`) **sans rien supprimer** ; `expected_count` absent ou négatif : `422 invalid_request` ; base vide : 200 à zéro. L'écran relit la base après un `base_count_stale`. Preuve : `test_clearing_deletes_everything_and_recreates_the_vector_table`, `test_clearing_leaves_no_vector_in_the_file`, `test_a_stale_expected_count_deletes_nothing`, `test_the_expected_count_is_required_and_a_number`, `test_an_empty_base_clears_to_zero`, `test_a_stale_count_is_refused_and_the_base_is_read_again` (E2E), `unit/test_vector_index.py::test_clear_empties_the_index_and_keeps_it_usable`.
-6. **`GET` et `PUT /api/rag/settings`** : réglages dans `preferences` (clé `rag.settings`, `rag/settings.py`), qui **priment** sur le `.toml` pour ces seules clés (AD-15) : `embedding_model`, `chunk_size`, `chunk_overlap`, `top_k`, `strategy`. L'ingestion les lit à chaque import (découpe, modèle par défaut) et la question à chaque run (`top_k`) ; `runs.params` porte les valeurs en vigueur. `GET` rend aussi l'état de la base, les modèles d'embedding installés, les stratégies disponibles, les bornes et `index.persistent` ; **`top_k` et `strategy` sont lus par la Discussion (4.5) dans cette réponse**. `PUT` ne change que les champs envoyés (`null` rend le choix au `.toml`), valide les bornes et `chunk_overlap < chunk_size` (`422 invalid_request`, rien n'est écrit), vérifie que le modèle est un embedding local. **L'app n'écrit jamais `wavelocalai.toml`** (test sur les octets du fichier du dépôt et sur l'absence de tout `.toml` créé). Preuve : `test_the_settings_start_from_the_toml_defaults`, `test_a_put_keeps_the_other_fields_and_applies_to_the_next_import_and_question`, `test_a_null_gives_the_choice_back_to_the_toml`, `test_a_bad_setting_is_a_422_and_nothing_is_stored` (8), `test_an_unknown_or_chat_model_cannot_be_the_embedding`, `test_the_app_never_writes_the_toml_file`, `unit/test_rag_settings.py` (14).
+6. **`GET` et `PUT /api/rag/settings`** : réglages dans `preferences` (clé `rag.settings`, `rag/settings.py`), qui **priment** sur le `.toml` pour ces seules clés (AD-15) : `embedding_model`, `chunk_size`, `chunk_overlap`, `top_k`, `strategy`. L'ingestion les lit à chaque import (découpe, modèle par défaut) et la question à chaque run (`top_k`) ; `runs.params` porte les valeurs en vigueur. `GET` rend aussi l'état de la base, les modèles d'embedding installés, les stratégies disponibles, les bornes et `index.persistent` ; **`top_k` et `strategy` sont lus par la Discussion (4.5) dans cette réponse**. `PUT` ne change que les champs envoyés (`null` rend le choix au `.toml`), valide les bornes et `chunk_overlap < chunk_size` (`422 invalid_request`, rien n'est écrit), vérifie que le modèle est un embedding local. **L'app n'écrit jamais `frugal-ai-workbench.toml`** (test sur les octets du fichier du dépôt et sur l'absence de tout `.toml` créé). Preuve : `test_the_settings_start_from_the_toml_defaults`, `test_a_put_keeps_the_other_fields_and_applies_to_the_next_import_and_question`, `test_a_null_gives_the_choice_back_to_the_toml`, `test_a_bad_setting_is_a_422_and_nothing_is_stored` (8), `test_an_unknown_or_chat_model_cannot_be_the_embedding`, `test_the_app_never_writes_the_toml_file`, `unit/test_rag_settings.py` (14).
 7. **Changer d'embedding sur une base non vide** : `409 embedding_change_needs_clear` (`detail.current`, `detail.requested`), rien n'est écrit ; le même modèle passe ; une fois la base vidée, le changement passe et sert à l'import suivant. Écran : « Enregistrer » envoie seulement les champs changés ; sur ce refus, `wl-error` dit pourquoi et un bouton « Vider la base documentaire » (déduit du code, D-4) ouvre le dialogue ; la base vidée, les réglages refusés sont rejoués et annoncés à la suite (« … supprimés. Réglages enregistrés. »). Preuve : `test_changing_the_embedding_of_a_non_empty_base_must_clear_first`, `test_a_refused_embedding_change_says_to_clear_first_and_offers_the_button` (E2E).
 8. **`409` pendant un run actif** : `base_in_use` (`detail.run_id`, `detail.kind`) pour un document `indexing`, un run `rag` actif (suppression d'un document), un run `ingest` ou `rag` actif (« Vider », changement d'embedding) ; rien n'est supprimé, `wl-error` l'affiche avec son action. Preuve : `test_a_document_still_indexing_is_a_409_with_the_active_import`, `test_a_document_cannot_be_deleted_while_a_question_runs`, `test_clearing_is_a_409_while_an_import_runs_and_nothing_is_deleted`, `test_clearing_is_a_409_while_a_question_runs`, `test_changing_the_embedding_is_a_409_while_an_import_runs`, `test_clearing_during_an_import_shows_the_409_and_deletes_nothing` (E2E).
 9. **Sans sqlite-vec** (report 4.1/4.4, voir `deferred`) : `409 vector_index_lost` avant tout run quand la base est « prête » mais que l'index en mémoire n'a plus ses vecteurs ; vider puis réimporter répare ; `index.persistent` faux affiche l'avertissement dans les réglages. Preuve : `test_a_base_whose_vectors_were_lost_is_refused_with_its_own_message`.
@@ -96,9 +96,9 @@ Maîtriser ce que contient la base documentaire : supprimer un document (prêt o
 
 ## Fichiers
 
-- `src/wavelocalai/rag/manage.py` (nouveau : `RagBaseService`), `rag/settings.py` (nouveau : réglages en vigueur), `rag/index.py` (`persistent`, `clear`), `rag/ingest.py` et `rag/query.py` (lisent les préférences ; `vector_index_lost`), `web/routes_rag_base.py` (nouveau : quatre routes), `web/app.py` (service, `app.state.preferences`), `errors.py` (quatre codes)
-- `src/wavelocalai/web/static/components/wl-confirm-dialog.js` (nouveau), `components/index.js`, `components.css`, `screens/documents-manage.js`, `screens/documents-settings.js` (nouveaux), `screens/documents-base.js`, `documents.css`, `core/api.js`, `i18n/fr.json`
-- `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md`
+- `src/frugal_ai_workbench/rag/manage.py` (nouveau : `RagBaseService`), `rag/settings.py` (nouveau : réglages en vigueur), `rag/index.py` (`persistent`, `clear`), `rag/ingest.py` et `rag/query.py` (lisent les préférences ; `vector_index_lost`), `web/routes_rag_base.py` (nouveau : quatre routes), `web/app.py` (service, `app.state.preferences`), `errors.py` (quatre codes)
+- `src/frugal_ai_workbench/web/static/components/wl-confirm-dialog.js` (nouveau), `components/index.js`, `components.css`, `screens/documents-manage.js`, `screens/documents-settings.js` (nouveaux), `screens/documents-base.js`, `documents.css`, `core/api.js`, `i18n/fr.json`
+- `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md`
 - Tests : `tests/v2/web/test_rag_manage_api.py` (32), `unit/test_rag_settings.py` (14), `unit/test_vector_index.py` (+3), `e2e/test_documents_manage.py` (19), `integration/test_rag_manage_ollama.py` (1) ; réalignés : `e2e/test_documents.py` (colonne « Actions », « Supprimer » présent), `unit/test_documents_static.py` (nouveaux fichiers)
 
 ## Vérification

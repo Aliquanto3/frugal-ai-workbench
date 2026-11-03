@@ -8,7 +8,7 @@ review_loop_iteration: 0
 followup_review_recommended: false
 context:
   - '{project-root}/AGENTS.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
 warnings: []
 deferred:
   - summary: >-
@@ -122,7 +122,7 @@ deferred:
   - `[false]` `[reject]` (intent) écart `pages/` → `views/` — justifié, consigné au Spec Change Log.
   - `[low]` `[reject]` (intent) « Mode » en texte et non en badge — story 8.
   - `[low]` `[reject]` (intent) deltas et graphiques partiellement retouchés (stories 8 et 10) — sans changement de calcul.
-  - `[maybe-false]` `[reject]` (intent) pied de page « année · Wavestone » sans version — conforme à « année courante… ou rien ».
+  - `[maybe-false]` `[reject]` (intent) pied de page « année · nom de l'application » sans version — conforme à « année courante… ou rien ».
   - `[medium]` `[patch]` (verification-gap) métrique « Mode » non liée au toggle par un test — AppTest ajouté.
   - `[medium]` `[patch]` (verification-gap) branche « base non vide » de l'Assistant documentaire jamais exécutée — AppTest avec statistiques simulées.
   - `[medium]` `[patch]` (verification-gap) mode « Équipe d'agents » jamais rendu — AppTest ajouté.
@@ -134,7 +134,7 @@ deferred:
   - `[low]` `[patch]` (edge) podium « nan/100 » — `_format_ratio`.
   - `[low]` `[patch]` (edge) source `None` comptée comme document — ignorée.
   - `[false]` `[reject]` (edge) la mémoire de l'accueil change de calcul — affichage « Go utilisés / Go totaux » exigé par EXPERIENCE.md ; mesure `psutil` inchangée.
-  - `[maybe-false]` `[reject]` (intent) lecture « noms identiques » au sens littéral pour l'accueil — exception d'EXPERIENCE.md (onglet « WaveLocalAI »).
+  - `[maybe-false]` `[reject]` (intent) lecture « noms identiques » au sens littéral pour l'accueil — exception d'EXPERIENCE.md (onglet « Frugal AI Workbench »).
   - `[false]` `[reject]` (intent) règle du benchmark — `benchmark_slm.py` n'importe que `config`.
   - `[maybe-false]` `[reject]` (intent) typographie (espaces insécables avant « : ») non contrôlée partout — appliquée via formatting.py pour les nombres ; revue visuelle au matin.
   - `[low]` `[reject]` (intent) écran « Mode » de Sobriété non testé dans le sens inverse — test ajouté dans les deux états.
@@ -163,7 +163,7 @@ with st.sidebar:
 pg.run()
 ```
 
-Un widget à `key` perd sa valeur quand il n'est pas rendu sur un run : le rendre à chaque run dans le routeur la conserve. L'onglet du navigateur de l'accueil reste « WaveLocalAI ».
+Un widget à `key` perd sa valeur quand il n'est pas rendu sur un run : le rendre à chaque run dans le routeur la conserve. L'onglet du navigateur de l'accueil reste « Frugal AI Workbench ».
 
 ## Verification
 

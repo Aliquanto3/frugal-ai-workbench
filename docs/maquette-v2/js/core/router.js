@@ -7,7 +7,7 @@
 // - Un écran exporte `mount(host, ctx)` (AD-20 ; `render` est accepté comme alias), qui rend sa
 //   fonction de démontage, et `scenarios` (voir CONVENTIONS.md). Il est gardé en mémoire : son
 //   nœud est masqué, non détruit. Un changement de paramètre le remonte.
-// - À chaque route : `document.title` « <Écran> · WaveLocalAI », focus sur le `h1`, annonce polie.
+// - À chaque route : `document.title` « <Écran> · Frugal AI Workbench », focus sur le `h1`, annonce polie.
 //   Route inconnue : retour à l'Accueil, sans entrée de plus dans l'historique.
 
 import { loadScreenTexts, t } from "./i18n.js";

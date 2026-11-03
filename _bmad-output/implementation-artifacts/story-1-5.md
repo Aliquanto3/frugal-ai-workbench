@@ -8,7 +8,7 @@ merged: 'feat/v2-hub (story 1.3)'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-2.md'
 warnings: []
 deferred:
@@ -16,19 +16,19 @@ deferred:
       Ports `ChatModel` / `Embedder` et adaptateurs absents : `registry.resolve` rend une `ModelRef` (tag, fournisseur, origine, type). La story 2.1 y ajoute l'adaptateur Ollama et branche le client sur la référence ; `models/port.py` ne contient que `ModelRef`.
     evidence: |-
       Les critères de 1.5 ne portent que sur le refus du cloud et du type.
-    location: src/wavelocalai/models/port.py
+    location: src/frugal_ai_workbench/models/port.py
     severity: low
   - summary: >-
-      Les listes de modèles cloud et la correspondance Groq vers ecologits (`[cloud.models]`, `[cloud.groq_ecologits]` de `wavelocalai.toml`) sont des listes fixes de départ, sans appel fournisseur ; le test de contrat ecologits (story 2.5) doit confirmer ou corriger la table Groq (deux entrées gpt-oss seulement).
+      Les listes de modèles cloud et la correspondance Groq vers ecologits (`[cloud.models]`, `[cloud.groq_ecologits]` de `frugal-ai-workbench.toml`) sont des listes fixes de départ, sans appel fournisseur ; le test de contrat ecologits (story 2.5) doit confirmer ou corriger la table Groq (deux entrées gpt-oss seulement).
     evidence: |-
       AD-11 : correspondance Groq explicite dans le `.toml`, test de contrat de signature.
-    location: wavelocalai.toml
+    location: frugal-ai-workbench.toml
     severity: low
   - summary: >-
       « Tient en mémoire » ne compte que la RAM disponible lue par psutil : pas de VRAM (NVML), ni la mémoire déjà occupée par les modèles chargés dans Ollama (la v1 la rajoutait via `/api/ps`), ni le contexte (KV cache). Pessimiste quand un modèle est déjà chargé. La fiche machine et NVML viennent en 1.7, le garde-fou chiffré en 4.8.
     evidence: |-
       `MemoryAdvisor` lit `psutil.virtual_memory().available`.
-    location: src/wavelocalai/hardware/memory.py
+    location: src/frugal_ai_workbench/hardware/memory.py
     severity: low
   - summary: >-
       `test_real_launch.py` (story 1.2) échoue sous Windows sans `PYTHONUTF8=1` : la sortie du sous-processus est en cp1252 et le test la lit en UTF-8 (`UnicodeDecodeError` dans le fil de lecture). Antérieur à cette story (échoue aussi sur `feat/v2-serveur`).
@@ -55,11 +55,11 @@ deferred:
 
 ## Fichiers
 
-- `src/wavelocalai/models/` : `registry.py`, `port.py`, `classify.py`, `catalog.py`, `facts.py`, `facts_store.py`, `run_stats.py`, `ollama_api.py`
-- `src/wavelocalai/hardware/memory.py`
-- `src/wavelocalai/web/routes_models.py`, `web/app.py` (registre dans le `lifespan` du hub, route)
-- `src/wavelocalai/store/migrations/0002_model_facts.sql`
-- `src/wavelocalai/config.py` (`CloudSettings`), `errors.py` (quatre codes en fin de liste : `cloud_not_allowed`, `model_not_chat`, `model_not_embedding`, `model_not_found`), `wavelocalai.toml` (`[cloud.models]`, `[cloud.groq_ecologits]`)
+- `src/frugal_ai_workbench/models/` : `registry.py`, `port.py`, `classify.py`, `catalog.py`, `facts.py`, `facts_store.py`, `run_stats.py`, `ollama_api.py`
+- `src/frugal_ai_workbench/hardware/memory.py`
+- `src/frugal_ai_workbench/web/routes_models.py`, `web/app.py` (registre dans le `lifespan` du hub, route)
+- `src/frugal_ai_workbench/store/migrations/0002_model_facts.sql`
+- `src/frugal_ai_workbench/config.py` (`CloudSettings`), `errors.py` (quatre codes en fin de liste : `cloud_not_allowed`, `model_not_chat`, `model_not_embedding`, `model_not_found`), `frugal-ai-workbench.toml` (`[cloud.models]`, `[cloud.groq_ecologits]`)
 - `tests/v2/` : `unit/{test_model_helpers,test_registry,test_registry_store}.py`, `unit/snapshots/schema_v2.sql`, `web/test_models.py`, `integration/test_models_ollama.py`
 
 ## Choix notables

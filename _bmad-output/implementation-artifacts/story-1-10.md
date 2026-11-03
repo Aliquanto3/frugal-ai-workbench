@@ -7,7 +7,7 @@ baseline_commit: '9151f62'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-8.md'
 warnings: []
 deferred:
@@ -15,7 +15,7 @@ deferred:
       `wl-run-status` ne nomme que quatre étapes (démarrage, chargement du modèle, génération, fin). « Recherche des extraits… » et les étapes des agents (UX-DR8) arrivent avec les événements des stories RAG et agents : la table `STAGE_TEXT` et `fr.json` (`components.run_status`) les attendent.
     evidence: |-
       Critère de la story : `model_loading`, `token`, `run_ended` du `fake` seulement.
-    location: src/wavelocalai/web/static/components/wl-run-status.js
+    location: src/frugal_ai_workbench/web/static/components/wl-run-status.js
     severity: low
   - summary: >-
       Aucun écran ne monte encore les deux composants : ils sont vérifiés sur la page d'essai `tests/v2/e2e/fixtures/picker.html`. Le chat, l'Arène et les documents les branchent (`purpose="chat"`, `purpose="arena" multi`) et écoutent `wl-model-change`.
@@ -27,13 +27,13 @@ deferred:
       Échap ferme le menu Affichage (`core/shell.js`, `core/disclosure.js`) sans `preventDefault` : avec un run suivi et un panneau ouvert, la même touche arrête aussi le run. Le sélecteur, lui, retient Échap (`stopPropagation`). Une fois la barre haute et l'écran du chat réunis, faire appeler `preventDefault` aux deux panneaux.
     evidence: |-
       `test_escape_closes_an_open_list_without_stopping_the_run` (liste du sélecteur seulement).
-    location: src/wavelocalai/web/static/core/disclosure.js
+    location: src/frugal_ai_workbench/web/static/core/disclosure.js
     severity: low
   - summary: >-
       `wl-error` affiche l'action du code `no_model` telle que l'API la donne, avec ses accents graves Markdown (« `ollama pull qwen3.5:2b` »). Le catalogue de la barre haute les retire pour `ollama_down` ; un nettoyage commun dans `wl-error` serait plus sûr.
     evidence: |-
       `errors.py` (action de `no_model`) et `tests/v2/unit/test_shell_static.py::test_the_ollama_down_text_mirrors_errors_py`.
-    location: src/wavelocalai/web/static/components/wl-error.js
+    location: src/frugal_ai_workbench/web/static/components/wl-error.js
     severity: low
 ---
 
@@ -58,8 +58,8 @@ Deux Custom Elements partagés, sans Shadow DOM, que les écrans de chat, d'Arè
 
 ## Fichiers
 
-- `src/wavelocalai/web/static/components/wl-model-picker.js`, `wl-run-status.js` (nouveaux), `components/index.js` (deux exports)
-- `src/wavelocalai/web/static/core/api.js` (`api.models`, `api.modelDefaults`, `api.cancelRun`), `components.css` (blocs `wl-picker-*` et `wl-run-*`), `i18n/fr.json` (`components.picker`, `components.run_status`)
+- `src/frugal_ai_workbench/web/static/components/wl-model-picker.js`, `wl-run-status.js` (nouveaux), `components/index.js` (deux exports)
+- `src/frugal_ai_workbench/web/static/core/api.js` (`api.models`, `api.modelDefaults`, `api.cancelRun`), `components.css` (blocs `wl-picker-*` et `wl-run-*`), `i18n/fr.json` (`components.picker`, `components.run_status`)
 - `tests/v2/e2e/test_picker.py` (25 cas), `tests/v2/e2e/fixtures/picker.{html,js}`, `tests/v2/unit/test_picker_static.py` (4 cas)
 
 ## Choix notables

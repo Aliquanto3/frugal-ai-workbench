@@ -23,7 +23,7 @@
     },
     {
       "id": "recherche_interne",
-      "label": "Recherche interne Wavestone",
+      "label": "Recherche interne (simulée)",
       "description": "Cherche dans les fiches internes de démonstration.",
       "available": true,
       "reason": null,

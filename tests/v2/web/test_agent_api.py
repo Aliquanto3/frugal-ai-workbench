@@ -15,11 +15,11 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.agents.tools import AgentTool, ToolOutput
-from wavelocalai.errors import ProviderError
-from wavelocalai.models.fake import FAKE_REF, Sleep
-from wavelocalai.models.port import TextDelta, ToolCall
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.agents.tools import AgentTool, ToolOutput
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.models.fake import FAKE_REF, Sleep
+from frugal_ai_workbench.models.port import TextDelta, ToolCall
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..fake_cloud import FakeCloud, Plan, chat_stream, chat_tool_stream
@@ -37,8 +37,8 @@ LEAF_CO2_METHODS = ("codecarbon", "ecologits", "unmeasurable")
 
 @contextlib.asynccontextmanager
 async def agent_app(tmp_path, **settings):
-    """(app, client) avec `WAVELOCALAI_TESTING=1` et des réglages d'agent à choisir."""
-    app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, **settings))
+    """(app, client) avec `FRUGAL_AI_TESTING=1` et des réglages d'agent à choisir."""
+    app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, **settings))
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(transport=transport, base_url=BASE) as client:
@@ -457,7 +457,7 @@ async def test_a_second_agent_run_while_one_is_active_is_run_busy(served):
 async def test_agent_secrets_never_reach_the_steps(tmp_path):
     key = "sk-test-OPENAI0123456789abcdef"
     app = create_app(
-        make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1", "OPENAI_API_KEY": key})
+        make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1", "OPENAI_API_KEY": key})
     )
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)

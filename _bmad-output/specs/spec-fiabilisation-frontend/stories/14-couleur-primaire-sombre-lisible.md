@@ -6,7 +6,7 @@ status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
 ---
 
 <frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
@@ -24,7 +24,7 @@ Décisions après vérification (27/09) : `#8468EC` puis `#886DED` écartés ; a
 ## Code Map
 
 - `.streamlit/config.toml:57` -- `[theme.dark] primaryColor` (valeur de test `#8468EC` appliquée, non commitée).
-- `_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md:27,156` -- token `primary-dark` et tableau Colors (mis à jour pour `#8468EC`).
+- `_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md:27,156` -- token `primary-dark` et tableau Colors (mis à jour pour `#8468EC`).
 - `tests/app/test_theme.py:32` -- valeur attendue du thème sombre.
 - `tests/e2e/README.md:71`, `tests/e2e/test_accessibility.py:17` -- textes sur la décision en attente, à réécrire une fois tranchée.
 - `src/app/static/wordmark.svg` -- reste `#6A4DE6` : image unique pour les deux thèmes, grand texte (seuil 3:1).

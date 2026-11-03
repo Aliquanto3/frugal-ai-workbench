@@ -52,7 +52,7 @@ def test_parcours_sobriete_puis_modeles_sans_recharger_la_page(page, models_serv
         '() => document.querySelector(\'[data-screen="sobriety"] [data-card="cpu"]\')'
         "?.getAttribute('aria-busy') === 'false'",
     )
-    assert page.title() == "Sobriété et matériel · WaveLocalAI"
+    assert page.title() == "Sobriété et matériel · Frugal AI Workbench"
     wait_sobriety_text(page, "Aucune réponse mesurée dans cette session")
     wait_sobriety_text(page, "1 modèle chargé")
 

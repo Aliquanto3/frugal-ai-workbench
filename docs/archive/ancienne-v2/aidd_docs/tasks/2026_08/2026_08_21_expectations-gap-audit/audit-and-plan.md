@@ -333,7 +333,7 @@ publication-level suites (public-benchmark subsets, contamination-marked), engin
 harness as row dimensions, bootstrap CI + paired Wilcoxon, judges re-targeted to Z.ai GLM +
 DeepSeek (paid, ~$10 campaign; GPT-5.6 Luna calibration on 10%; Google/Mistral demoted to
 subjects), CC-BY 4.0 on suite items + bundle (code stays MIT), tabular export; wattmeter
-explicitly out of scope; venue: blog/Wavestone first, arXiv optional, JOSS later-optional.
+explicitly out of scope; venue: blog first, arXiv optional, JOSS later-optional.
 
 Plan: Phase P (spec): P1 commit source docs; P2 PRD amendment; P3 new epics E-F machines,
 E-G statistics+suite growth, E-H engine+variant matrix, E-J data publication; P4 amend E-D

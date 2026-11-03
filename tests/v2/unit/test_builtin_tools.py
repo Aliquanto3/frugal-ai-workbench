@@ -12,11 +12,11 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.agents.tools import ToolError, ToolOutput, Workspace
-from wavelocalai.agents.tools import basic as basic_module
-from wavelocalai.agents.tools import build_registry
-from wavelocalai.agents.tools import builtin as builtin_module
-from wavelocalai.agents.tools import files as files_module
+from frugal_ai_workbench.agents.tools import ToolError, ToolOutput, Workspace
+from frugal_ai_workbench.agents.tools import basic as basic_module
+from frugal_ai_workbench.agents.tools import build_registry
+from frugal_ai_workbench.agents.tools import builtin as builtin_module
+from frugal_ai_workbench.agents.tools import files as files_module
 
 from ..conftest import make_settings
 
@@ -88,7 +88,7 @@ def test_the_registry_carries_the_nine_tools_of_the_v1_with_the_lexicon_labels(r
     assert {t.id: t.label for t in registry.all()} == {
         "get_current_time": "Heure",
         "calculator": "Calculatrice",
-        "search_wavestone_internal": "Recherche interne Wavestone",
+        "search_internal": "Recherche interne (simulée)",
         "send_email": "Envoi d'email",
         "analyze_csv": "Analyse de données",
         "generate_document": "Génération de document",
@@ -197,9 +197,9 @@ async def test_a_missing_argument_is_an_error_the_agent_can_read(registry):
 
 async def test_time_search_and_system_monitor(registry):
     assert len((await run(registry, "get_current_time")).split()) == 2
-    assert "Wavestone" in await run(registry, "search_wavestone_internal", query="PUE")
-    assert "1.4" in await run(registry, "search_wavestone_internal", query="pue")
-    assert "Aucune information" in await run(registry, "search_wavestone_internal", query="zzz")
+    assert "l'entreprise" in await run(registry, "search_internal", query="PUE")
+    assert "1.4" in await run(registry, "search_internal", query="pue")
+    assert "Aucune information" in await run(registry, "search_internal", query="zzz")
     report = await run(registry, "system_monitor")
     assert report.startswith("**Monitoring Système**") and "### RAM" in report
 

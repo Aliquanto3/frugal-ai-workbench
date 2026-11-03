@@ -1,7 +1,7 @@
 # Parité de la v1 (Streamlit) avec la v2
 
 Liste page par page et onglet par onglet de ce que fait la v1 et de ce qu'il en advient dans la v2
-(`src/wavelocalai/`, port 8502). Elle sert à décider de l'archivage de la v1 (story 8.4) sans perdre
+(`src/frugal_ai_workbench/`, port 8502). Elle sert à décider de l'archivage de la v1 (story 8.4) sans perdre
 une fonction sans le dire. Source : l'inventaire de `docs/audits/refonte-2026-10/03-ux-front.md` §1.1,
 relu contre le code de la v1 (`src/app/Accueil.py`, `home.py`, `views/`, `tabs/`, `rag_upload.py`,
 `rag_clear.py`) et contre le code, les textes et les tests de la v2.
@@ -35,7 +35,7 @@ v2 se comporte comme décrit ; une décision « à reprendre » ouvre une story 
 | G10 | Équipe : délégation entre agents (`allow_delegation`) | ordre fixe, le texte de l'agent précédent est transmis (écart noté en 6.5) | confirmer l'ordre fixe |
 | G11 | Équipe : champ « Contexte » (`backstory`) éditable par agent | valeur gardée à l'enregistrement, non éditable (écart noté en 6.6) | confirmer, ou ajouter le champ |
 | S4 | Sobriété : « Arrêter et enregistrer » puis « Reprendre le suivi » de la session CodeCarbon | la mesure est continue ; seule « Remettre le compteur à zéro » clôt une session (elle va à l'historique) | confirmer qu'une pause de mesure n'a pas d'usage |
-| S8 | Sobriété, carte d'identité : « Nom de la machine », « Architecture », version de Python | la fiche montre processeur, mémoire, accélérateur, système, version d'Ollama et de WaveLocalAI | confirmer (le nom de machine n'a pas d'intérêt en démonstration, et peut être sensible) |
+| S8 | Sobriété, carte d'identité : « Nom de la machine », « Architecture », version de Python | la fiche montre processeur, mémoire, accélérateur, système, version d'Ollama et de Frugal AI Workbench | confirmer (le nom de machine n'a pas d'intérêt en démonstration, et peut être sensible) |
 | M5 | Gestion des modèles : filtres rapides par capacité (Raisonnement, Outils, Rapide, Cloud) | pas de filtre sur l'écran Modèles ; le sélecteur de modèles se filtre par saisie et marque outils, raisonnement et MoE | ajouter des filtres, ou s'en remettre au filtre par saisie du sélecteur |
 | M6 | Gestion des modèles : colonnes « RAM » estimée et « CO₂ pour 1 000 tokens » de chaque modèle installé | « Tient en mémoire » et « Débit sur ce poste » sur l'écran ; la fiche d'un modèle donne mémoire au pic et énergie par 1 000 tokens, mesurées sur les postes de référence | confirmer (le CO₂ est mesuré par réponse, pas estimé par modèle) |
 
@@ -61,7 +61,7 @@ v2 se comporte comme décrit ; une décision « à reprendre » ouvre une story 
 | H3 | Métriques « Processeur » et « Mémoire » (figées à l'ouverture) | reprise | Accueil, cartes en direct (flux système toutes les 2 s) |
 | H4 | Carte « Démo recommandée » et lien vers l'Arène | reprise | Accueil, carte « Démo recommandée » : modèles prêts et « Lancer une comparaison » |
 | H5 | Trois cartes de modules (`st.page_link`) | remplacée par | Accueil, cinq cartes de modules avec nom court, nom long, résumé (documents indexés) ; carte « Références » |
-| H6 | Pied de page © année · Wavestone | remplacée par | pied de page de la coquille (« Les données restent sur ce poste tant que le cloud n'est pas autorisé ») |
+| H6 | Pied de page © année · nom de l'application | remplacée par | pied de page de la coquille (« Les données restent sur ce poste tant que le cloud n'est pas autorisé ») |
 
 ## Arène des modèles : Chat libre
 
@@ -121,7 +121,7 @@ v2 se comporte comme décrit ; une décision « à reprendre » ouvre une story 
 |---|---|---|---|
 | M1 | Tableau des modèles disponibles (nom, format, vitesse, RAM, CO₂, paramètres, capacités) | remplacée par | Modèles `#/modeles` : « Sur ce poste » (nom, origine, usage, paramètres, taille, tient en mémoire, chargé, débit mesuré) ; modèles cloud dans le groupe « Cloud » du sélecteur ; fiche d'un modèle par `#/modeles/<tag>` |
 | M2 | « Rafraîchir » la liste | remplacée par | liste servie en direct par le registre ; pas de bouton |
-| M3 | « Ajouter un modèle » : catalogue Ollama et Wavestone, caractéristiques, tag libre, progression | reprise | Modèles : « Catalogue installable » (avec mémoire nécessaire, « Tient en mémoire »), « Installer un modèle par son nom », progression chiffrée et « Annuler », « Installer quand même » |
+| M3 | « Ajouter un modèle » : catalogue Ollama et catalogue curaté, caractéristiques, tag libre, progression | reprise | Modèles : « Catalogue installable » (avec mémoire nécessaire, « Tient en mémoire »), « Installer un modèle par son nom », progression chiffrée et « Annuler », « Installer quand même » |
 | M4 | Aucune suppression de modèle | remplacée par | **ajout** : « Supprimer » avec confirmation et conséquence chiffrée |
 | M5 | Filtres rapides par capacité (Raisonnement, Outils, Rapide, Cloud) | abandonnée | **(à confirmer)** pas de filtre sur l'écran Modèles |
 | M6 | Colonnes « RAM » et « CO₂ pour 1 000 tokens » | abandonnée | **(à confirmer)** remplacées en partie : « Tient en mémoire », « Débit sur ce poste », fiche du modèle (mémoire au pic, énergie par 1 000 tokens) |
@@ -192,7 +192,7 @@ v2 se comporte comme décrit ; une décision « à reprendre » ouvre une story 
 |---|---|---|---|
 | G5 | Bibliothèque « Scénarios » (dialogue, cinq scénarios en catégories) | abandonnée | **(à confirmer)** deux actions rapides subsistent |
 | G6 | Choix du modèle, tri par outils vérifiés, avertissement | reprise | Agent seul : sélecteur (défaut `agent`), « Outils vérifiés », avertissement sans outils vérifiés |
-| G7 | Pastilles d'outils (neuf outils, email décoché) | reprise | Agent seul : neuf interrupteurs (Heure, Calculatrice, Recherche interne Wavestone, Analyse de données, Génération de document, de graphique, Rapport Markdown, Moniteur système, Envoi d'email), « Envoi d'email » décoché ; un outil non configuré dit pourquoi |
+| G7 | Pastilles d'outils (neuf outils, email décoché) | reprise | Agent seul : neuf interrupteurs (Heure, Calculatrice, Recherche interne (simulée), Analyse de données, Génération de document, de graphique, Rapport Markdown, Moniteur système, Envoi d'email), « Envoi d'email » décoché ; un outil non configuré dit pourquoi |
 | G8 | Actions rapides « Lancer l'audit » et « Analyser les données » | reprise | Agent seul : écran d'accueil « Bonjour ! », mêmes deux actions (le CSV est celui de l'espace de travail des agents) |
 | G12 | Flux d'événements `tool_call`, `tool_result`, réponse finale | reprise | Agent seul : trace d'étapes dépliables (`wl-step-trace`) ; la réponse arrive d'un bloc (dit) |
 | G13 | Validation d'un email (dialogue « Envoyer l'email ? ») | reprise | Agent seul : dialogue de validation (destinataire, objet, corps), délai de réponse dit, aucun envoi sans accord |
@@ -230,7 +230,7 @@ v2 se comporte comme décrit ; une décision « à reprendre » ouvre une story 
 | S5 | Total de la session et équivalence en kilomètres de voiture | remplacée par | Sobriété : « Total de la session », local et cloud estimé, par module, non mesurables à part ; équivalence dans « Comment ces chiffres sont calculés » seulement (calcul serveur) |
 | S6 | Historique des émissions : une barre par lancement, période (segmenté), données en tableau replié | reprise | Sobriété : historique par session, période 7 jours / 30 jours / Tout, « Graphique » ou « Tableau », une seule unité |
 | S7 | Message « suivi indisponible » ou sans historique | reprise | états vides et d'échec de la section (« Réessayer ») |
-| S8 | Carte d'identité : système, architecture, nom de la machine, Python, cœurs logiques | abandonnée | **(à confirmer)** remplacée par processeur (cœurs physiques et fils), mémoire, accélérateur, système, versions d'Ollama et de WaveLocalAI |
+| S8 | Carte d'identité : système, architecture, nom de la machine, Python, cœurs logiques | abandonnée | **(à confirmer)** remplacée par processeur (cœurs physiques et fils), mémoire, accélérateur, système, versions d'Ollama et de Frugal AI Workbench |
 | S9 | « Rafraîchir » | abandonnée | inutile : les valeurs suivent le flux sans clic |
 | S10 | Avertissement « l'impact par réponse est une estimation théorique » | remplacée par | panneau « Comment ces chiffres sont calculés » : local mesuré, cloud estimé, non mesurable dit |
 

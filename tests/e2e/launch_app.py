@@ -15,8 +15,8 @@ une adresse autre que la machine locale, ainsi que toute résolution DNS d'un no
 consignée dans <dossier_de_données>/external_connections.log, dès le démarrage. `conftest.py`
 vérifie ce journal après chaque test et, en entier, à l'arrêt de l'app.
 
-Délai court (optionnel) : WAVELOCALAI_E2E_TIMEOUT_TAGS (tags Ollama séparés par des
-virgules) et WAVELOCALAI_E2E_SHORT_TIMEOUT_S (secondes, > 0) imposent ce délai d'inférence aux
+Délai court (optionnel) : FRUGAL_AI_E2E_TIMEOUT_TAGS (tags Ollama séparés par des
+virgules) et FRUGAL_AI_E2E_SHORT_TIMEOUT_S (secondes, > 0) imposent ce délai d'inférence aux
 seuls modèles cités, pour observer « Délai dépassé » avec un vrai modèle ; les autres gardent
 le délai de l'application.
 """
@@ -32,8 +32,8 @@ from urllib.parse import urlsplit
 ROOT_DIR = Path(__file__).resolve().parents[2]
 
 EXTERNAL_LOG_NAME = "external_connections.log"
-TIMEOUT_TAGS_ENV = "WAVELOCALAI_E2E_TIMEOUT_TAGS"
-SHORT_TIMEOUT_S_ENV = "WAVELOCALAI_E2E_SHORT_TIMEOUT_S"
+TIMEOUT_TAGS_ENV = "FRUGAL_AI_E2E_TIMEOUT_TAGS"
+SHORT_TIMEOUT_S_ENV = "FRUGAL_AI_E2E_SHORT_TIMEOUT_S"
 
 _LOCAL_NAMES = {"localhost", "localhost.localdomain", "ip6-localhost", "ip6-loopback", ""}
 _HOSTNAME = socket.gethostname().lower()
@@ -131,7 +131,7 @@ def redirect_data(data_dir: Path) -> None:
 
 
 def short_timeout_s() -> float:
-    """Délai court de WAVELOCALAI_E2E_SHORT_TIMEOUT_S (0,05 s par défaut), nombre > 0."""
+    """Délai court de FRUGAL_AI_E2E_SHORT_TIMEOUT_S (0,05 s par défaut), nombre > 0."""
     raw = os.environ.get(SHORT_TIMEOUT_S_ENV, "0.05")
     try:
         value = float(raw)
@@ -143,7 +143,7 @@ def short_timeout_s() -> float:
 
 
 def apply_short_timeouts() -> None:
-    """Délai d'inférence court pour les tags de WAVELOCALAI_E2E_TIMEOUT_TAGS (vrai appel,
+    """Délai d'inférence court pour les tags de FRUGAL_AI_E2E_TIMEOUT_TAGS (vrai appel,
     interrompu par le délai de l'application). Tags comparés sous forme normalisée
     (« gemma3 » = « gemma3:latest »)."""
     from tests.e2e.ollama_api import normalize_tag

@@ -7,8 +7,8 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.config import RagSettings
-from wavelocalai.rag.passage import (
+from frugal_ai_workbench.config import RagSettings
+from frugal_ai_workbench.rag.passage import (
     LABEL_CLOSE,
     LABEL_FAR,
     LABEL_VERY_CLOSE,

@@ -8,28 +8,28 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-3-4.md'
 warnings: []
 deferred:
   - summary: >-
-      La table de prix cloud est vide : aucune table de prix datée et sourcée n'existe dans le dépôt (la v1 n'en a pas ; l'ancienne v2 archivée n'a qu'un prix Google hors de `[cloud.models]` et des tables jugées périmées, sans source relevée pour les modèles de `[cloud.models]`). Aucun prix ni aucune date n'a été inventé : tant que la table est vide, le coût d'un modèle cloud s'affiche « inconnu » avec sa raison. À remplir par Anaël : pour chaque modèle de `[cloud.models]` qu'il veut chiffrer, les prix publics par million de tokens d'entrée et de sortie, la date du relevé et l'URL de la source (`[cloud.prices]` de `wavelocalai.toml`, mode d'emploi en commentaire).
+      La table de prix cloud est vide : aucune table de prix datée et sourcée n'existe dans le dépôt (la v1 n'en a pas ; l'ancienne v2 archivée n'a qu'un prix Google hors de `[cloud.models]` et des tables jugées périmées, sans source relevée pour les modèles de `[cloud.models]`). Aucun prix ni aucune date n'a été inventé : tant que la table est vide, le coût d'un modèle cloud s'affiche « inconnu » avec sa raison. À remplir par Anaël : pour chaque modèle de `[cloud.models]` qu'il veut chiffrer, les prix publics par million de tokens d'entrée et de sortie, la date du relevé et l'URL de la source (`[cloud.prices]` de `frugal-ai-workbench.toml`, mode d'emploi en commentaire).
     evidence: |-
-      `wavelocalai.toml` (`[cloud.prices]`), `src/wavelocalai/config.py` (`PriceTable`, qui refuse une entrée sans `retrieved_at` ni `source`).
-    location: wavelocalai.toml
+      `frugal-ai-workbench.toml` (`[cloud.prices]`), `src/frugal_ai_workbench/config.py` (`PriceTable`, qui refuse une entrée sans `retrieved_at` ni `source`).
+    location: frugal-ai-workbench.toml
     severity: medium
   - summary: >-
       Le verdict est calculé à la lecture de l'instantané (notes lues dans `run_events`, mesures des feuilles, table de prix courante), non figé en base à la fin du run. Une table de prix remplacée plus tard change donc le coût d'une comparaison rouverte (la date affichée est celle de la table courante). Figer le verdict demanderait une migration (colonne ou événement) : non demandée.
     evidence: |-
-      `src/wavelocalai/runs/snapshot.py` (`run_snapshot`), `runs/verdict.py`.
-    location: src/wavelocalai/runs/snapshot.py
+      `src/frugal_ai_workbench/runs/snapshot.py` (`run_snapshot`), `runs/verdict.py`.
+    location: src/frugal_ai_workbench/runs/snapshot.py
     severity: low
   - summary: >-
       Le coût d'un modèle cloud se calcule sur les tokens de la lane (entrée et sortie) comptés par le fournisseur ; un fournisseur qui n'en rend pas (`input_tokens` ou `output_tokens` nul) donne « inconnu » avec la raison. Les tokens de raisonnement facturés à part ne sont pas distingués (l'événement `metrics` n'en porte pas).
     evidence: |-
       `runs/verdict.py` (`_cost`), `contrat-api.md` (`metrics`).
-    location: src/wavelocalai/runs/verdict.py
+    location: src/frugal_ai_workbench/runs/verdict.py
     severity: low
 ---
 
@@ -43,7 +43,7 @@ deferred:
 
 Preuves : `tests/v2/unit/test_verdict.py` (calcul, config), `tests/v2/web/test_arena_verdict_api.py` (instantané de bout en bout), `tests/v2/unit/test_arena_verdict_static.py` (écran, sans navigateur) et `tests/v2/e2e/test_arena_verdict.py` (Edge, axe-core clair et sombre, 320 px).
 
-1. **Table de prix datée, lue par `Settings`.** `[cloud.prices]` de `wavelocalai.toml` : `currency`, `retrieved_at` (date), `source` (texte) et `[cloud.prices.models]` (`"fournisseur/modèle" = { input_per_mtok, output_per_mtok }`, par million de tokens). `PriceTable` (`config.py`) refuse une entrée sans date de relevé ni source, un prix négatif, une devise qui n'a pas trois lettres. L'application n'écrit jamais le `.toml` (AD-15). Preuve : `test_a_price_table_needs_a_date_and_a_source`, `test_the_shipped_toml_loads_with_its_price_table`.
+1. **Table de prix datée, lue par `Settings`.** `[cloud.prices]` de `frugal-ai-workbench.toml` : `currency`, `retrieved_at` (date), `source` (texte) et `[cloud.prices.models]` (`"fournisseur/modèle" = { input_per_mtok, output_per_mtok }`, par million de tokens). `PriceTable` (`config.py`) refuse une entrée sans date de relevé ni source, un prix négatif, une devise qui n'a pas trois lettres. L'application n'écrit jamais le `.toml` (AD-15). Preuve : `test_a_price_table_needs_a_date_and_a_source`, `test_the_shipped_toml_loads_with_its_price_table`.
 2. **Verdict à la fin du run, dans l'instantané.** Un run `arena` terminé `ok` avec au moins un local et un cloud notés rend `verdict` : `leader` (`local`, `cloud` ou `tie`) et `score_gap` (points, positif), `local` et `cloud` (`model`, `score`, `co2` d'AD-10 ou `null`, `cost` `{amount, currency, reason}`), `requests: 1000`, `price_table {retrieved_at, source, currency}` et `data_on_device {models, count, judge_off_device}`. Le meilleur de chaque origine est celui de plus haute note (à égalité, le premier lancé). Coût local : 0 ; coût cloud : 1 000 × (tokens d'entrée × prix d'entrée + tokens de sortie × prix de sortie) / 10⁶ avec le prix daté de la table. Aucun événement nouveau (`GET /api/runs/{id}` seul). Preuve : `test_the_verdict_compares_the_best_local_with_the_best_cloud`, `test_the_cost_of_1000_requests_uses_the_dated_price_of_the_cloud_model`, `test_the_snapshot_of_an_arena_carries_the_verdict`.
 3. **Modèle absent de la table : « inconnu », jamais 0.** `cost.amount` est `null` et `cost.reason` dit pourquoi : table vide, modèle absent de la table, tokens non comptés. Preuve : `test_a_cloud_model_missing_from_the_price_table_has_an_unknown_cost_with_a_reason`, `test_an_empty_price_table_gives_an_unknown_cost`, `test_a_cloud_model_without_counted_tokens_has_an_unknown_cost`.
 4. **Arène sans cloud, sans local noté ou non terminée : pas de verdict.** `verdict` vaut `null` (clé présente pour un run `arena`, absente pour les autres genres). Un run arrêté, interrompu ou en échec n'a pas de verdict (variante conservatrice : le classement ne vaut alors que pour les modèles déjà notés). Preuve : `test_no_verdict_without_a_scored_cloud_and_a_scored_local_model`, `test_a_cancelled_arena_has_no_verdict`.
@@ -53,9 +53,9 @@ Preuves : `tests/v2/unit/test_verdict.py` (calcul, config), `tests/v2/web/test_a
 
 ## Fichiers
 
-- `wavelocalai.toml` (`[cloud.prices]`, vide, avec mode d'emploi), `src/wavelocalai/config.py` (`ModelPrice`, `PriceTable`, `CloudSettings.prices`)
-- `src/wavelocalai/runs/verdict.py` (nouveau, fonctions pures) ; `runs/snapshot.py` (`run_snapshot(store, run_id, prices)`, notes lues dans `run_events`) ; `web/routes_runs.py` (passe la table)
-- `src/wavelocalai/web/static/screens/arena-verdict.js` (nouveau) ; `screens/arena-results.js` (monte la section, `end(state, runId)`) ; `screens/arena.js` (`results.end(state, runId)`, une ligne) ; `core/api.js` (`run`) ; `core/format.js` (`formatMoney`) ; `arena-results.css` ; `i18n/fr.json` (`arena.verdict`)
+- `frugal-ai-workbench.toml` (`[cloud.prices]`, vide, avec mode d'emploi), `src/frugal_ai_workbench/config.py` (`ModelPrice`, `PriceTable`, `CloudSettings.prices`)
+- `src/frugal_ai_workbench/runs/verdict.py` (nouveau, fonctions pures) ; `runs/snapshot.py` (`run_snapshot(store, run_id, prices)`, notes lues dans `run_events`) ; `web/routes_runs.py` (passe la table)
+- `src/frugal_ai_workbench/web/static/screens/arena-verdict.js` (nouveau) ; `screens/arena-results.js` (monte la section, `end(state, runId)`) ; `screens/arena.js` (`results.end(state, runId)`, une ligne) ; `core/api.js` (`run`) ; `core/format.js` (`formatMoney`) ; `arena-results.css` ; `i18n/fr.json` (`arena.verdict`)
 - Tests : voir les preuves ; `tests/v2/e2e/conftest.py` (`Backend` accepte un `.toml` de réglages), `tests/v2/unit/test_arena_static.py` et `test_arena_results_static.py` (scripts de l'écran)
 
 ## Écarts

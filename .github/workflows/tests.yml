@@ -38,7 +38,7 @@ jobs:
         echo "$files"
         # Tout ce qui n'est pas dans `_bmad-output/` est du code ou de la configuration.
         if echo "$files" | grep -qv '^_bmad-output/'; then code=true; else code=false; fi
-        # Ce que lit la v1 : `src/` hors `src/wavelocalai/`, ses tests, ses dépendances, sa
+        # Ce que lit la v1 : `src/` hors `src/frugal_ai_workbench/`, ses tests, ses dépendances, sa
         # configuration, les scripts, et la CI elle-même.
         if echo "$files" | grep -qE '^(src/(app|core)/|src/[^/]+$|tests/(unit|app|integration)/|tests/[^/]+$|requirements\.txt|constraints\.txt|pyproject\.toml|pytest\.ini|config/|scripts/|\.github/)'; then v1=true; else v1=false; fi
         echo "code=$code" >> "$GITHUB_OUTPUT"; echo "v1=$v1" >> "$GITHUB_OUTPUT"

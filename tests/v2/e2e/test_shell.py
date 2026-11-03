@@ -235,7 +235,7 @@ def test_unknown_route_goes_back_to_home(page, server, route):
     page.goto(f"{server.base_url}/{route}")
     wait_ready(page)
     assert page.evaluate("location.hash") == "#/"
-    assert page.title() == "Accueil · WaveLocalAI"
+    assert page.title() == "Accueil · Frugal AI Workbench"
     assert page.get_by_role("heading", level=1).inner_text() == "Accueil"
 
 
@@ -275,13 +275,13 @@ def test_each_route_sets_title_focuses_the_h1_announces_and_is_fast(shell):
     # Aller sur un écran chargé à la demande.
     elapsed = shell.evaluate(measure, "#/arene/comparer")
     assert elapsed < SCREEN_CHANGE_BUDGET_MS
-    assert shell.title() == "Arène · WaveLocalAI"
+    assert shell.title() == "Arène · Frugal AI Workbench"
     assert shell.evaluate("document.activeElement.textContent") == "Arène"
     wait_for(shell, "() => document.getElementById('announcer').textContent === 'Écran Arène'")
 
     # Revenir à l'Accueil, puis à l'écran déjà visité : gardé en mémoire (un seul load et mount).
     shell.evaluate("(hash) => { location.hash = hash }", "#/")
-    wait_for(shell, "() => document.title === 'Accueil · WaveLocalAI'")
+    wait_for(shell, "() => document.title === 'Accueil · Frugal AI Workbench'")
     assert shell.evaluate("document.activeElement.textContent") == "Accueil"
     elapsed = shell.evaluate(measure, "#/arene/comparer")
     assert elapsed < SCREEN_CHANGE_BUDGET_MS
@@ -346,7 +346,7 @@ def test_dark_theme_applies_without_reload_and_is_remembered(shell):
     assert shell.evaluate("window.__same_page") is True  # aucun rechargement
     assert shell.evaluate("localStorage.getItem('wl.theme')") == "dark"
     background = shell.evaluate("getComputedStyle(document.body).backgroundColor")
-    assert background == "rgb(10, 10, 20)"  # surface-dark #0A0A14
+    assert background == "rgb(14, 19, 22)"  # surface-dark #0E1316
 
     shell.reload()
     wait_ready(shell)
@@ -394,7 +394,7 @@ def test_the_system_theme_follows_prefers_color_scheme_live_and_is_remembered(sh
     assert shell.get_attribute("html", "data-theme") == "dark"
     assert shell.get_attribute("html", "data-theme-choice") == "system"
     assert shell.evaluate("localStorage.getItem('wl.theme')") == "system"
-    assert shell.evaluate("getComputedStyle(document.body).backgroundColor") == "rgb(10, 10, 20)"
+    assert shell.evaluate("getComputedStyle(document.body).backgroundColor") == "rgb(14, 19, 22)"
 
     # Le réglage du système change pendant que la page est ouverte : le thème suit, sans recharger.
     set_system_scheme(shell, "light")
@@ -486,13 +486,13 @@ def test_projection_and_cloud_are_switches_with_the_same_wl_switch_rendering(she
     assert {k: cloud[k] for k in shared} == {k: projection[k] for k in shared}
     assert (cloud["label"], projection["label"]) == ("Autoriser le cloud", "Mode projection")
     # Éteint : piste surface-alt bordée ink-secondary, curseur surface, icône cachée.
-    assert cloud["background"] == "rgb(246, 245, 250)" and cloud["border"] == "rgb(74, 74, 94)"
+    assert cloud["background"] == "rgb(238, 241, 240)" and cloud["border"] == "rgb(75, 85, 96)"
     assert cloud["thumb"] == "rgb(255, 255, 255)" and cloud["check"] == "0"
     assert cloud["radius"] != "0px" and cloud["width"] == "44px" and cloud["height"] == "24px"
 
 
 @pytest.mark.parametrize(
-    ("theme", "fill"), [("light", "rgb(69, 29, 199)"), ("dark", "rgb(106, 77, 230)")]
+    ("theme", "fill"), [("light", "rgb(11, 107, 120)"), ("dark", "rgb(79, 193, 207)")]
 )
 def test_switch_state_reads_in_the_shape_not_only_in_the_color(shell, theme, fill):
     if theme == "dark":
@@ -552,9 +552,9 @@ def test_theme_still_applies_when_storage_is_blocked(page, server):
     assert page.get_attribute("html", "data-theme") == "dark"
 
 
-def test_font_stack_is_aptos_then_local_inter_then_sans_serif(shell, server):
+def test_font_stack_is_local_inter_then_system_then_sans_serif(shell, server):
     stack = shell.evaluate("getComputedStyle(document.body).fontFamily")
-    assert stack == "Aptos, Inter, sans-serif"
+    assert stack == "Inter, system-ui, sans-serif"
     families = shell.evaluate("[...document.fonts].map((face) => face.family.replaceAll('\"', ''))")
     assert families.count("Inter") == 2  # droite et italique
     font = shell.request.get(f"{server.base_url}/static/fonts/InterVariable.woff2")

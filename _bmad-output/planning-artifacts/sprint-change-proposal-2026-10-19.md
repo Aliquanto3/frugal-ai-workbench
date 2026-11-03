@@ -120,7 +120,7 @@ Note en tête de §3 qui renvoie aux documents mis à jour ; table d'IA (§3.3) 
 - Précisions adoptées sans choix produit (pas des décisions) : code `run_not_found` pour un identifiant de run inconnu (`detail.run_id`) ; `model_in_use` nommé pour le 409 de suppression déjà prévu ; verdict de format du banc dans l'instantané, comme celui de l'Arène ; groupe des références désigné par le serveur (AD-20) ; catalogue installable = catalogue moins les installés ; légendes de bouton désactivé (« Choisissez 4 modèles au plus », « Saisissez une question », « Choisissez un juge ») ; « Prendre un modèle plus petit » sélectionne `detail.suggested_model` sans relancer ; codes d'erreur des trois refus de 4.3 laissés au choix de la story ; défaut `rag` du contrat cité dans le Flow 2 (le contrat prime sur `EXPERIENCE.md`).
 - `default_temperature` : lue des paramètres publiés par Ollama ou du catalogue, sinon `null`. La source exacte se règle dans 2.7.
 - `passage` : la règle de désignation (par exemple la phrase la plus proche de la question) est laissée à 4.4, écrite et testée.
-- Équivalence CO₂ : calculée par le serveur (AD-20), facteur daté et sourcé dans `wavelocalai.toml`. Le facteur de la maquette (111 g/km) est fictif ; 5.1 vérifie une source publique.
+- Équivalence CO₂ : calculée par le serveur (AD-20), facteur daté et sourcé dans `frugal-ai-workbench.toml`. Le facteur de la maquette (111 g/km) est fictif ; 5.1 vérifie une source publique.
 - Affichage d'un résultat **effacé** rouvert par son adresse : non tranché (la maquette distingue « effacé » et « introuvable »). Seul l'identifiant inconnu rend `run_not_found`.
 
 ## 7. Consignes pour l'orchestrateur du run
@@ -161,7 +161,7 @@ Aucune des deux ne change de version : elles partent dans la préversion suivant
 | 4.6, 4.7 | Aucun. |
 | 4.8 | « Prendre un modèle plus petit » sélectionne `detail.suggested_model` sans relancer. |
 | 4.9 | Carte « Documents » / « Assistant documentaire » (D-10) ; le Flow 2 vérifie le passage surligné (D-21). |
-| 5.1 | Équivalence CO₂ seulement dans le panneau de méthode, facteur et source du serveur (`wavelocalai.toml`, source publique vérifiée) (D-38). |
+| 5.1 | Équivalence CO₂ seulement dans le panneau de méthode, facteur et source du serveur (`frugal-ai-workbench.toml`, source publique vérifiée) (D-38). |
 | 5.2 | Historique des sessions closes seulement, avec une phrase sous le graphique (D-37) ; Tableau par défaut sous 640 px (D-39). |
 | 5.3 | « Installer quand même » dans le catalogue et la fiche (D-42) ; colonnes Usage et Origine repliées sous 1 024 px (D-43) ; un modèle supprimé revient au catalogue ; `pull_failed` avec `detail.cause`. |
 | 5.4 | Dialogue de suppression qui signale un défaut choisi (D-41) ; `409 model_in_use` ajouté à `errors.py`. |

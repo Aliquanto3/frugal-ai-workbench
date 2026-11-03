@@ -90,7 +90,7 @@ def download_model(model_id: str, save_path: Path, is_sentence_transformer: bool
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Setup WaveLocalAI RAG Models")
+    parser = argparse.ArgumentParser(description="Setup Frugal AI Workbench RAG Models")
     parser.add_argument("--all", action="store_true", help="Télécharger tous les modèles")
     parser.add_argument(
         "--embeddings", action="store_true", help="Télécharger uniquement les embeddings"

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import asyncio
 
-from wavelocalai.rag import rerank, rerank_pull
+from frugal_ai_workbench.rag import rerank, rerank_pull
 
 from .conftest import parse_sse, served  # noqa: F401 - fixture
 

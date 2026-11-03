@@ -7,7 +7,7 @@ baseline_commit: 'a7ab77b'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-2-3.md'
 warnings: []
 deferred:
@@ -15,37 +15,37 @@ deferred:
       Écarts additifs à `contrat-api.md`, à ratifier : l'événement `ingest_progress` porte `file` (et non `fichier`, convention « JSON en anglais snake_case »), `file_index`, `file_count`, `phase`, `done`, `total` ; `extract` et `split` valent 0/1 puis 1/1 (pas de progression par page), `embed` compte les extraits vectorisés. Nouvel événement `ingest_file_done {file, file_index, file_count, document_id, status: ready|failed|duplicate, chunks, error}` (l'enveloppe `ingest_failed` d'AD-18 en cas d'échec) : sans lui l'écran 4.2 ne saurait pas la fin ni la raison d'un fichier sans relire la liste.
     evidence: |-
       `rag/ingest.py` (docstring), `test_ingest_service.py::test_progress_events_follow_each_file_through_its_phases`, `test_rag_api.py::test_several_files_are_imported_...`.
-    location: _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
+    location: _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
     severity: low
   - summary: >-
       Résidu de texte dans le journal WAL après un échec ou une annulation : les extraits d'un document `failed` ou annulé sont supprimés (`secure_delete` efface les pages de la base) mais le `-wal` garde les anciens cadres jusqu'au prochain point de contrôle. L'ordre `DELETE` / `wal_checkpoint(TRUNCATE)` / `VACUUM` d'AD-13 et son test d'octets sont ceux de la story « Effacer » (4.4) ; le résidu vectoriel dans le blob vec0 après suppression par `rowid` (Deferred de la spine) y est vérifié aussi.
     evidence: |-
       `rag/repo.py::delete_chunks` (suppression transactionnelle, vecteurs puis extraits) ; aucun test d'octets ici.
-    location: src/wavelocalai/rag/repo.py
+    location: src/frugal_ai_workbench/rag/repo.py
     severity: medium
   - summary: >-
       Une annulation qui arrive pendant le démarrage du tracker CodeCarbon (avant le premier appel d'embedding) perd la mesure de ce lot : il garde le `co2` de remplacement `unmeasurable` (« réponse annulée avant la fin »), comme le chat. Au-delà, la mesure faite jusqu'à l'arrêt est écrite (`amend_cancelled_leaf`).
     evidence: |-
       `test_cancelling_a_batch_keeps_the_energy_measured_until_the_stop`.
-    location: src/wavelocalai/rag/ingest.py
+    location: src/frugal_ai_workbench/rag/ingest.py
     severity: low
   - summary: >-
       Le plafond d'un fichier (`rag.max_file_mb`, 50) est appliqué à la réception : Starlette a déjà reçu tout le corps multipart (fichiers temporaires) avant la route, il n'y a pas de limite de requête (`413`). Suffisant pour un poste mono-utilisateur sur 127.0.0.1 ; à reprendre si l'API s'ouvre.
     evidence: |-
       `rag/staging.py`, `test_rag_api.py::test_an_oversized_file_fails_with_its_reason`.
-    location: src/wavelocalai/rag/staging.py
+    location: src/frugal_ai_workbench/rag/staging.py
     severity: low
   - summary: >-
       Le port `Embedder` d'AD-8 rend les vecteurs seulement : une feuille `embedding` n'a ni `input_tokens` ni `tps` (durée totale mesurée par le service, `total_s`). Un compte de jetons exigerait d'élargir le port (`/api/embed` rend `prompt_eval_count`).
     evidence: |-
       `models/port.py::Embedder`, `models/ollama_embed.py`.
-    location: src/wavelocalai/models/port.py
+    location: src/frugal_ai_workbench/models/port.py
     severity: low
   - summary: >-
       `master` a avancé pendant la story (PR #55, chat cloud 2.4) : `web/app.py`, `errors.py`, `models/factory.py`, `models/fake.py` et `models/port.py` sont touchés des deux côtés ; les ajouts de cette story y sont isolés (voir « Fichiers »).
     evidence: |-
       Branche partie de `a7ab77b` ; `master` à `33adc49`.
-    location: src/wavelocalai/web/app.py
+    location: src/frugal_ai_workbench/web/app.py
     severity: low
 ---
 
@@ -74,10 +74,10 @@ deferred:
 
 ## Fichiers
 
-- `src/wavelocalai/store/migrations/0004_documents.sql`, `store/vec.py` (nouveaux), `store/db.py` (extension chargée par l'écrivain, `ensure_vec_table`, `read(vec=)`)
-- `src/wavelocalai/rag/` : `extract.py`, `split.py`, `staging.py`, `index.py`, `repo.py`, `ingest.py` (nouveaux)
-- `src/wavelocalai/models/ollama_embed.py` (nouveau), `models/port.py` (`Embedder`), `models/fake.py` (`FakeEmbedder`, `fake_embedders`), `models/factory.py` (`embedder`)
-- `src/wavelocalai/web/routes_rag.py` (nouveau), `web/app.py` (service dans le cycle de vie, `recover`, fabrique partagée), `errors.py` (`ingest_failed`, `no_embedding_model`, `embedding_locked`), `config.py` + `wavelocalai.toml` (`[rag]`), `greenops/session.py` (une ligne de SQL)
+- `src/frugal_ai_workbench/store/migrations/0004_documents.sql`, `store/vec.py` (nouveaux), `store/db.py` (extension chargée par l'écrivain, `ensure_vec_table`, `read(vec=)`)
+- `src/frugal_ai_workbench/rag/` : `extract.py`, `split.py`, `staging.py`, `index.py`, `repo.py`, `ingest.py` (nouveaux)
+- `src/frugal_ai_workbench/models/ollama_embed.py` (nouveau), `models/port.py` (`Embedder`), `models/fake.py` (`FakeEmbedder`, `fake_embedders`), `models/factory.py` (`embedder`)
+- `src/frugal_ai_workbench/web/routes_rag.py` (nouveau), `web/app.py` (service dans le cycle de vie, `recover`, fabrique partagée), `errors.py` (`ingest_failed`, `no_embedding_model`, `embedding_locked`), `config.py` + `frugal-ai-workbench.toml` (`[rag]`), `greenops/session.py` (une ligne de SQL)
 - `pyproject.toml`, `uv.lock`
 - Tests : `tests/v2/rag_files.py`, `unit/{test_rag_files,test_vector_index,test_ingest_service,test_embedder,test_documents_schema}.py`, `unit/snapshots/schema_v4.sql`, `web/test_rag_api.py`, `integration/test_rag_ollama.py`
 
@@ -87,7 +87,7 @@ deferred:
 
 ## Revue
 
-Revue Opus du 2026-10-18, après fusion de `origin/master` (stories 2.4 et 2.5) : conflits de `pyproject.toml`, `wavelocalai.toml`, `errors.py`, `models/factory.py` et `web/app.py` résolus en gardant les deux côtés (`ModelFactory(client, fakes, fake_embedders, settings, cloud_http)`, une seule fabrique partagée par le chat et l'ingestion) ; `uv.lock` cohérent (`uv lock --check`).
+Revue Opus du 2026-10-18, après fusion de `origin/master` (stories 2.4 et 2.5) : conflits de `pyproject.toml`, `frugal-ai-workbench.toml`, `errors.py`, `models/factory.py` et `web/app.py` résolus en gardant les deux côtés (`ModelFactory(client, fakes, fake_embedders, settings, cloud_http)`, une seule fabrique partagée par le chat et l'ingestion) ; `uv.lock` cohérent (`uv lock --check`).
 
 - medium, second avis 1 : corrigé. Une annulation pendant l'écriture de la ligne `documents` (hors `try`) ou pendant que `mark_failed` attendait dans la file de l'écrivain laissait le document `indexing` avec ses extraits (base verrouillée sur ce modèle, réimport vu `duplicate` jusqu'au redémarrage). Écritures passées par `_write_through` (job jamais sauté, attente protégée), et l'insertion annulée est retirée. Tests : `test_cancelling_while_the_document_row_is_written_...`, `test_cancelling_while_a_failure_is_queued_...` (échouent sans le correctif).
 - medium, second avis 2 : requalifié low, corrigé quand même (deux lignes). Il faut une table vec0 déjà créée puis une extension qui ne se charge plus ; `recover` journalise désormais l'échec d'un document au lieu d'empêcher le démarrage. Test : `test_recovery_does_not_stop_the_startup_...`.

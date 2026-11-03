@@ -102,8 +102,8 @@ quantifiés en 1 bit ne se chargent pas.
 Placez-vous dans un dossier de travail, puis :
 
 ```bash
-git clone https://github.com/Aliquanto3/wavelocalai.git
-cd wavelocalai
+git clone https://github.com/Aliquanto3/frugal-ai-workbench.git
+cd frugal-ai-workbench
 git checkout feat/benchmark-multi-machine
 ```
 
@@ -114,7 +114,7 @@ git checkout feat/benchmark-multi-machine
 Si le projet est déjà présent sur la machine, mettez-le à jour :
 
 ```bash
-cd wavelocalai
+cd frugal-ai-workbench
 git fetch origin
 git status          # vérifiez qu'aucune modification locale ne va être perdue
 git pull
@@ -332,7 +332,7 @@ git push -u origin bench/mon-pc
 
 ### Ouvrir la pull request, sans ligne de commande
 
-1. Rendez-vous sur https://github.com/Aliquanto3/wavelocalai
+1. Rendez-vous sur https://github.com/Aliquanto3/frugal-ai-workbench
 2. Un bandeau jaune propose **« Compare & pull request »** : cliquez dessus.
 3. Titre : `Bench: mon-pc`. Dans la description, indiquez votre matériel (GPU, VRAM,
    RAM), le nombre de modèles testés, et toute anomalie rencontrée.

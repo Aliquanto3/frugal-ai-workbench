@@ -2,7 +2,7 @@
 en dépendance de base depuis la story 9.5, D-R6).
 
 Ce test ne télécharge rien : il saute si le modèle n'est pas dans `data/models/fastembed` (ou le
-dossier de `WAVELOCALAI_RERANK_CACHE`). Pour le jouer : remplir le cache comme l'explique le README
+dossier de `FRUGAL_AI_RERANK_CACHE`). Pour le jouer : remplir le cache comme l'explique le README
 (« Reranker local »), par exemple via le bouton « Installer le reranker » de l'écran Modèles.
 """
 
@@ -14,8 +14,8 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.config import load_settings
-from wavelocalai.rag.rerank import RerankerService, cache_dir
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.rag.rerank import RerankerService, cache_dir
 
 pytestmark = pytest.mark.integration
 
@@ -23,8 +23,8 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def _service() -> RerankerService:
-    settings = load_settings(ROOT / "wavelocalai.toml", environ={})
-    override = os.environ.get("WAVELOCALAI_RERANK_CACHE")
+    settings = load_settings(ROOT / "frugal-ai-workbench.toml", environ={})
+    override = os.environ.get("FRUGAL_AI_RERANK_CACHE")
     cache = Path(override) if override else cache_dir(settings.data_dir)
     return RerankerService(settings.rag.reranker_model, cache)
 

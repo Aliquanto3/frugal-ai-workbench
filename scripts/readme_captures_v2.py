@@ -12,7 +12,7 @@ jamais celui du poste qui fait la capture (dépôt public).
 
 Usage (depuis la racine du dépôt, après `uv sync`) :
 
-    $env:WAVELOCALAI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+    $env:FRUGAL_AI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
     .venv\Scripts\python scripts/readme_captures_v2.py
 
 Sans la variable, Chromium de Playwright (`python -m playwright install chromium`).
@@ -229,7 +229,7 @@ def main() -> None:
     ASSETS.mkdir(parents=True, exist_ok=True)
     fake_ollama = FakeOllama(closed_port())
     fake_ollama.start()
-    with tempfile.TemporaryDirectory(prefix="wavelocalai-captures-") as folder:
+    with tempfile.TemporaryDirectory(prefix="frugal-ai-workbench-captures-") as folder:
         doubles = Path(folder) / "doubles"
         doubles.mkdir()
         (doubles / "sitecustomize.py").write_text(

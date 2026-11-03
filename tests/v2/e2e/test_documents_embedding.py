@@ -41,7 +41,7 @@ def ollama():
     fake.stop()
 
 
-NO_FAKE_EMBEDDER = {"WAVELOCALAI_TESTING_NO_FAKE_EMBEDDER": "1"}  # aucun embedding, même `fake`
+NO_FAKE_EMBEDDER = {"FRUGAL_AI_TESTING_NO_FAKE_EMBEDDER": "1"}  # aucun embedding, même `fake`
 
 
 @pytest.fixture

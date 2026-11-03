@@ -7,7 +7,7 @@ baseline_commit: 'edb870e'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-9.md'
 warnings: []
 deferred:
@@ -21,13 +21,13 @@ deferred:
       « Aucun modèle local disponible » se lit sur l'état d'Ollama (arrêté = aucun modèle local), pas sur la liste des modèles installés : `GET /api/models` (registre, story 1.5) n'était pas dans la branche de base ; il y est depuis la fusion de `feat/v2-selecteur`, mais l'ajouter demande une lecture de plus dans `core/system.js` (rafraîchie quand Ollama change d'état) : à faire avec la story qui consomme la liste sur l'Accueil. Ollama démarré sans aucun modèle installé n'est donc pas encore dit sur l'Accueil ; la carte Système donne les modèles chargés en mémoire.
     evidence: |-
       `renderSystem` (`screens/home.js`) ; la branche part de `feat/v2-barre-haute`, sans `routes_models`.
-    location: src/wavelocalai/web/static/screens/home.js
+    location: src/frugal_ai_workbench/web/static/screens/home.js
     severity: low
   - summary: >-
       Les cartes « Démo recommandée » (Epic 3, story 3.6) et « Assistant documentaire » avec le résumé de la base (Epic 4) ne sont pas livrées : chaque carte arrive avec son écran. L'Accueil ne liste que les modules dont un écran est `available`.
     evidence: |-
       Décision de structure du 2026-10-18 ; `test_planned_modules_have_no_card_on_the_home`.
-    location: src/wavelocalai/web/static/screens/home.js
+    location: src/frugal_ai_workbench/web/static/screens/home.js
     severity: low
 ---
 
@@ -56,7 +56,7 @@ L'écran `#/` (`screens/home.js`) montre le titre, l'accroche et quatre cartes d
 ## Choix notables
 
 - Les quatre cartes sont celles de l'epic et d'UX-DR24 (Système, Mode, Processeur, Mémoire) ; le CO₂ de la session s'affiche en ligne de détail de la carte Mode plutôt que dans une cinquième carte.
-- Le `h1` reste « Accueil » (contrat de la 1.8 : titre de l'onglet, annonce et focus portent le nom de l'écran) ; la marque « WaveLocalAI » est dans la barre haute.
+- Le `h1` reste « Accueil » (contrat de la 1.8 : titre de l'onglet, annonce et focus portent le nom de l'écran) ; la marque « Frugal AI Workbench » est dans la barre haute.
 - La pause est dans `core/system.js` et non dans l'écran : il n'y a qu'un flux pour la page (barre haute comprise), le fermer onglet masqué ne coûte rien et la reconnexion rattrape l'identité du serveur et le CO₂.
 - Les cartes mises à jour toutes les 2 s ne recréent jamais un bouton ni un nœud inchangé (le focus sur « Réessayer » ne bouge pas).
 - Squelette animé par `@keyframes` ; `prefers-reduced-motion` est déjà neutralisé par `base.css`.

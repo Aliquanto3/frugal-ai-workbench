@@ -2,6 +2,7 @@
 Script de détection de secrets potentiels dans le code source.
 Usage: python scripts/scan_secrets.py
 """
+
 import re
 from pathlib import Path
 
@@ -102,7 +103,7 @@ def scan_project(root_dir: Path) -> list[dict]:
 
 
 def main():
-    print("🔍 WaveLocalAI - Scan de Secrets")
+    print("🔍 Frugal AI Workbench - Scan de Secrets")
     print("=" * 60)
 
     ROOT_DIR = Path(__file__).parent.parent

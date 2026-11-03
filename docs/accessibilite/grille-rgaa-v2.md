@@ -1,6 +1,6 @@
 # Grille RGAA 4.1 de la v2
 
-Story 8.2 (NFR8, UX-DR2, UX-DR19, UX-DR25, AD-20). Périmètre : tous les écrans du registre (`static/core/routes/*.js`), servis par `wavelocalai-v2`. Les 106 critères du RGAA 4.1 sont listés, treize thématiques, chacun avec un statut.
+Story 8.2 (NFR8, UX-DR2, UX-DR19, UX-DR25, AD-20). Périmètre : tous les écrans du registre (`static/core/routes/*.js`), servis par `frugal-ai-workbench-v2`. Les 106 critères du RGAA 4.1 sont listés, treize thématiques, chacun avec un statut.
 
 Statuts :
 
@@ -59,7 +59,7 @@ Fichier : `tests/v2/e2e/test_accessibilite.py` (axe-core réinjecté tel quel : 
 
 ## Focus au premier chargement (B16)
 
-**Décision (revue 8.2) : à chaque route, premier chargement compris, le focus va sur le `h1` de l'écran**, comme l'écrit le critère de la story 1.8 (« à chaque route, le focus va sur le h1 »). Le titre de la page (`<Écran> · WaveLocalAI`) et l'annonce polie (« Écran … ») sont posés au même moment. Le lien d'évitement « Aller au contenu » reste le premier élément focalisable du document (RGAA 12.7) : Maj+Tab depuis le `h1` le rejoint en remontant la barre haute, et il place toujours le focus sur `main` sans changer la route.
+**Décision (revue 8.2) : à chaque route, premier chargement compris, le focus va sur le `h1` de l'écran**, comme l'écrit le critère de la story 1.8 (« à chaque route, le focus va sur le h1 »). Le titre de la page (`<Écran> · Frugal AI Workbench`) et l'annonce polie (« Écran … ») sont posés au même moment. Le lien d'évitement « Aller au contenu » reste le premier élément focalisable du document (RGAA 12.7) : Maj+Tab depuis le `h1` le rejoint en remontant la barre haute, et il place toujours le focus sur `main` sans changer la route.
 
 Pourquoi : la première version de la story gardait le focus en tête au chargement (variante des pages ordinaires) ; l'AC 8.2 demandait de trancher B16 et le seul critère écrit est celui de la 1.8. Aucun critère RGAA ne l'interdit : 12.7 porte sur la présence, la position et le fonctionnement du lien d'évitement, tous conservés. Le coût : au chargement, un utilisateur du clavier qui veut la navigation remonte par Maj+Tab au lieu de descendre par Tab. Les recettes R1 (clavier seul) et R2 (NVDA) le jugent ; l'inverse tient en une ligne du routeur (`focus` au premier passage).
 
@@ -140,7 +140,7 @@ Appliqué : `core/router.js`, test T11, `test_shell.py` (lien d'évitement attei
 | 8.2 | Code source valide | À vérifier par Anaël (recette manuelle) | R4. axe contrôle les identifiants dupliqués, rôles et attributs ARIA valides (T1). |
 | 8.3 | Langue par défaut indiquée | Conforme | `lang="fr"` ; T7. |
 | 8.4 | Code de langue pertinent | Conforme | `fr` ; T7. |
-| 8.5 | Titre de page | Conforme | `<Écran> · WaveLocalAI` à chaque route ; T7. |
+| 8.5 | Titre de page | Conforme | `<Écran> · Frugal AI Workbench` à chaque route ; T7. |
 | 8.6 | Titre de page pertinent | Conforme | Un titre distinct par écran ; T7. |
 | 8.7 | Changement de langue indiqué | Non conforme, reporté | Les réponses des modèles sont en langue libre et ne sont pas balisées : « Écarts et reports ». Les textes de l'interface sont tous en français ; les noms de modèles et de produits (Ollama, Qwen, Self-RAG…) sont des noms propres ou des termes sans traduction. |
 | 8.8 | Code de langue de changement pertinent | Non applicable | Aucun passage balisé. |

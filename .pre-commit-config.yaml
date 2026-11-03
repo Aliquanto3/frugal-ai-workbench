@@ -1,4 +1,4 @@
-# Configuration pre-commit pour WaveLocalAI
+# Configuration pre-commit pour Frugal AI Workbench
 # Installation : pip install pre-commit && pre-commit install
 
 # BMAD est du code tiers, régénéré à chaque mise à jour : ni formatage ni scan de secrets

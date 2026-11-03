@@ -15,10 +15,10 @@ import asyncio
 import httpx
 import pytest
 
-from wavelocalai.config import load_settings
-from wavelocalai.hardware.memory import MemoryReading
-from wavelocalai.models.ollama_ps import loaded_models, unload_model
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.hardware.memory import MemoryReading
+from frugal_ai_workbench.models.ollama_ps import loaded_models, unload_model
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT
 from ..web.conftest import parse_sse

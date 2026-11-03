@@ -15,7 +15,7 @@ Anaël a utilisé la v2 (préversion 2.0.0a7) et remonte six retours. Ils ont é
 
 | # | Retour | Constat dans le code ou à l'écran |
 |---|---|---|
-| R1 | `uv run` devrait ouvrir le navigateur | `wavelocalai/__main__.py` démarre le serveur sans jamais ouvrir de navigateur. |
+| R1 | `uv run` devrait ouvrir le navigateur | `frugal_ai_workbench/__main__.py` démarre le serveur sans jamais ouvrir de navigateur. |
 | R2 | Arène : un modèle qui tourne en boucle (`tev1:0.8b`, question sur la photosynthèse) bloque la comparaison | La requête de l'Arène ne fixe aucun `max_tokens` (`inference/arena.py:286`). Le seul garde-fou est `delays.lane_timeout_s = 300`. Seule la comparaison entière s'annule (`POST /api/runs/{id}/cancel`) : on ne peut pas arrêter une colonne seule. |
 | R3 | Arène : on ne voit pas le juge travailler | Les colonnes passent bien à `judging`. Mais le juge note les réponses l'une après l'autre, avec une seule place locale, sans rien publier entre l'entrée en notation et `judge_score` : ni chargement, ni rang dans la file. |
 | R4 | Interface peu engageante, l'œil n'est pas guidé, une seule colonne sur grand écran (vaut pour tous les écrans) | Le contenu tient en une colonne d'environ 1 400 px, avec de larges marges vides en 1920 px. Les intertitres (« Scénario », « Réglages ») sont plus visibles que les choix eux-mêmes : prompt en petite police à chasse fixe, modèle sous un libellé discret. Le bouton de lancement du Banc d'essai est sous la ligne de flottaison. L'écran Modèles fait 3 900 px de haut. |
@@ -23,7 +23,7 @@ Anaël a utilisé la v2 (préversion 2.0.0a7) et remonte six retours. Ils ont é
 | R6 | Modèles : le bouton du reranker est bloqué et renvoie à une commande | Sans l'extra `rerank` (fastembed), le bouton est désactivé avec « uv sync --extra rerank » (`screens/models-rerank.js`), conformément à AD-17. |
 
 Décisions d'Anaël en session :
-- **D-R4-a** : pas d'emojis. Des icônes Material **colorées** et des aplats de la palette Wavestone. Cela amende DESIGN.md, où les icônes étaient monochromes et héritaient de la couleur du texte.
+- **D-R4-a** : pas d'emojis. Des icônes Material **colorées** et des aplats de la palette générique. Cela amende DESIGN.md, où les icônes étaient monochromes et héritaient de la couleur du texte.
 - **D-R6** : fastembed passe en dépendance par défaut.
 - **D-suite** : les stories sont écrites, puis exécutées en run autonome. La refonte visuelle passe d'abord par une maquette validée par Anaël.
 
@@ -70,13 +70,13 @@ Corrige ce que la première recette humaine de la v2 a relevé, avant la bascule
 ```
 
 **Story 9.1 : Le lanceur ouvre l'application dans le navigateur**
-- *Given* `uv run wavelocalai-v2` (le nom passe à `wavelocalai` à la story 8.4), *When* le serveur écoute, *Then* le navigateur par défaut s'ouvre sur `http://127.0.0.1:<port>/`. L'ouverture a lieu une seule fois, après que le port répond, jamais avant.
+- *Given* `uv run frugal-ai-workbench-v2` (le nom passe à `frugal-ai-workbench` à la story 8.4), *When* le serveur écoute, *Then* le navigateur par défaut s'ouvre sur `http://127.0.0.1:<port>/`. L'ouverture a lieu une seule fois, après que le port répond, jamais avant.
 - *And* `--no-browser` et le réglage `[server] open_browser = false` l'empêchent. Les tests, la CI et les E2E lancent le serveur sans navigateur.
 - *And* un échec d'ouverture (aucun navigateur, session sans affichage) écrit l'URL dans la console et le journal, sans arrêter le serveur.
 - Gouverné par AD-23.
 
 **Story 9.2 : L'Arène arrête un modèle qui tourne en boucle, automatiquement ou à la demande (serveur et écran)**
-- *Given* une comparaison, *When* une colonne génère, *Then* la requête porte un plafond `arena.max_tokens` (réglable dans `wavelocalai.toml`). Une colonne qui l'atteint finit avec `stopped_reason: "max_tokens"`, sa réponse partielle est gardée et **notée**.
+- *Given* une comparaison, *When* une colonne génère, *Then* la requête porte un plafond `arena.max_tokens` (réglable dans `frugal-ai-workbench.toml`). Une colonne qui l'atteint finit avec `stopped_reason: "max_tokens"`, sa réponse partielle est gardée et **notée**.
 - *Given* une sortie qui se répète (même fragment final répété au-delà d'un seuil, par exemple 4 fois au moins sur une fenêtre de 200 caractères ou plus), *When* le détecteur la voit, *Then* la génération s'arrête avec `stopped_reason: "loop"`, et la colonne affiche « Arrêté : le modèle se répétait ».
   - Le seuil et la fenêtre sont réglables.
   - Un jeu de tests garde les faux positifs à zéro sur des listes, des tableaux Markdown et du code.
@@ -112,7 +112,7 @@ Corrige ce que la première recette humaine de la v2 a relevé, avant la bascule
   - une grille à **deux colonnes au-delà de 1 400 px environ** : saisie et choix du modèle à gauche ; réglages repliés, aperçu et résultats à droite ;
   - une **hiérarchie qui met en avant** le prompt (police normale, grand champ), le ou les modèles (cartes de choix) et le bouton principal, visible sans défilement ;
   - des **réglages secondaires discrets**, avec des intertitres plus petits que les champs qu'ils regroupent ;
-  - une **couleur qui guide l'œil** : icônes Material colorées par module, aplats légers de la palette Wavestone sur les zones d'action, sans emojis ;
+  - une **couleur qui guide l'œil** : icônes Material colorées par module, aplats légers de la palette générique sur les zones d'action, sans emojis ;
   - des contrastes conformes à la story 8.2.
 - *And* Anaël valide la maquette. Les décisions sont consignées, puis DESIGN.md et EXPERIENCE.md sont amendés avant 9.7.
 

@@ -14,8 +14,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from wavelocalai.models.fake import FAKE_EMBED_REF, Sleep
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.fake import FAKE_EMBED_REF, Sleep
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..rag_files import make_docx, make_pdf
@@ -26,7 +26,7 @@ LONG = " ".join(f"phrase{i:03d}" for i in range(300))
 
 
 def _staging_dirs() -> set[Path]:
-    return set(Path(tempfile.gettempdir()).glob("wavelocalai-ingest-*"))
+    return set(Path(tempfile.gettempdir()).glob("frugal-ai-workbench-ingest-*"))
 
 
 def _files(**named: bytes | str) -> list[tuple[str, tuple[str, bytes, str]]]:
@@ -160,7 +160,7 @@ async def test_cancelling_the_run_keeps_ready_documents_and_drops_the_one_in_pro
 
 async def test_an_oversized_file_fails_with_its_reason(tmp_path):
     app = create_app(
-        make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, rag={"max_file_mb": 1})
+        make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, rag={"max_file_mb": 1})
     )
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)
@@ -216,7 +216,7 @@ async def test_a_foreign_origin_cannot_import_files(served):
 
 
 async def test_the_ingest_error_codes_are_in_the_closed_list():
-    from wavelocalai.errors import ERRORS, build_envelope
+    from frugal_ai_workbench.errors import ERRORS, build_envelope
 
     for code in ("ingest_failed", "no_embedding_model", "embedding_locked"):
         assert ERRORS[code].message and ERRORS[code].action

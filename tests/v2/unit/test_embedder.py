@@ -8,9 +8,9 @@ import httpx
 import pytest
 from ollama import AsyncClient
 
-from wavelocalai.errors import AppError, ProviderError
-from wavelocalai.models.factory import ModelFactory
-from wavelocalai.models.fake import (
+from frugal_ai_workbench.errors import AppError, ProviderError
+from frugal_ai_workbench.models.factory import ModelFactory
+from frugal_ai_workbench.models.fake import (
     FAKE_EMBED_DIM,
     FAKE_EMBED_REF,
     FAKE_REF,
@@ -20,8 +20,8 @@ from wavelocalai.models.fake import (
     fake_models,
     fake_vector,
 )
-from wavelocalai.models.ollama_embed import OllamaEmbedder
-from wavelocalai.models.port import Embedder, ModelRef
+from frugal_ai_workbench.models.ollama_embed import OllamaEmbedder
+from frugal_ai_workbench.models.port import Embedder, ModelRef
 
 from ..conftest import make_settings
 
@@ -112,7 +112,7 @@ async def test_the_fake_embedder_follows_its_script_and_keeps_the_batches():
 
 def test_fake_embedders_only_exist_when_testing(tmp_path):
     assert fake_embedders(make_settings(tmp_path)) == {}
-    on = fake_embedders(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}))
+    on = fake_embedders(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}))
     assert list(on) == [FAKE_EMBED_REF.tag] and on[FAKE_EMBED_REF.tag].ref == FAKE_EMBED_REF
     assert FAKE_EMBED_REF.kind == "embedding" and FAKE_EMBED_REF.origin == "local"
     assert fake_models(make_settings(tmp_path)) == {}
@@ -123,8 +123,8 @@ def test_testing_no_fake_embedder_simulates_a_machine_without_any_embedding(tmp_
     settings = make_settings(
         tmp_path,
         environ={
-            "WAVELOCALAI_TESTING": "1",
-            "WAVELOCALAI_TESTING_NO_FAKE_EMBEDDER": "1",
+            "FRUGAL_AI_TESTING": "1",
+            "FRUGAL_AI_TESTING_NO_FAKE_EMBEDDER": "1",
         },
     )
     assert fake_embedders(settings) == {}

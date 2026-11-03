@@ -28,11 +28,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.evaluation import metrics, prompts, scoring
-from wavelocalai.evaluation.judge import JudgeReply
-from wavelocalai.inference.judge_port import NOT_EVALUATED_INVALID, NOT_EVALUATED_UNAVAILABLE
-from wavelocalai.models.port import ChatModel, ChatRequest, TextDelta
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.evaluation import metrics, prompts, scoring
+from frugal_ai_workbench.evaluation.judge import JudgeReply
+from frugal_ai_workbench.inference.judge_port import (
+    NOT_EVALUATED_INVALID,
+    NOT_EVALUATED_UNAVAILABLE,
+)
+from frugal_ai_workbench.models.port import ChatModel, ChatRequest, TextDelta
 
 FIXTURES = Path(__file__).parent / "fixtures" / "eval"
 CASES_FILE = FIXTURES / "cases.json"
@@ -392,8 +395,8 @@ async def _main(args: argparse.Namespace) -> int:
         _write(REPLAY_FILE, await record(doc))
         print(f"{REPLAY_FILE.name} réécrit : relire le diff avant de le commiter.")
         return 0
-    from wavelocalai.models.ollama import OllamaChatModel, make_client  # noqa: PLC0415
-    from wavelocalai.models.port import ModelRef  # noqa: PLC0415
+    from frugal_ai_workbench.models.ollama import OllamaChatModel, make_client  # noqa: PLC0415
+    from frugal_ai_workbench.models.port import ModelRef  # noqa: PLC0415
 
     ref = ModelRef(args.model, "ollama", "local", "chat")
     asker = ModelAsker(OllamaChatModel(ref, make_client(args.host)))

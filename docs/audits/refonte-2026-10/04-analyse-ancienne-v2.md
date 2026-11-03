@@ -3,7 +3,7 @@
 - **Date :** 2026-10-18
 - **Dépôt analysé :** `Aliquanto3/wave_local_ai_v2`, clone en lecture seule. `main` au commit `c68b23e` (2026-10-02). La branche la plus avancée est `origin/feat/night-run-2026-10-02` (`d28c8a7`, 2026-10-04, 125 commits de plus, jamais fusionnée). Sauf mention contraire, les états viennent de cette branche.
 - **Lu :** `context_input/*.md`, `aidd_docs/product/`, `aidd_docs/memory/`, le PRD (`aidd_docs/tasks/2026_08/2026_08_21-wave-local-ai-v2-benchmark-suite-prd.md`), les 12 épopées, 18 spikes et 117 stories (statuts et titres, détail des plus utiles), les journaux de nuit, l'audit du 2026-09-22, `aidd_docs/results/README.md`, `README.md`, `CHANGELOG.md`, `docs/`. Rien n'a été exécuté.
-- **Comparé à :** `00-synthese.md` à `03-ux-front.md`, `../frontend-2026-09/SYNTHESE.md` (D1 à D7), `EXPERIENCE.md` et `DESIGN.md` (`_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/`), `slm-quality-bench` (`docs/spec/SPEC.md`, `docs/architecture/ARCHITECTURE-SPINE.md`).
+- **Comparé à :** `00-synthese.md` à `03-ux-front.md`, `../frontend-2026-09/SYNTHESE.md` (D1 à D7), `EXPERIENCE.md` et `DESIGN.md` (`_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/`), `slm-quality-bench` (`docs/spec/SPEC.md`, `docs/architecture/ARCHITECTURE-SPINE.md`).
 - **Rapport voisin :** [`05-code-ancienne-v2.md`](05-code-ancienne-v2.md) analyse le code. Ce rapport-ci ne le répète pas : il traite des intentions, des spécifications et de la méthode.
 
 ## Résumé
@@ -41,7 +41,7 @@
 | Produit | Une preuve défendable pour arbitrer local contre cloud. « That defensibility, not any single benchmark number, is the product. » Succès qualitatif, pas lié à une vente | `product/wave-local-ai-v2.md`, « Product Bet », « Success » |
 | Publics | Le consultant (lui) ; les développeurs du client, qui lisent le dépôt ; les décideurs, qui ne voient que le front pendant un pitch ; depuis le 2026-09-06, un relecteur académique ; enfin « quelqu'un qui prépare l'IA locale sur un PC ordinaire » | brief, « Audience » ; `publication_gap_brief.md`, « Context » ; PRD, « User Stories » |
 | Pitch client | Comparer depuis un navigateur, pas un terminal ; une carte par usage avec le meilleur modèle local, son comparateur cloud, débit et énergie ; un seul chiffre d'énergie, avec son calcul disponible si on le conteste ; le client peut taper une question à un modèle local | PRD, « Goals » et « User Stories » ; attentes E7, E8 |
-| Publication | Un article court qui aide à anticiper les résultats de nombreux modèles sur PC personnels. Il sert aussi son activité de conseil et une entrée vers le monde académique (doctorat, enseignement : secondaire). Ordre : article de blog ou Wavestone, arXiv en option, JOSS plus tard | `publication_ambitions.md` ; `publication_gap_brief.md`, « Decisions taken 2026-09-06 » |
+| Publication | Un article court qui aide à anticiper les résultats de nombreux modèles sur PC personnels. Il sert aussi son activité de conseil et une entrée vers le monde académique (doctorat, enseignement : secondaire). Ordre : article de blog, arXiv en option, JOSS plus tard | `publication_ambitions.md` ; `publication_gap_brief.md`, « Decisions taken 2026-09-06 » |
 | Matériel | Trois PC : tour (Ryzen 5 7600, 32 Go DDR5-6000, RTX 3050 8 Go), portable (Ryzen 7 5800H, 32 Go DDR4-3200, RTX 3060 Laptop 6 Go), PC pro (16 Go, sans GPU). Le PC pro est « le cas le plus important pour la publication : presque absent de la littérature ». Tailles de modèles adaptées à chaque machine (Granite 350M sur le PC pro, classe Gemma 4 sur la tour) | `publication_ambitions.md` ; `publication_gap_brief.md`, écart 1 ; `hardware.md` |
 | Constat matériel | « La bande passante mémoire détermine le débit de génération, la VRAM détermine quels modèles chargent. » Les mesures ne se transposent pas d'une machine à l'autre : chaque mesure porte sa fiche matérielle | `hardware.md`, « Implication de conception » |
 | Capacités à anticiper | Catégorisation, traduction, correction de fautes, réécriture ; réponse RAG, voire RAG agentique ou Refrag ; appel d'outils, orchestration agentique, code (qualité, durée, tokens, énergie) ; langues EN, FR, DE et langages de programmation ; débits ; énergie et carbone | `publication_ambitions.md` ; `publication_gap_brief.md`, « Tasks » |
@@ -56,7 +56,7 @@
 
 ## 2. Inventaire des fonctionnalités spécifiées
 
-États : **spécifiée** (épopée ou story `proposed` ou `ready` sans code), **implémentée** (code fusionné ou sur la branche de nuit), **testée** (tests et lignes réelles publiées). Destinations : **App** (wavelocalai), **Banc** (slm-quality-bench), **Les deux**, **Abandon**.
+États : **spécifiée** (épopée ou story `proposed` ou `ready` sans code), **implémentée** (code fusionné ou sur la branche de nuit), **testée** (tests et lignes réelles publiées). Destinations : **App** (frugal-ai-workbench), **Banc** (slm-quality-bench), **Les deux**, **Abandon**.
 
 | # | Fonctionnalité | État dans l'ancien dépôt | Destination | Couverte par les plans actuels ? | Recommandation |
 |---|---|---|---|---|---|
@@ -108,7 +108,7 @@ Classées par valeur pour l'utilisateur, absentes des plans actuels ou seulement
 | Rang | Idée | Ce qu'elle apporte | Écran | Données et source | Effort |
 |---|---|---|---|---|---|
 | 1 | **« Quel modèle pour quel usage ? »** Une carte par usage : groupe des modèles indiscernables du meilleur, intervalle, débit sur la machine de référence la plus proche, licence | Répond en une vue à la question du DSI (Flow 1) ; c'est la vue d'ensemble que l'ancien dépôt n'a jamais branchée sur de vraies données | Nouveau sous-écran `#/arene/references`, avec une carte sur l'Accueil | `qb.results/1` : groupes et intervalles par usage et piste (CAP-7), débit par machine | M (front), plus le contrat |
-| 2 | **Verdict local ou cloud** à la fin d'une comparaison : écart de note, coût pour 1 000 requêtes, CO₂, « données restées sur ce poste » | Conclut la démo par une phrase chiffrée ; reprend le PRD (« Cost », méthode 16) sans sa lourdeur | `#/arene/comparer`, sous le classement | L'app : notes du juge, tokens, CO₂ du run ; table de prix cloud **datée** dans `wavelocalai.toml` ; prix du kWh configurable | S à M |
+| 2 | **Verdict local ou cloud** à la fin d'une comparaison : écart de note, coût pour 1 000 requêtes, CO₂, « données restées sur ce poste » | Conclut la démo par une phrase chiffrée ; reprend le PRD (« Cost », méthode 16) sans sa lourdeur | `#/arene/comparer`, sous le classement | L'app : notes du juge, tokens, CO₂ du run ; table de prix cloud **datée** dans `frugal-ai-workbench.toml` ; prix du kWh configurable | S à M |
 | 3 | **« Sur d'autres postes »** : pour un modèle, débit et tenue en mémoire attendus sur la tour, le portable et le PC pro sans GPU | Sert le public « je prépare l'IA locale sur un PC ordinaire », cœur de son ambition ; montre le PC pro de 16 Go | `#/modeles` (détail d'un modèle) et Sobriété, « Carte d'identité technique » | `qb.results/1` (vitesse, mémoire, refus par machine) ; fiche locale lue par l'app | M |
 | 4 | **Fiche modèle** : dense ou MoE, paramètres actifs sur totaux, quantification, famille, licence, langues revendiquées, outils et raisonnement vérifiés, scores du banc | Explique pourquoi un 35B-A3B va vite ; les champs viennent du registre de l'ancien dépôt (`architecture`, `family`, `licence`, `language_claim`) | `#/modeles`, et une pastille « MoE 3B actifs » dans le `model-picker` (03 §3.4) | L'app : `/api/show` d'Ollama ; catalogue ; `qb.results/1` pour les scores | M |
 | 5 | **Export de preuve** : l'export prévu de l'Arène (CSV, Markdown) porte la fiche machine, la version d'Ollama, le digest des modèles, la date, la méthode CO₂ et le juge | Une comparaison montrée en rendez-vous devient rejouable et défendable après coup | `#/arene/comparer` (bouton « Exporter » déjà prévu en 03 §3.5) | L'app (table `runs`, 02 §5.4) | S |
@@ -152,7 +152,7 @@ Le rapport 05 §6 liste les signes visibles dans le code. Ceux-ci viennent des d
 | **Choix de juges changés trois fois, jamais exécutés** | Mistral et Google, puis GLM et DeepSeek, plus GPT-5.6 Luna en calibration ; spikes `blocked` | Choisir un juge par mesure (CAP-6 du banc), puis le figer |
 | **Contrat de données instable** : 30 versions de schéma, bundle publié en retard d'une version | `CHANGELOG.md`, `results/README.md` | App : schéma SQLite par migrations, contrat `qb.results/1` versionné et rarement changé |
 | **Défauts de mesure trouvés tard**, après publication de résultats | Invites jamais passées au gabarit de conversation (défaut `local-subject-prompts-are-never-chat-templated`) ; énergie qui comptait le refroidissement (audit C3) | Une démo réelle et un contrôle à l'œil des sorties brutes dès le premier lot |
-| **Langue et charte hors cible** : tout en anglais, interface hors charte, alors que les publics sont français | `architecture.md` « English in the repo » ; 05 §3.4 | Déjà corrigé par `AGENTS.md` (docs et interface en français, charte Wavestone) |
+| **Langue et charte hors cible** : tout en anglais, interface hors charte, alors que les publics sont français | `architecture.md` « English in the repo » ; 05 §3.4 | Déjà corrigé par `AGENTS.md` (docs et interface en français, charte générique) |
 | **Exécutions de nuit perturbées** par la mise en veille Windows | `run-log.md`, « Root cause of the stalls » | Empêcher la veille pendant tout run long (déjà en mémoire du projet) |
 | **Branche principale jamais fusionnée** | 125 commits sur `feat/night-run-2026-10-02`, PR n° 56 en brouillon | Un lot = une PR fusionnée sur `master` |
 
@@ -160,7 +160,7 @@ Le rapport 05 §6 liste les signes visibles dans le code. Ceux-ci viennent des d
 
 ## 6. Documents à conserver avant la suppression
 
-Cible : `wavelocalai/docs/archive/ancienne-v2/`. Copier avec `git show <branche>:<chemin>`. Priorité 1 : textes de l'utilisateur. Priorité 2 : ses décisions. Priorité 3 : savoir réutilisable par le banc.
+Cible : `frugal-ai-workbench/docs/archive/ancienne-v2/`. Copier avec `git show <branche>:<chemin>`. Priorité 1 : textes de l'utilisateur. Priorité 2 : ses décisions. Priorité 3 : savoir réutilisable par le banc.
 
 | Priorité | Chemin | Branche | Raison |
 |---|---|---|---|

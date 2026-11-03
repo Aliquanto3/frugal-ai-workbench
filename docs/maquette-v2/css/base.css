@@ -1,8 +1,7 @@
 /* Reset, typographie, focus, mouvement et mode projection (UX-DR2). */
 
-/* Inter, servie depuis ce dossier (aucun CDN) : la pile Aptos -> Inter -> sans-serif est dans
-   tokens.css. Aptos est appelée par son nom (--font-body) : installée, elle prime ; sinon le
-   navigateur ne télécharge Inter que pour les caractères qu'il affiche. */
+/* Inter, servie depuis ce dossier (aucun CDN) : la pile Inter -> system-ui -> sans-serif est dans
+   tokens.css ; le navigateur ne télécharge Inter que pour les caractères qu'il affiche. */
 @font-face {
   font-family: "Inter";
   font-style: normal;

@@ -11,9 +11,9 @@ import json
 
 import httpx
 
-from wavelocalai.agents.tools import AgentTool
-from wavelocalai.models.fake import FAKE_REF
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.agents.tools import AgentTool
+from frugal_ai_workbench.models.fake import FAKE_REF
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import make_settings
 from .test_agent_api import BASE, _post, _run, agent_app, call, steps, turns
@@ -24,7 +24,7 @@ CSV = "region,quantite\nNord,10\nSud,5\nNord,7\n"
 @contextlib.asynccontextmanager
 async def env_app(tmp_path, environ=None, **settings):
     app = create_app(
-        make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1", **(environ or {})}, **settings)
+        make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1", **(environ or {})}, **settings)
     )
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)
@@ -45,7 +45,7 @@ async def test_the_tools_are_listed_with_label_availability_and_sensitivity(tmp_
     assert response.status_code == 200
     tools = {t["id"]: t for t in response.json()["tools"]}
     assert list(tools) == [
-        "get_current_time", "calculator", "search_wavestone_internal", "send_email",
+        "get_current_time", "calculator", "search_internal", "send_email",
         "analyze_csv", "generate_document", "generate_chart", "generate_markdown_report",
         "system_monitor",
     ]  # fmt: skip

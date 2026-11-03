@@ -79,7 +79,7 @@ BADGE_UNKNOWN_HELP = (
 
 
 def render_logo() -> None:
-    """Affiche le wordmark « WaveLocalAI » en tête de la barre latérale."""
+    """Affiche le wordmark « Frugal AI Workbench » en tête de la barre latérale."""
     st.logo(str(WORDMARK_PATH))
 
 

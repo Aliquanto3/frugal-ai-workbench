@@ -128,7 +128,7 @@ Les logs Streamlit répètent : « `use_container_width` will be removed after 2
 
 ## 4. Lisibilité et esthétique
 
-- **U-01 : pas de thème.** Sans `.streamlit/config.toml`, l'app garde le rouge Streamlit par défaut. Les actions principales (« Gérer les Documents », « FIGHT ! ») et les pastilles d'outils de l'Agent Lab ressemblent à des erreurs. Proposition : thème au violet Wavestone `#451DC7`, et `client.toolbarMode = "minimal"` pour masquer « Deploy ».
+- **U-01 : pas de thème.** Sans `.streamlit/config.toml`, l'app garde le rouge Streamlit par défaut. Les actions principales (« Gérer les Documents », « FIGHT ! ») et les pastilles d'outils de l'Agent Lab ressemblent à des erreurs. Proposition : thème au bleu pétrole `#0B6B78`, et `client.toolbarMode = "minimal"` pour masquer « Deploy ».
 - **U-02 : trois noms pour un même module.** La barre latérale affiche les noms de fichiers (« Socle Hardware », « RAG Knowledge »). Les cartes de l'accueil disent « Cockpit GreenOps », « Base de Connaissance », et les titres « Assistant Documentaire ». Proposition : `st.navigation` / `st.Page` avec un titre et une icône par module.
 - **U-03 : emojis dans tous les titres.** Inférence et RAG partagent le même 🧠. Proposition : icônes `:material/…:`, et un seul pictogramme par module, repris partout.
 - **U-04 : le bouton cloud existe 4 fois, avec 2 libellés** (`Accueil.py:156`, `02:36`, `03:138`, `04:36`). Proposition : un seul contrôle global, avec l'état (Local / Hybride) toujours visible.

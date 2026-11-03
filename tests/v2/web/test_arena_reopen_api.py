@@ -15,9 +15,9 @@ from pathlib import Path
 
 import httpx
 
-from wavelocalai.models.fake import FakeChatModel, Sleep
-from wavelocalai.models.port import ModelRef
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.fake import FakeChatModel, Sleep
+from frugal_ai_workbench.models.port import ModelRef
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from .test_arena_api import _ended, _post, arena_app, children, cloud, local, say
@@ -141,7 +141,7 @@ async def test_the_markdown_export_names_the_proof_and_never_a_zero_for_an_unkno
     assert response.headers["content-type"].startswith("text/markdown")
     text = response.text
     for part in (
-        "# Comparaison wavelocalai",
+        "# Comparaison Frugal AI Workbench",
         SECRET_QUESTION,
         "| fake:a |",
         "70/100",
@@ -162,12 +162,10 @@ async def test_the_markdown_export_names_the_proof_and_never_a_zero_for_an_unkno
 async def test_exports_never_contain_a_configured_key_and_neutralise_spreadsheet_formulas(
     tmp_path,
 ):
-    settings = make_settings(
-        tmp_path, environ={"WAVELOCALAI_TESTING": "1", "GROQ_API_KEY": FAKE_KEY}
-    )
+    settings = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1", "GROQ_API_KEY": FAKE_KEY})
     a, b = local("fake:a", say("Alpha")), local("fake:b", say("Bravo"))
     judge = ReasonJudge("fake:j", reason='=HYPERLINK("http://x")')
-    from wavelocalai.models.registry import ModelRegistry
+    from frugal_ai_workbench.models.registry import ModelRegistry
 
     registry = ModelRegistry(settings, extra_refs={m.ref.tag: m.ref for m in (a, b, judge)})
     app = create_app(settings, registry=registry)

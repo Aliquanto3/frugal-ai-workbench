@@ -8,9 +8,9 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-7.md'
 warnings: []
 deferred:
@@ -24,7 +24,7 @@ deferred:
       Choix de conception à confirmer. (1) L'Accueil fait désormais **un** appel à l'API (`GET /api/rag/documents`, `totals`) pour le résumé de la carte « Documents » ; AD-6 voulait des cartes qui ne lisent que le store du flux système. Variante conservatrice : aucune route ni aucun champ du flux n'est ajouté (le contrat ne bouge pas), l'appel est unique (au montage, au retour sur l'Accueil et au retour de l'onglet, jamais en boucle) et son échec laisse la phrase d'accroche. Alternative, plus lourde : un champ `rag` dans l'état du flux système. (2) Une base vide dit « 0 document indexé · 0 extrait » (le critère d'`epics.md` donne le format `N documents indexés · M extraits`, sans cas vide) ; le singulier vaut pour 0 et 1, comme la Discussion. Le compte est celui des documents `ready` (`totals`, D-26) : un document en échec ou en cours d'indexation n'y figure pas. (3) La « carte » de l'Accueil est le lien du module (`a.home-module-link`), seul élément cliquable, avec le nom court, le nom long et le résumé de D-10 ; aucune autre carte n'est créée. (4) Le tag annoté `v2.0.0-alpha.4` et la release GitHub ne sont pas créés (consigne du run) : ils suivent la recette humaine, notes et recette dans le rapport de la story.
     evidence: |-
       `screens/home.js::refreshBase`, `baseSummary`, `tests/v2/e2e/test_home.py::test_the_documents_card_*`, `tests/v2/unit/test_shell_static.py::test_the_home_screen_reads_the_store_and_one_base_summary_*`.
-    location: src/wavelocalai/web/static/screens/home.js
+    location: src/frugal_ai_workbench/web/static/screens/home.js
     severity: medium
   - summary: >-
       Rien n'a été joué avec le vrai reranker (aucun téléchargement) ni sur le PC pro de 16 Go sans GPU installé par `uv sync` seul : la recette humaine (Flow 1 puis Flow 2) reste le signal de succès de la spec. Le test d'intégration du Flow 2 a tourné sur le vrai Ollama de ce poste (`qwen2.5:1.5b`, `nomic-embed-text`) et couvre pour la première fois Self-RAG sur un vrai modèle (report de la revue de la 4.6) : la boucle `embedding`, `search`, `grade` tourne et la réponse part avec ses sources.
@@ -62,7 +62,7 @@ Un consultant, depuis l'Accueil, importe un document, l'interroge et retrouve sa
 
 ## Fichiers
 
-- `src/wavelocalai/web/static/screens/home.js`, `i18n/fr.json` (`home.documents_indexed`)
+- `src/frugal_ai_workbench/web/static/screens/home.js`, `i18n/fr.json` (`home.documents_indexed`)
 - `pyproject.toml`, `uv.lock`, `CITATION.cff` (2.0.0a4)
 - Tests : `tests/v2/e2e/test_flow2.py`, `tests/v2/integration/test_flow2_ollama.py`, `tests/v2/unit/test_version.py`, `tests/v2/workshop_note.py` (nouveaux) ; `tests/v2/e2e/test_home.py`, `tests/v2/unit/test_shell_static.py` (complétés ou réalignés)
 

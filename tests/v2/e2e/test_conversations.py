@@ -259,7 +259,7 @@ def test_download_json_gives_messages_model_origin_rate_and_co2_with_method(scre
         page.get_by_role("button", name="Télécharger (JSON)").click()
     assert re.fullmatch(r"conversation-[0-9a-f]{8}\.json", download.value.suggested_filename)
     document = json.loads(Path(download.value.path()).read_text(encoding="utf-8"))
-    assert document["format"] == "wavelocalai.conversation/1"
+    assert document["format"] == "frugal-ai-workbench.conversation/1"
     assert [m["role"] for m in document["messages"]] == ["user", "assistant"] * 2
     first = document["messages"][1]
     assert first["content"] == "Réponse **un** du modèle."
@@ -277,7 +277,7 @@ def test_download_markdown_reads_as_a_transcript(screen):
         page.get_by_role("button", name="Télécharger (Markdown)").click()
     assert re.fullmatch(r"conversation-[0-9a-f]{8}\.md", download.value.suggested_filename)
     text = Path(download.value.path()).read_text(encoding="utf-8")
-    assert text.startswith("# Conversation wavelocalai")
+    assert text.startswith("# Conversation Frugal AI Workbench")
     assert "## Vous\n\nPremière question" in text and "## Modèle\n\nRéponse deux." in text
     assert "origine : local" in text and "(mesuré par Ollama (D3))" in text
     assert "CO2 : 2,5 mg (codecarbon, mesuré)" in text

@@ -8,9 +8,9 @@ import types
 
 import pytest
 
-from wavelocalai.hardware import accelerator, machine_state, nvml
-from wavelocalai.hardware.fiche import capture_fiche
-from wavelocalai.hardware.monitor import HardwareMonitor
+from frugal_ai_workbench.hardware import accelerator, machine_state, nvml
+from frugal_ai_workbench.hardware.fiche import capture_fiche
+from frugal_ai_workbench.hardware.monitor import HardwareMonitor
 
 
 @pytest.fixture

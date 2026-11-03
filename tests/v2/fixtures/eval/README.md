@@ -28,7 +28,7 @@ assistant, ses affirmations avec le **verdict attendu** et l'extrait d'appui, et
    La garde ne passe pas si l'accord est sous `minimum_agreement` **ou** si le juge ne fait pas
    mieux qu'un juge trivial (toujours le verdict le plus fréquent du jeu ; « tous utiles » ou
    « aucun utile » pour les extraits) : la mesure le dit (« juge non informatif »). Avertissement
-   par défaut, échec avec `WAVELOCALAI_JUDGE_STRICT=1`.
+   par défaut, échec avec `FRUGAL_AI_JUDGE_STRICT=1`.
 
 Cas à regarder de près (verdicts les plus discutables) : `sauvegarde-frequence` (affirmations
 impliquées, non dites), `jardin-partage` (« finance » pour « prend en charge »), `frais-repas-negation`

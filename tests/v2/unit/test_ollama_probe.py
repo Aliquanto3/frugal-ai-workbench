@@ -7,7 +7,7 @@ import time
 
 import httpx
 
-from wavelocalai.models.ollama_probe import DOWN, OllamaProbe
+from frugal_ai_workbench.models.ollama_probe import DOWN, OllamaProbe
 
 from ..conftest import closed_port
 

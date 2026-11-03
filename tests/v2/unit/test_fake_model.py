@@ -7,10 +7,10 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.inference.streaming import stream_into_run
-from wavelocalai.models.fake import FakeChatModel, Sleep, fake_models
-from wavelocalai.models.port import (
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.inference.streaming import stream_into_run
+from frugal_ai_workbench.models.fake import FakeChatModel, Sleep, fake_models
+from frugal_ai_workbench.models.port import (
     ChatMessage,
     ChatModel,
     ChatRequest,
@@ -19,8 +19,8 @@ from wavelocalai.models.port import (
     LoadState,
     TextDelta,
 )
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..conftest import make_settings
 
@@ -52,7 +52,7 @@ def _row(store, run_id):
 
 def test_the_fake_is_registered_only_when_testing(tmp_path):
     assert fake_models(make_settings(tmp_path)) == {}
-    registered = fake_models(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}))
+    registered = fake_models(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}))
     assert list(registered) == ["fake:1b"]
     assert isinstance(registered["fake:1b"], ChatModel)  # respecte le port
 

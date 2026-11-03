@@ -1,4 +1,4 @@
-Fiche projet Hirondelle (document de test WaveLocalAI).
+Fiche projet Hirondelle (document de test Frugal AI Workbench).
 Le projet Hirondelle a été lancé le 3 mars 2025 par l'équipe Data de Lyon.
 Son budget total est de 412 000 euros.
 La cheffe de projet s'appelle Margaux Delorme.

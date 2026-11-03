@@ -1,6 +1,6 @@
 # Maquette v2 : conventions pour les agents d'écran
 
-Maquette HTML interactive du front définitif de wavelocalai v2 : modules ES natifs, sans Node, sans compilation, sans CDN. Ouvrir : double-clic sur `maquette-autonome.html` (un seul fichier, ouvrable en `file://`), ou sur `ouvrir.cmd` (ou `python serveur.py`) pour les sources. En `file://`, `index.html` ne charge pas ses modules : il renvoie vers la page autonome. Contenus 100 % fictifs, textes en français, formats `fr-FR` (`js/core/format.js`), charte de `tokens.css` (aucune couleur en dur), aucun emoji.
+Maquette HTML interactive du front définitif de Frugal AI Workbench v2 : modules ES natifs, sans Node, sans compilation, sans CDN. Ouvrir : double-clic sur `maquette-autonome.html` (un seul fichier, ouvrable en `file://`), ou sur `ouvrir.cmd` (ou `python serveur.py`) pour les sources. En `file://`, `index.html` ne charge pas ses modules : il renvoie vers la page autonome. Contenus 100 % fictifs, textes en français, formats `fr-FR` (`js/core/format.js`), charte de `tokens.css` (aucune couleur en dur), aucun emoji.
 
 ## Ajouter un écran (aucun fichier partagé à modifier)
 
@@ -60,4 +60,4 @@ Chaque agent écrit `notes/<s>.md` : (a) états couverts (id des scénarios) ; (
 
 ## Vérifier
 
-Depuis la racine du dépôt : `.venv\Scripts\python.exe -m pytest docs/maquette-v2/tests -q --tb=short` (Edge via `WAVELOCALAI_E2E_CHROMIUM`, sinon Edge à son emplacement habituel). Les tests lisent `donnees/routes.json` et les `scenarios` de chaque module : axe sans exclusion (clair, sombre, projection), 320 à 1 440 px sans défilement horizontal, clavier, aucune erreur ni avertissement de console, aucune requête hors de 127.0.0.1.
+Depuis la racine du dépôt : `.venv\Scripts\python.exe -m pytest docs/maquette-v2/tests -q --tb=short` (Edge via `FRUGAL_AI_E2E_CHROMIUM`, sinon Edge à son emplacement habituel). Les tests lisent `donnees/routes.json` et les `scenarios` de chaque module : axe sans exclusion (clair, sombre, projection), 320 à 1 440 px sans défilement horizontal, clavier, aucune erreur ni avertissement de console, aucune requête hors de 127.0.0.1.

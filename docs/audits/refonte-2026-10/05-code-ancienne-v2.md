@@ -7,7 +7,7 @@
 
 ## Résumé
 
-1. **Ce n'est pas une v2 de l'application.** C'est un banc de mesure publiable : llama.cpp seul, deux juges cloud (Mistral, Google), des lignes JSONL signées par une fiche matérielle, un tableau de bord de lecture. Il n'y a ni chat, ni Arène, ni RAG, ni agents, ni Ollama. Rien de ce que `wavelocalai` v1 montre à l'écran n'y existe.
+1. **Ce n'est pas une v2 de l'application.** C'est un banc de mesure publiable : llama.cpp seul, deux juges cloud (Mistral, Google), des lignes JSONL signées par une fiche matérielle, un tableau de bord de lecture. Il n'y a ni chat, ni Arène, ni RAG, ni agents, ni Ollama. Rien de ce que `frugal-ai-workbench` v1 montre à l'écran n'y existe.
 2. **Le code est dense et très testé** : 24 080 lignes de Python, 28 740 lignes de tests, couverture imposée à 95 % (98,1 % mesurée sur `main`). Il est aussi hors de proportion avec la preuve produite : 80 lignes de qualité et 2 de runtime publiées sur `main`.
 3. **Le front est un lecteur de tables.** React 19, Vite, TypeScript, 8 écrans, aucun graphique, aucun routeur, aucune icône, une seule feuille de 116 lignes, en anglais, hors charte (accent `#6c2bd9`).
 4. **À reprendre : des idées et quelques modules de mesure, pas des écrans.** Le plus utile est la discipline « jamais de zéro à la place d'une absence » (`Absent`), la fiche matérielle hachée, le verdict à trois états, les intervalles par bootstrap et l'accord entre juges. Le tout relève surtout de `slm-quality-bench`.
@@ -196,16 +196,16 @@ Le front est un outil d'auditeur, pas une vitrine. Le backlog prévoit un écran
 | Playground qui dit avant l'envoi si le texte quitte la machine | `PlaygroundLabel`, `sendControlText` | Cadre exact de D1 : le bouton d'envoi change de libellé quand le sujet est cloud | À reprendre tel quel dans le `model-picker` et le bouton d'envoi |
 | Ne montrer aucun chiffre dans le playground | `playground.py` | « Tout chiffre à l'écran se lirait comme une mesure » : principe de 03 §3.2 (« le front ne calcule aucune mesure ») | Notre débit provisoire contredit cette règle : à trancher, voir leçon 7 |
 
-### 3.4 Écarts à la charte Wavestone
+### 3.4 Écarts à la charte générique
 
 | Règle | Constat |
 |---|---|
-| Primaire `#451DC7` | Accent `#6c2bd9` en clair, `#b083f0` en sombre. Aucune trace de `#451DC7`. Gris GitHub (`#24292f`, `#d0d7de`) pour le reste |
+| Primaire `#0B6B78` | Accent `#6c2bd9` en clair, `#b083f0` en sombre. Aucune trace de `#0B6B78`. Gris GitHub (`#24292f`, `#d0d7de`) pour le reste |
 | Icônes Material | Aucune icône. Des flèches Unicode dans le texte (« Runs → », « ← Runs ») |
 | Aucun emoji | Respecté |
 | Thème sombre | Présent, par `prefers-color-scheme`, sans bascule manuelle |
-| Police | `system-ui`. Ni Aptos ni Inter |
-| Langue | Interface en anglais. La charte et `AGENTS.md` de wavelocalai demandent le français |
+| Police | `system-ui`. Pas d'Inter |
+| Langue | Interface en anglais. La charte et `AGENTS.md` de frugal-ai-workbench demandent le français |
 | Accessibilité | Boutons natifs et `aria-pressed` sur l'onglet. Pas de lien d'évitement, pas de `aria-live`, pas de mode projection, pas de test d'accessibilité |
 | Jetons de design | Neuf variables CSS, pas de fichier de jetons, pas de test de dérive |
 
@@ -215,7 +215,7 @@ Le front est un outil d'auditeur, pas une vitrine. Le backlog prévoit un écran
 
 Barème de qualité : **A** = directement lisible et testé ; **B** = bon mais lié à d'autres modules du dépôt ; **C** = utile seulement comme référence. Coût d'adaptation à la pile cible (FastAPI, SDK officiels, sqlite-vec, front natif) : **faible** (copie et retouche de noms), **moyen** (réécriture partielle), **élevé** (réécriture).
 
-### 4.1 Pour `wavelocalai` (application)
+### 4.1 Pour `frugal-ai-workbench` (application)
 
 Le périmètre réutilisable est mince, parce que l'application n'a pas d'équivalent dans cet ancien dépôt.
 
@@ -289,7 +289,7 @@ Ce que l'expérience valide :
 | Persistance | JSONL en ajout seul, JSON par hachage | SQLite unique (table `runs`), sqlite-vec |
 | Concurrence | Un verrou global d'occupation (« un seul lancement ») | Sémaphore Ollama, appels cloud en parallèle, tâches annulables |
 | Découpage | Paquet plat de 60 modules, tous au même niveau | Paquets par domaine (`models/`, `inference/`, `rag/`, …) avec `web/` seul à connaître FastAPI |
-| Configuration | `settings.py` de 583 lignes (une fonction de chargement par service) | `Settings` pydantic unique, `wavelocalai.toml` |
+| Configuration | `settings.py` de 583 lignes (une fonction de chargement par service) | `Settings` pydantic unique, `frugal-ai-workbench.toml` |
 | Sécurité locale | Clé d'API obligatoire, TLS auto-signé, refus des pairs non locaux | Écoute sur `127.0.0.1`, refus des POST d'une autre origine |
 | Mesure carbone | CodeCarbon par canal, étiqueté | CodeCarbon local, `ecologits` cloud, table `runs` |
 

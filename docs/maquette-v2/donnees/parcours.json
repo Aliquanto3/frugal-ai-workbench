@@ -6,7 +6,7 @@
       "label": "Flow 1 : démo d'avant-vente (Arène)",
       "source": "EXPERIENCE.md, Flow 1",
       "steps": [
-        { "route": "/", "scenario": "nominal", "pause_ms": 2500, "note": "Claire ouvre WaveLocalAI : Système « Disponible », mode Local." },
+        { "route": "/", "scenario": "nominal", "pause_ms": 2500, "note": "Claire ouvre Frugal AI Workbench : Système « Disponible », mode Local." },
         { "route": "/", "scenario": "suivre-demo-recommandee", "pause_ms": 1500, "note": "Elle suit « Arène des modèles », marquée « Démo recommandée »." },
         { "route": "/arene/comparer", "scenario": "trois-locaux-preselectionnes", "pause_ms": 2000, "note": "Trois petits modèles locaux présélectionnés, juge local." },
         { "route": "/arene/comparer", "scenario": "comparaison-en-cours", "pause_ms": 2000, "note": "« Chargement du modèle en mémoire… », puis les colonnes en flux." },

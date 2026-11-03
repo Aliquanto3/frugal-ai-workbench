@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.models.card import NBSP, CardSource, why_lines
+from frugal_ai_workbench.models.card import NBSP, CardSource, why_lines
 
 
 def _source(tps: float) -> CardSource:

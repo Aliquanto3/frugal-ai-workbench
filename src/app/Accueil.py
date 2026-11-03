@@ -1,5 +1,5 @@
 """
-Point d'entrée de WaveLocalAI : navigation, barre latérale commune et contrôle cloud unique.
+Point d'entrée de Frugal AI Workbench : navigation, barre latérale commune et contrôle cloud unique.
 
 Le contenu de l'accueil vit dans home.py ; les modules dans views/. Seules les pages déclarées
 ici existent. Le dossier ne doit pas s'appeler pages/ : sa seule présence fait exécuter par

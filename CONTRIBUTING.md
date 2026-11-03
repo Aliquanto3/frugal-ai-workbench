@@ -1,6 +1,6 @@
 # 🤝 Guide de Contribution & Workflow
 
-Ce document détaille les standards de qualité, le workflow Git et les outils nécessaires pour contribuer au projet **WaveLocalAI**.
+Ce document détaille les standards de qualité, le workflow Git et les outils nécessaires pour contribuer au projet **Frugal AI Workbench**.
 
 ## 🛠️ 1. Prérequis & Installation
 

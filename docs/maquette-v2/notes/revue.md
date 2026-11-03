@@ -11,9 +11,9 @@ Diff `origin/master...HEAD`, limité à `docs/maquette-v2/`. Captures Edge 1 280
 | low | second avis 5 | `disclosure.js` : écouteurs `document` jamais retirés | Rejeté : liés une seule fois au démarrage de la coquille. |
 | low | second avis 6 | `"when": "{{x}}"` sans variable : événement joué | Corrigé, test ajouté. |
 | low | second avis 7 | `stop()` avant `run.ready` : jetons tardifs | Corrigé (`schedule` s'arrête si `stopping`), test ajouté. |
-| low | second avis 8 | Couleurs en dur (`scenarios.css`, SVG d'Agent seul) | Rejeté : panneau volontairement hors charte, documenté ; le SVG est un fichier téléchargé, sans accès aux jetons, en `#451DC7` (primaire). |
+| low | second avis 8 | Couleurs en dur (`scenarios.css`, SVG d'Agent seul) | Rejeté : panneau volontairement hors charte, documenté ; le SVG est un fichier téléchargé, sans accès aux jetons, en `#0B6B78` (primaire). |
 | low | second avis 9 | Nom non échappé dans le SVG téléchargé | Corrigé (échappement), bien que les noms viennent de données fictives. |
-| medium | second avis 10 | Société fictive « Hélianthe » cherchée par la « Recherche interne Wavestone » comme « client » : nom porté par des sociétés réelles | Corrigé : renommée « Ombrelune » partout. Le libellé de l'outil reprend celui de la v1 (`search_wavestone_internal`) : gardé. |
+| medium | second avis 10 | Société fictive « Hélianthe » cherchée par la « Recherche interne (simulée) » comme « client » : nom porté par des sociétés réelles | Corrigé : renommée « Ombrelune » partout. Le libellé de l'outil reprend celui de la v1 (`search_internal`) : gardé. |
 | low | second avis 11 | Test des scénarios vide si un écran n'en exporte aucun | Corrigé : assertion d'au moins un scénario. |
 | — | second avis 12 | Notes `documents-commun.md`, `etats.md` absentes | Rejeté : ni l'un ni l'autre n'est un écran (module partagé, catalogue propre à la maquette). |
 | low | revue (captures) | En-têtes simples et triables décalés en hauteur dans les tableaux communs | Corrigé : `vertical-align: middle` sur `thead th`. |

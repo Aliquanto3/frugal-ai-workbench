@@ -11,7 +11,7 @@ Fichier lu par `/agent-cost-kit:avancement-run`. Le détail du run (règles, out
 
 ## Règles fixes
 
-Voir `run-autonome-mvp.md`, sections « Reprise après /clear » et « État courant ». Par story : dev-story (Sonnet, effort high, worktree `..\wavelocalai-wt\<clé>`) → second-avis (Haiku) → reviewer (Opus) → fusion de la branche précédente ou de `origin/master` par l'orchestrateur → contrôles complets (`_outils/checks.sh`) → `_outils/finalize.sh` → PR → merge commit quand la CI est verte.
+Voir `run-autonome-mvp.md`, sections « Reprise après /clear » et « État courant ». Par story : dev-story (Sonnet, effort high, worktree `..\frugal-ai-workbench-wt\<clé>`) → second-avis (Haiku) → reviewer (Opus) → fusion de la branche précédente ou de `origin/master` par l'orchestrateur → contrôles complets (`_outils/checks.sh`) → `_outils/finalize.sh` → PR → merge commit quand la CI est verte.
 
 ## Parallélisme
 
@@ -113,7 +113,7 @@ Convention : `- AAAA-MM-JJ HH:MM · story · étape · résultat · commit`. Ét
 - 2026-10-18 23:22 · run · décision · Ollama laissé au run pour la nuit (Anaël) · —
 - 2026-10-18 23:22 · 3.1 · contrôles · verts (668 v2, 172 E2E dont topbar relancé seul, 6 integration, 1286 v1) ; finalisation et PR · 784ff71
 - 2026-10-18 23:24 · run · décision · périmètre étendu aux Epics 5 à 8 sauf 8.4 (confirmé par Anaël) ; garde-fou : PR correct-course fusionnée avant l'Epic 5 · —
-- 2026-10-18 23:24 · run · décision · second message de périmètre de wavelocalai-d7 attendu dans la nuit, à prendre en compte (Anaël) · —
+- 2026-10-18 23:24 · run · décision · second message de périmètre de frugal-ai-workbench-d7 attendu dans la nuit, à prendre en compte (Anaël) · —
 - 2026-10-18 23:25 · 4.2 · review · 2 medium et 5 low corrigés, 1 low reporté (plafonds avant lecture du multipart) · 5a77b2a
 - 2026-10-18 23:27 · 4.2 · fusion 4.1 · 4.1 à jour de master fusionnée d'avance (conflits garder les deux), 804 tests v2 unit+web · bac487f
 - 2026-10-18 23:36 · 3.1 · fusion · PR #59 fusionnée · 5ab78e4
@@ -129,7 +129,7 @@ Convention : `- AAAA-MM-JJ HH:MM · story · étape · résultat · commit`. Ét
 - 2026-10-19 00:10 · 3.2 · fusion master · master avec 3.1 fusionné (sans conflit) ; contrôles lancés · 74286f2
 - 2026-10-19 00:19 · 4.1 · CI · correctif poussé (course du test d'annulation ; index numpy si sqlite-vec absent, `select_index`) ; report : index numpy en mémoire perdu au redémarrage (4.3) · 2d4b0b6
 - 2026-10-19 00:25 · 3.2 · contrôles · verts (677 v2, 195 E2E, 6 integration, 1286 v1) ; finalisation et PR · 74286f2
-- 2026-10-19 00:42 · run · décision · second message de wavelocalai-d7 appliqué : #58 et #61 fusionnées, garde-fou Epic 5 levé, 1.12 et 2.7 ajoutées, ajustements 3.2/3.3/4.1/4.2 avant PR, écarts §7(d) en variante conservatrice · 72137a4
+- 2026-10-19 00:42 · run · décision · second message de frugal-ai-workbench-d7 appliqué : #58 et #61 fusionnées, garde-fou Epic 5 levé, 1.12 et 2.7 ajoutées, ajustements 3.2/3.3/4.1/4.2 avant PR, écarts §7(d) en variante conservatrice · 72137a4
 - 2026-10-19 00:42 · run · report · incident b7703cd (fichiers d'état poussés sur master par l'autre session) : version locale gardée, aucune ligne perdue ; annulation à décider par Anaël · b7703cd
 - 2026-10-19 00:44 · 4.1 · fusion master · correct course fusionné ; ajustement §7(a) : `ingest_progress` et `ingest_file_done` consignés dans `contrat-api.md` ; 805 tests v2 unit+web ; poussé · 6d17a04
 - 2026-10-19 00:45 · 3.2 · fusion master · correct course fusionné ; PR #62 retenue pour les ajustements §7(a) · 02f092b
@@ -253,7 +253,7 @@ Convention : `- AAAA-MM-JJ HH:MM · story · étape · résultat · commit`. Ét
 - 2026-10-19 07:15 · 4.3 · fusion master · conflits `components.css` et `components/index.js` (3.4) gardés des deux côtés ; 1037 v2 ; poussé · a1b411c
 - 2026-10-19 07:15 · run · décision · pause demandée par Anaël pour un /clear ; file de fusion #71 → #68 → #70 lancée · —
 - 2026-10-19 07:21 · 3.5 · dev · fini, 1010 v2, 153 E2E ; table de prix cloud livrée vide (aucune source datée dans le dépôt) : coût cloud « inconnu » avec raison · 763a122
-- 2026-10-19 07:21 · 3.5 · attente humaine · table `[cloud.prices]` de `wavelocalai.toml` à remplir par Anaël (prix par million de tokens entrée/sortie, `retrieved_at`, `source`) · —
+- 2026-10-19 07:21 · 3.5 · attente humaine · table `[cloud.prices]` de `frugal-ai-workbench.toml` à remplir par Anaël (prix par million de tokens entrée/sortie, `retrieved_at`, `source`) · —
 - 2026-10-19 07:33 · run · état · PR #71 fusionnée (fichiers d'état + `.gitattributes`) · 644eb47
 - 2026-10-19 07:33 · 4.3 · CI · rouge Windows (`test_read_budget` /api/models 440 ms, minutage) ; job relancé · a1b411c
 - 2026-10-19 07:33 · 4.8 · CI · rouge (fusion avec 3.4 : `arena.js` 606 lignes > 600) ; à la reprise : fusionner master dans la branche et alléger `arena.js` · 8e2f758
@@ -420,7 +420,7 @@ Convention : `- AAAA-MM-JJ HH:MM · story · étape · résultat · commit`. Ét
 - 2026-10-19 16:48 · 5.3 · fusion master · conflits avec la 5.1 résolus (les deux écrans gardés, comptes recalculés, 145 E2E) ; E2E rouge de #89 = défaut de master corrigé par #91 ; poussé · 3bf7ff2
 - 2026-10-19 16:49 · run · état · fichiers d'état mis à jour (contexte de l'orchestrateur proche de 200 k) ; PR d'état · —
 - 2026-10-19 16:50 · correctif · fusion · PR #91 fusionnée (verdict de l'Arène rouverte, budget de la température) · c889381
-- 2026-10-19 16:52 · 7.2 · review · medium corrigé (« juge non informatif » si pas mieux que le juge trivial, avertissement sauf `WAVELOCALAI_JUDGE_STRICT=1`), garde de relecture par cas et date ; 3 low écartés ; aucun verdict validé ; PR après la fusion de la 7.1 (#90) · 5da70b5
+- 2026-10-19 16:52 · 7.2 · review · medium corrigé (« juge non informatif » si pas mieux que le juge trivial, avertissement sauf `FRUGAL_AI_JUDGE_STRICT=1`), garde de relecture par cas et date ; 3 low écartés ; aucun verdict validé ; PR après la fusion de la 7.1 (#90) · 5da70b5
 - 2026-10-19 16:53 · 7.2 · contrôles · lancés · 5da70b5
 - 2026-10-19 16:55 · 6.3 · dev · fini (`approval_required`, `POST /api/runs/{id}/approvals/{approval_id}`, expiration 600 s, envoi seulement après approbation dans `agents/outbox.py`, STARTTLS exigé ; SMTP factice local, aucun email réel ; integration Ollama) · 4b7702f
 - 2026-10-19 16:55 · 6.3 · second-avis · lancé (Haiku) · —
@@ -537,7 +537,7 @@ Convention : `- AAAA-MM-JJ HH:MM · story · étape · résultat · commit`. Ét
 - 2026-10-19 19:27 · 5.4 · fusion master · sans conflit · —
 - 2026-10-19 19:27 · 5.4 · PR · #102 ouverte · —
 - 2026-10-19 19:29 · CI · fusion · PR #100 fusionnée (CI allégée) · 959057e
-- 2026-10-19 19:31 · 5.7 · décision · Anaël : pas de release de slm-quality-bench avant la fin des développements (Ollama requis sur ce poste) ; 5.7 reportée après le run ; une version de WaveLocalAI sans les chiffres du banc est acceptée ; prévenir Anaël quand le run n'a plus besoin d'Ollama · —
+- 2026-10-19 19:31 · 5.7 · décision · Anaël : pas de release de slm-quality-bench avant la fin des développements (Ollama requis sur ce poste) ; 5.7 reportée après le run ; une version de Frugal AI Workbench sans les chiffres du banc est acceptée ; prévenir Anaël quand le run n'a plus besoin d'Ollama · —
 - 2026-10-19 19:33 · 6.6 · review · medium corrigé (`joinBusy` : un Agent seul actif n'est plus rejoint comme mission), 3 low corrigés (`Object.hasOwn`, « introuvable » sur `run_not_found` seulement, `warm_up` du test de l'Agent seul) ; défaut inverse dans `agents-solo.js` → 8.1 · 88d53e4
 - 2026-10-19 19:39 · 6.3 · CI · verte sur les 3 OS après le correctif macOS ; PR en conflit après les fusions · —
 - 2026-10-19 19:39 · 6.3 · fusion master · conflit `contrat-api.md` (sections 6.3 et 5.3 gardées) ; poussé sur #95 · 7122bc2

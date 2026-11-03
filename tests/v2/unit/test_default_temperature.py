@@ -9,17 +9,17 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.models.facts import (
+from frugal_ai_workbench.models.facts import (
     InMemoryFactsStore,
     ModelFacts,
     facts_from_ollama,
     parse_temperature,
 )
-from wavelocalai.models.facts_store import SqliteFactsStore
-from wavelocalai.models.ollama_api import OllamaUnavailableError
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.store.db import Store, db_path
-from wavelocalai.store.migrate import migrate
+from frugal_ai_workbench.models.facts_store import SqliteFactsStore
+from frugal_ai_workbench.models.ollama_api import OllamaUnavailableError
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.store.db import Store, db_path
+from frugal_ai_workbench.store.migrate import migrate
 
 from ..conftest import make_settings
 from .test_registry import FakeOllama, _listed
@@ -169,7 +169,7 @@ def test_the_parameters_survive_the_sqlite_cache(tmp_path):
 
 
 def test_migration_0005_adds_the_column_and_keeps_old_rows_unread(tmp_path):
-    path = tmp_path / "wavelocalai.db"
+    path = tmp_path / "frugal-ai-workbench.db"
     migrate(path, target=3)
     with sqlite3.connect(path) as conn:
         conn.execute(

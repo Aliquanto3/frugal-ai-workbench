@@ -1,6 +1,6 @@
 # src/core/utils.py
 """
-Utilitaires partagés pour le projet WaveLocalAI.
+Utilitaires partagés pour le projet Frugal AI Workbench.
 Centralise les fonctions dupliquées à travers les modules.
 """
 

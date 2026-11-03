@@ -29,7 +29,7 @@ STREAMLIT_DEPRECATION_RE = re.compile(r"streamlit.*deprecat", re.I)
 CONFIG_PATH = Path(__file__).resolve().parents[2] / ".streamlit" / "config.toml"
 
 # Couleur primaire claire (DESIGN.md, .streamlit/config.toml) et rouge par défaut de Streamlit.
-PRIMARY_LIGHT_RGB = "rgb(69, 29, 199)"
+PRIMARY_LIGHT_RGB = "rgb(11, 107, 120)"
 STREAMLIT_RED_RGB = "rgb(255, 75, 75)"
 
 # Libellés remplacés par le lexique (EXPERIENCE.md) : jamais affichés.
@@ -71,7 +71,7 @@ def test_home_is_local_and_available(page, app):
     assert main.get_by_text("Démo recommandée").count() == 1
 
     text = h.flat(main.inner_text())
-    assert f"© {date.today().year} {APP_NAME} · Wavestone" in text
+    assert f"© {date.today().year} {APP_NAME}" in text
     assert not re.search(r"v\d+\.\d+\.\d+", text), "aucune version inventée au pied de page"
     assert page.locator('[data-testid="stAppDeployButton"]').count() == 0
     assert h.ui_errors(page) == []
@@ -96,7 +96,7 @@ def test_page_structure(page, app, path, title):
 
 
 def test_primary_action_uses_brand_color(page, app):
-    """L'action principale est violette (#451DC7), jamais le rouge par défaut de Streamlit
+    """L'action principale est bleu pétrole (#0B6B78), jamais le rouge par défaut de Streamlit
     (U4) ; police Inter chargée localement, fond blanc en thème clair (U1)."""
     # Base documentaire vide (app neuve) : « Importer des documents » est l'action principale.
     h.goto(page, app.base_url, DOCUMENTS.url_path)
@@ -106,8 +106,8 @@ def test_primary_action_uses_brand_color(page, app):
         "els => els.map(e => getComputedStyle(e).backgroundColor)"
     )
     assert STREAMLIT_RED_RGB not in colors
-    # Inter déclarée par @font-face et servie localement (Aptos, si elle est installée, passe
-    # devant : on vérifie la déclaration et le fichier, pas la police employée).
+    # Inter déclarée par @font-face et servie localement (on vérifie la déclaration et le
+    # fichier, pas la police employée).
     families = page.evaluate("[...document.fonts].map(f => f.family.replace(/[\"']/g, ''))")
     assert "Inter" in families, families
     for face in toml.load(CONFIG_PATH)["theme"]["fontFaces"]:

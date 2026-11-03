@@ -1,7 +1,7 @@
 """
-Tests du thème Wavestone, des icônes et de l'accessibilité du code source (story 2).
+Tests du thème de la charte générique, des icônes et de l'accessibilité du code source (story 2).
 
-Référence : _bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md.
+Référence : _bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md.
 Usage: python -m pytest tests/app/test_theme.py -v
 """
 
@@ -20,27 +20,27 @@ CONFIG_PATH = ROOT_DIR / ".streamlit" / "config.toml"
 # Tableau Colors de DESIGN.md, clé config.toml -> valeur, par thème.
 EXPECTED_THEME = {
     "light": {
-        "primaryColor": "#451DC7",
+        "primaryColor": "#0B6B78",
         "backgroundColor": "#FFFFFF",
-        "secondaryBackgroundColor": "#F6F5FA",
-        "textColor": "#0A0A14",
-        "borderColor": "#E6E6EC",
-        "linkColor": "#451DC7",
-        "chartCategoricalColors": ["#6A4DE6", "#0E9F5E", "#2F7FD8", "#C98A00"],
+        "secondaryBackgroundColor": "#EEF1F0",
+        "textColor": "#141A1F",
+        "borderColor": "#C9D1D3",
+        "linkColor": "#0B6B78",
+        "chartCategoricalColors": ["#0B7A86", "#C2560E", "#2F68D0", "#B83A75"],
     },
     "dark": {
-        "primaryColor": "#7E65E9",
-        "backgroundColor": "#0A0A14",
-        "secondaryBackgroundColor": "#16162A",
-        "textColor": "#F6F5FA",
-        "borderColor": "#2E2E44",
-        "linkColor": "#9B85F0",
-        "chartCategoricalColors": ["#7A5FEA", "#12A564", "#3B86DB", "#B07800"],
+        "primaryColor": "#0B7A86",
+        "backgroundColor": "#0E1316",
+        "secondaryBackgroundColor": "#161D21",
+        "textColor": "#E7ECEE",
+        "borderColor": "#56605F",
+        "linkColor": "#86D8E2",
+        "chartCategoricalColors": ["#4FC1CF", "#F29A57", "#7FA8F5", "#EE7FB2"],
     },
 }
 # Clés natives ajoutées hors tableau, pour un contraste AA sur les couleurs sémantiques.
 EXTRA_THEME_KEYS = {"light": {"greenTextColor"}, "dark": set()}
-FONT_STACK = "Aptos, Inter, sans-serif"
+FONT_STACK = "Inter, system-ui, sans-serif"
 
 # Une icône Material par page, jamais partagée (EXPERIENCE.md, Information Architecture),
 # déclarée une seule fois dans src/app/modules.py (menu et liens de l'accueil). Le favicon est
@@ -120,14 +120,15 @@ def _mix(color: str, background: str, share: float) -> str:
 
 def test_dark_primary_compromise_does_not_degrade():
     """Primaire sombre : compromis documenté dans DESIGN.md (note `primary-dark`), aucune valeur
-    ne donnant 4,5:1 partout. Planchers : les valeurs du 27/09 arrondies au centième inférieur,
-    pour qu'un changement de couleur ne dégrade pas un contraste sans le dire."""
+    ne donnant 4,5:1 partout. Planchers : les valeurs de la charte générique (2026-11-03)
+    arrondies au centième inférieur, pour qu'un changement de couleur ne dégrade pas un
+    contraste sans le dire."""
     dark = _config()["theme"]["dark"]
     primary, background = dark["primaryColor"], dark["backgroundColor"]
-    assert _contrast("#FFFFFF", primary) >= 4.26  # texte blanc des boutons principaux
-    assert _contrast(primary, background) >= 4.61  # valeur d'un curseur
-    assert _contrast(primary, dark["secondaryBackgroundColor"]) >= 4.16  # curseur, barre latérale
-    assert _contrast(primary, _mix(primary, background, 0.10)) >= 4.24  # pastille choisie
+    assert _contrast("#FFFFFF", primary) >= 5.06  # texte blanc des boutons principaux
+    assert _contrast(primary, background) >= 3.68  # valeur d'un curseur
+    assert _contrast(primary, dark["secondaryBackgroundColor"]) >= 3.35  # curseur, barre latérale
+    assert _contrast(primary, _mix(primary, background, 0.10)) >= 3.40  # pastille choisie
 
 
 def test_theme_keys_exist_in_installed_streamlit():

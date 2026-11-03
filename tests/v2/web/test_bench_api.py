@@ -13,9 +13,9 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..fake_ollama import FakeOllama, Plan, final, part

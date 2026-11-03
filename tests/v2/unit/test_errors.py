@@ -6,7 +6,7 @@ import re
 
 import pytest
 
-from wavelocalai.errors import ERRORS, AppError, build_envelope, mask_secrets
+from frugal_ai_workbench.errors import ERRORS, AppError, build_envelope, mask_secrets
 
 REQUIRED = {"ollama_down", "forbidden_host", "forbidden_origin", "internal"}
 
@@ -66,7 +66,7 @@ def test_masking_also_covers_known_secret_values_and_nested_detail():
 
 
 def test_prefixed_env_var_names_are_masked():
-    from wavelocalai.errors import mask_secrets
+    from frugal_ai_workbench.errors import mask_secrets
 
     text = mask_secrets("MISTRAL_API_KEY=abcd1234efgh ANTHROPIC_API_KEY: zzzz9999yyyy")
     assert "abcd1234efgh" not in text and "zzzz9999yyyy" not in text
@@ -75,7 +75,7 @@ def test_prefixed_env_var_names_are_masked():
 
 def test_chat_codes_are_declared_and_none_reuses_a_status_name():
     # AD-5 : aucun code d'erreur ne reprend un nom de statut (d'où `generation_interrupted`).
-    from wavelocalai.runs.models import STATUSES
+    from frugal_ai_workbench.runs.models import STATUSES
 
     assert not set(ERRORS) & set(STATUSES)
     envelope = build_envelope("timeout", "300 s", timeout_s=300.0)
@@ -116,7 +116,7 @@ def test_cloud_codes_name_the_provider_and_the_key_variable():
     assert refused["detail"]["http_status"] == 401
     bare = build_envelope("cloud_error")  # sans detail : formule neutre, jamais d'accolade
     assert "{" not in bare["message"] and "le fournisseur" in bare["message"]
-    from wavelocalai.runs.models import STATUSES
+    from frugal_ai_workbench.runs.models import STATUSES
 
     assert not {c for c in ERRORS if c.startswith("cloud_")} & set(STATUSES)
 
@@ -145,7 +145,7 @@ def test_run_not_found_is_a_404_and_arena_busy_a_409_that_name_the_run():
 
 
 def test_error_texts_are_generated_from_the_closed_list_without_markdown():
-    from wavelocalai.errors import ERRORS, error_texts
+    from frugal_ai_workbench.errors import ERRORS, error_texts
 
     texts = error_texts()
     assert set(texts) == set(ERRORS)
@@ -162,7 +162,7 @@ def test_no_text_file_declares_the_generated_errors_key():
     """Le front lit `errors.*` du catalogue généré : aucun `i18n/fr/*.json` ne le recopie."""
     import json
 
-    from wavelocalai.web.routes_static import STATIC_DIR
+    from frugal_ai_workbench.web.routes_static import STATIC_DIR
 
     for path in (STATIC_DIR / "i18n" / "fr").glob("*.json"):
         assert "errors" not in json.loads(path.read_text(encoding="utf-8")), path.name
@@ -171,7 +171,7 @@ def test_no_text_file_declares_the_generated_errors_key():
 def test_a_text_file_that_redeclares_errors_stops_the_assembly(tmp_path):
     import pytest
 
-    from wavelocalai.web.routes_static import text_catalog
+    from frugal_ai_workbench.web.routes_static import text_catalog
 
     folder = tmp_path / "i18n" / "fr"
     folder.mkdir(parents=True)

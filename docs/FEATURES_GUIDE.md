@@ -1,6 +1,6 @@
-# 🎮 Guide des Fonctionnalités WaveLocalAI
+# 🎮 Guide des Fonctionnalités Frugal AI Workbench
 
-Voici le détail exhaustif des modules disponibles dans le Workbench **WaveLocalAI**.
+Voici le détail exhaustif des modules disponibles dans le Workbench **Frugal AI Workbench**.
 
 ---
 
@@ -49,7 +49,7 @@ Une interface d'administration avancée pour gérer votre bibliothèque locale O
 * **Filtres & Recherche :**
     * **Filtre par Langue :** Trouvez instantanément les modèles supportant le Français, le Code, etc.
 * **Installation Simplifiée :**
-    * **Menu déroulant :** Suggestions curées par Wavestone (Qwen, Mistral, Llama, Gemma, Granite, etc.).
+    * **Menu déroulant :** Suggestions curées (Qwen, Mistral, Llama, Gemma, Granite, etc.).
     * **Feedback Visuel :** Barre de progression temps réel lors du téléchargement (Pull).
     * **Saisie Manuelle :** Champ libre pour télécharger n'importe quel modèle du registre Ollama.
 
@@ -89,7 +89,7 @@ Ce module transforme l'IA en agent autonome capable d'agir via des outils, basé
 L'agent a accès à des fonctions Python sécurisées :
 1.  **🕒 get_current_time :** Accès à l'horloge système (ce que les LLM ne peuvent pas faire seuls).
 2.  **🧮 calculator :** Exécution de calculs mathématiques exacts.
-3.  **🏢 search_wavestone_internal :** Moteur de recherche simulé (Base de connaissance RH/Projets) avec gestion intelligente des fautes de frappe et accents.
+3.  **🏢 search_internal :** Moteur de recherche simulé (Base de connaissance RH/Projets) avec gestion intelligente des fautes de frappe et accents.
 
 ### 🧠 Capacités Cognitives
 * **Filtrage Intelligent :** L'interface ne propose que les modèles capables de faire du "Tool Calling" (ex: Qwen 2.5, Mistral) pour éviter les erreurs.
@@ -112,7 +112,7 @@ L'agent a maintenant accès à **9 outils** (anciennement 3) :
 
 **Données :**
 - 📊 CSV Analyzer
-- 🏢 Wavestone Search
+- 🏢 Internal Search
 
 **Communication :**
 - 📧 Email Sender
@@ -125,4 +125,4 @@ L'agent a maintenant accès à **9 outils** (anciennement 3) :
 Voir [AGENT_TOOLS.md](AGENT_TOOLS.md) pour la documentation complète.
 
 ---
-*Développé pour Wavestone - Architecture Local First.*
+*Architecture Local First.*

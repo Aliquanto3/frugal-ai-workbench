@@ -8,9 +8,9 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-6-4.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-6-5.md'
 warnings: []
@@ -19,13 +19,13 @@ deferred:
       Écart (variante conservatrice) : « Modèle » de chaque agent dans le volet Configurer est une liste native (`select`, « Modèle de la mission » = aucun modèle propre) et non un `wl-model-picker` par agent : le sélecteur préchoisit un défaut (ce qui supprimerait le sens de `model: null`) et cinq combobox chargeraient cinq fois la liste. La liste vient d'un seul `GET /api/models`.
     evidence: |-
       `tests/v2/e2e/test_agents_crew.py::test_configure_opens_a_non_modal_panel_beside_the_schema_and_saves_the_change`.
-    location: src/wavelocalai/web/static/screens/agents-crew-config.js
+    location: src/frugal_ai_workbench/web/static/screens/agents-crew-config.js
     severity: low
   - summary: >-
       Écarts nouveaux, variante conservatrice. (1) Le `backstory` (contexte) d'un agent n'est pas éditable : il est conservé tel quel à l'enregistrement. (2) Un agent dont la mission s'arrête ou échoue est « Arrêté » (échec compris) ; les suivants « Non lancé ». (3) La mission rouverte (`#/agents/equipe/<run_id>`) montre le schéma de l'équipe **telle qu'elle a été jouée** (`params.agents`), pas l'équipe en vigueur ; le sujet vient de la conversation (jamais des `params`). (4) Le rapport d'une mission rouverte vient des `token` rejoués, sinon du dernier message `assistant` de la conversation. (5) Pas de bouton « Effacer la conversation » ni de réouverture de la dernière mission. (6) Un rôle de plus de 19 caractères est coupé sur deux lignes dans le nœud du schéma (abrégé au-delà), son nom entier est dans le `<title>` du nœud. (7) Le garde-fou mémoire (`ram_guard`) n'a pas de traitement propre à cet écran : l'erreur de `run_ended` est affichée par `wl-run-status`, et le sujet reste dans le champ.
     evidence: |-
       `tests/v2/e2e/test_agents_crew.py`, `tests/v2/unit/test_agents_crew_static.py`.
-    location: src/wavelocalai/web/static/screens/agents-crew.js
+    location: src/frugal_ai_workbench/web/static/screens/agents-crew.js
     severity: low
   - summary: >-
       Hors périmètre, constaté : `test_agents_solo.py::test_steps_arrive_in_order_…` échoue seul sur un serveur neuf (le premier appel de modèle met une dizaine de secondes à mesurer, avant que les trois étapes n'arrivent) et passe dès qu'un test a chauffé le serveur du module. Le fichier d'équipe a une fixture `warm_up` de module ; le fichier de l'Agent seul n'en a pas.

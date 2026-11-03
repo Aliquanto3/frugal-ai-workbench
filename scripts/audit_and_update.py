@@ -288,7 +288,7 @@ def generate_markdown_report(db):
         rows.append([name, tag, size, max_ctx, ram, speed])
 
     with open(REPORT_MD_PATH, "w", encoding="utf-8") as f:
-        f.write("# 📊 WaveLocalAI - Rapport de Stress Test\n")
+        f.write("# 📊 Frugal AI Workbench - Rapport de Stress Test\n")
         f.write(f"*Généré le : {datetime.now().strftime('%d/%m/%Y à %H:%M')}*\n")
         f.write(f"**RAM Totale Installée : {TOTAL_RAM_GB} GB**\n\n")
         f.write(

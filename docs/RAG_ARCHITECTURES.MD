@@ -1,4 +1,4 @@
-# 🧠 Documentation Technique : Module RAG WaveLocalAI
+# 🧠 Documentation Technique : Module RAG Frugal AI Workbench
 
 Ce document détaille l'architecture du module RAG refondu (v2.0), conçu pour fonctionner **100% Localement**.
 

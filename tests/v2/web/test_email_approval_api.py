@@ -15,7 +15,7 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import closed_port, make_settings
 from ..fake_smtp import FakeSmtp
@@ -36,7 +36,7 @@ async def mail_app(tmp_path, server: FakeSmtp | None = None, **settings):
     async with contextlib.AsyncExitStack() as stack:
         fake = server or await stack.enter_async_context(FakeSmtp())
         merged = {"smtp": fake.settings(), **settings}
-        app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, **merged))
+        app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, **merged))
         await stack.enter_async_context(app.router.lifespan_context(app))
         transport = httpx.ASGITransport(app=app)
         client = await stack.enter_async_context(

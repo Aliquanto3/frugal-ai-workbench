@@ -84,7 +84,7 @@ def test_the_drop_zone_is_visible_before_the_server_answers_and_the_base_is_empt
     assert page.locator(".docs-drop-line").inner_text() == DROP_LINE
     assert page.get_by_text("Chargement de la base documentaire…").is_visible()
     assert page.locator(".docs-card").is_hidden()  # pas de « base vide » avant la réponse
-    assert page.title() == "Base documentaire · WaveLocalAI"
+    assert page.title() == "Base documentaire · Frugal AI Workbench"
 
     while not held:
         page.wait_for_timeout(20)
@@ -566,7 +566,7 @@ def test_a_failed_document_is_in_the_table_but_not_in_the_ready_count(docs):
 
 
 @pytest.mark.parametrize(
-    ("theme", "fill"), [("light", "rgb(69, 29, 199)"), ("dark", "rgb(106, 77, 230)")]
+    ("theme", "fill"), [("light", "rgb(11, 107, 120)"), ("dark", "rgb(79, 193, 207)")]
 )
 def test_the_filled_button_uses_primary_fill_with_white_text(docs, theme, fill):
     page, _ = docs
@@ -574,7 +574,8 @@ def test_the_filled_button_uses_primary_fill_with_white_text(docs, theme, fill):
     style = page.get_by_role("button", name="Importer des documents").evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color]; }"
     )
-    assert style == [fill, "rgb(255, 255, 255)"]
+    on_primary = "rgb(255, 255, 255)" if theme == "light" else "rgb(5, 34, 39)"
+    assert style == [fill, on_primary]
 
 
 @pytest.mark.parametrize("theme", ["light", "dark"])

@@ -7,7 +7,7 @@ baseline_commit: '89e20e1'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-3.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-5.md'
 warnings: []
@@ -16,37 +16,37 @@ deferred:
       Le code d'erreur de la génération coupée deux fois s'appelle `generation_interrupted`, pas `interrupted` comme le dit le texte de la story 2.1 : AD-5 interdit qu'un code d'erreur reprenne un nom de statut (`interrupted` en est un). La spine prime ; `epics.md` (story 2.1) et le front de la story 2.2 doivent lire `generation_interrupted`.
     evidence: |-
       `tests/v2/unit/test_errors.py::test_chat_codes_are_declared_and_none_reuses_a_status_name`.
-    location: src/wavelocalai/errors.py
+    location: src/frugal_ai_workbench/errors.py
     severity: medium
   - summary: >-
       Aucun adaptateur cloud : `ModelFactory.chat_model` lève `internal` pour un fournisseur autre qu'Ollama (modèle cloud listé avec `allow_cloud=true` puis choisi). Les adaptateurs cloud, leur flux et le CO2 ecologits viennent avec leurs stories.
     evidence: |-
-      `src/wavelocalai/models/factory.py`.
-    location: src/wavelocalai/models/factory.py
+      `src/frugal_ai_workbench/models/factory.py`.
+    location: src/frugal_ai_workbench/models/factory.py
     severity: low
   - summary: >-
       Le CO2 d'une feuille est `unmeasurable` (raison « mesure non branchée ») : CodeCarbon est la story 2.3, qui s'ouvre et se ferme dans la place du `LocalSlot`.
     evidence: |-
       `test_nominal_chat_streams_tokens_then_metrics_and_stores_both_messages` (champ `co2` présent partout, AD-10).
-    location: src/wavelocalai/inference/streaming.py
+    location: src/frugal_ai_workbench/inference/streaming.py
     severity: low
   - summary: >-
       `LoadState("loaded").duration_s` est le délai jusqu'au premier fragment (chargement et lecture du prompt compris) : l'API d'Ollama ne donne `load_duration` qu'au fragment final, où il reste exact dans `metrics.load_s`. Le prefill est exposé par deux champs optionnels ajoutés en fin de `ChatResult` (`prefill_s`, `prefill_tps = prompt_eval_count / prompt_eval_duration`), renseignés par l'adaptateur Ollama seulement et publiés dans `metrics` : écart additif à AD-8 et à `contrat-api.md`, à ratifier. Ils ne sont pas en colonnes de `runs` : l'instantané d'un run terminé ne les a pas.
     evidence: |-
       Docstring de `models/ollama.py` ; `test_loading_is_announced_...`.
-    location: src/wavelocalai/models/ollama.py
+    location: src/frugal_ai_workbench/models/ollama.py
     severity: low
   - summary: >-
       Ollama arrêté, `ollama_down` arrive après 2 à 3 s sous Windows (un refus de connexion locale met ~2 s à échouer) ; la sonde `/api/ps` du chargement échoue déjà sur le refus et évite un second essai. Le message assistant d'un run en erreur ou annulé garde son texte partiel, et le tour suivant le renvoie au modèle dans l'historique.
     evidence: |-
       `test_ollama_stopped_ends_in_ollama_down` (délai de 10 s) ; `test_cancelling_closes_the_http_stream_and_keeps_the_partial_answer`.
-    location: src/wavelocalai/models/ollama.py
+    location: src/frugal_ai_workbench/models/ollama.py
     severity: low
   - summary: >-
       `registry.resolve` ne lit que la dernière liste connue : au tout premier lancement, avant le premier rafraîchissement (< 1 s), un tag installé donne `model_not_found`. L'écran de la story 2.2 liste les modèles avant d'envoyer, ce qui laisse le temps au cache.
     evidence: |-
       Comportement hérité de la story 1.5, non modifié ici.
-    location: src/wavelocalai/models/registry.py
+    location: src/frugal_ai_workbench/models/registry.py
     severity: low
   - summary: >-
       Le test `integration` sur `qwen2.5:1.5b` n'a pas tourné sur le poste de développement : le modèle n'y est pas installé (Ollama y servait un autre modèle de 26 Go, rien n'a été chargé). Il est écrit, marqué `integration`, et saute proprement.
@@ -72,11 +72,11 @@ deferred:
 
 ## Fichiers
 
-- `src/wavelocalai/models/` : `ollama.py`, `ollama_metrics.py`, `factory.py`, `registry.py` (`extra_refs` pour le `fake` en mode test)
-- `src/wavelocalai/inference/` : `chat.py`, `local_slot.py`, `streaming.py` (place, délai, relance unique)
-- `src/wavelocalai/runs/` : `hub.py` (`conversation_messages`, effacement du partiel au `retry`), `models.py`
-- `src/wavelocalai/web/` : `routes_chat.py`, `app.py` (client Ollama partagé, service, `LocalSlot`)
-- `src/wavelocalai/errors.py` : `timeout`, `generation_interrupted`, `ollama_error` en fin de liste
+- `src/frugal_ai_workbench/models/` : `ollama.py`, `ollama_metrics.py`, `factory.py`, `registry.py` (`extra_refs` pour le `fake` en mode test)
+- `src/frugal_ai_workbench/inference/` : `chat.py`, `local_slot.py`, `streaming.py` (place, délai, relance unique)
+- `src/frugal_ai_workbench/runs/` : `hub.py` (`conversation_messages`, effacement du partiel au `retry`), `models.py`
+- `src/frugal_ai_workbench/web/` : `routes_chat.py`, `app.py` (client Ollama partagé, service, `LocalSlot`)
+- `src/frugal_ai_workbench/errors.py` : `timeout`, `generation_interrupted`, `ollama_error` en fin de liste
 - Tests : `tests/v2/fake_ollama.py`, `unit/test_ollama_adapter.py`, `unit/test_chat_service.py`, `unit/test_errors.py`, `web/test_chat_api.py`, `integration/test_chat_ollama.py`
 
 ## Revue

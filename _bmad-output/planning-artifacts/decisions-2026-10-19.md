@@ -33,7 +33,7 @@ L'Accueil lit le store rempli par le flux système, **plus au plus un appel de l
 
 ## Ajouts d'API ratifiés tels quels
 
-Déjà consignés dans `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md` par leurs stories : 4.1 (`ingest_progress.file`, `ingest_file_done`), 4.3 (`embedding_change_needs_clear`, `base_count_stale`, `base_in_use`, `vector_index_lost`, `vector_tables_unreachable`, `GET /api/rag/settings` enrichi), 4.4 (`sources`, `retrieval_step`, `metrics.retrieval_s`, `rag_base_empty`, `chunk_not_found`, réglages `rag.*`), 4.8 (`ram_guard` 503 et son `detail`, `memory.available_gb`, `required_gb`), 4.6 (`strategy`, `top_k`, `citations`, étapes de `retrieval_step`), 4.7 (`reranker`, champs de reclassement), 3.1 à 3.6 (`question`, `lane_status.error`, `judge`, `invalid_output`, `verdict`, `run_not_found`, `arena_busy`, `config`, `erased`), 2.1 et 2.3 (`generation_interrupted`, `energy_wh`).
+Déjà consignés dans `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md` par leurs stories : 4.1 (`ingest_progress.file`, `ingest_file_done`), 4.3 (`embedding_change_needs_clear`, `base_count_stale`, `base_in_use`, `vector_index_lost`, `vector_tables_unreachable`, `GET /api/rag/settings` enrichi), 4.4 (`sources`, `retrieval_step`, `metrics.retrieval_s`, `rag_base_empty`, `chunk_not_found`, réglages `rag.*`), 4.8 (`ram_guard` 503 et son `detail`, `memory.available_gb`, `required_gb`), 4.6 (`strategy`, `top_k`, `citations`, étapes de `retrieval_step`), 4.7 (`reranker`, champs de reclassement), 3.1 à 3.6 (`question`, `lane_status.error`, `judge`, `invalid_output`, `verdict`, `run_not_found`, `arena_busy`, `config`, `erased`), 2.1 et 2.3 (`generation_interrupted`, `energy_wh`).
 
 ## Points ouverts du run ratifiés
 

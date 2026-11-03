@@ -1,4 +1,4 @@
-# Refonte de wavelocalai : synthèse des audits (octobre 2026)
+# Refonte de frugal-ai-workbench : synthèse des audits (octobre 2026)
 
 - **Date :** 2026-10-18
 - **Code audité :** `master` au 2026-10-18, avec les correctifs des PR #28 (juge Claude de Ragas) et #30 (modèles d'embedding, client Ollama sur `127.0.0.1`).
@@ -41,8 +41,8 @@ Les deux auditeurs convergent sur la même pile, reprise du dépôt `agentic-har
 | RAG | sqlite-vec (repli numpy), embeddings servis par Ollama, reranker fastembed en option | Chroma, sentence-transformers, torch |
 | Évaluation | Juge maison à sortie structurée, verdict par affirmation | Ragas |
 | Carbone | CodeCarbon par exécution, hors du fil de requête ; EcoLogits pour le cloud | Tracker par session, constante par token |
-| Persistance | Une base SQLite `data/wavelocalai.db` (runs, messages, documents, évaluations, jobs) | CSV d'émissions, état de session |
-| Configuration | `wavelocalai.toml` versionné + `.env` pour les secrets, objet `Settings` sans effet de bord à l'import | `config.py` à effets de bord |
+| Persistance | Une base SQLite `data/frugal-ai-workbench.db` (runs, messages, documents, évaluations, jobs) | CSV d'émissions, état de session |
+| Configuration | `frugal-ai-workbench.toml` versionné + `.env` pour les secrets, objet `Settings` sans effet de bord à l'import | `config.py` à effets de bord |
 
 Gain attendu : environ 1,8 Go de dépendances en moins, quatre librairies instables en moins, aucune fonctionnalité visible perdue. Trois changements à annoncer aux utilisateurs : embeddings issus d'Ollama, évaluation « méthode Ragas » sans la librairie, schéma d'équipe dessiné par le front.
 
@@ -105,7 +105,7 @@ Les rapports en listent 21 (10 côté back, 11 côté front). Celles-ci engagent
 | 5 | CO₂ | CodeCarbon par run en local, EcoLogits en cloud, « non mesurable » expliqué sinon | 02 #5, 03 U6, §3 ci-dessus |
 | 6 | Persistance | SQLite unique, conversations comprises | 02 §5.4, §3 ci-dessus |
 | 7 | « Gestion des modèles » | Écran « Modèles » à part, hors de l'Arène (modifie `EXPERIENCE.md`) | 03 U5 |
-| 8 | Typographie | Aptos puis Inter, comme `DESIGN.md` | 03 U3 |
+| 8 | Typographie | Inter, comme `DESIGN.md` | 03 U3 |
 | 9 | Dépôt de la v2 | **Tranché le 2026-10-18 :** ce dépôt, versions SemVer ; benchmark dans `slm-quality-bench` | Anaël |
 | 10 | Investissement dans la v1 | Une dernière PR de gains rapides (§5), puis maintenance stricte | 03 U11, 01 |
 
@@ -118,7 +118,7 @@ L'ancien dépôt (août à octobre 2026) n'était pas une v2 de l'app : c'était
 | Idée (04 §3) | Où dans le plan | Données |
 |---|---|---|
 | « Quel modèle pour quel usage ? » : une carte par usage, groupe des meilleurs, intervalle, débit sur la machine de référence | Nouveau sous-écran `#/arene/references` et carte sur l'Accueil, après l'étape 5 | `qb.results/1` |
-| Verdict local ou cloud chiffré à la fin d'une comparaison (écart de note, coût pour 1 000 requêtes, CO₂, données restées sur le poste) | Étape 3 (Arène) | L'app ; table de prix cloud datée dans `wavelocalai.toml` |
+| Verdict local ou cloud chiffré à la fin d'une comparaison (écart de note, coût pour 1 000 requêtes, CO₂, données restées sur le poste) | Étape 3 (Arène) | L'app ; table de prix cloud datée dans `frugal-ai-workbench.toml` |
 | « Sur d'autres postes » : débit et tenue en mémoire attendus sur les trois postes de référence, dont le PC pro de 16 Go sans GPU | Étape 5 (écran Modèles, Sobriété) | `qb.results/1` |
 | Fiche modèle (dense ou MoE, paramètres actifs, quantification, licence, outils et raisonnement vérifiés) et pastille « MoE 3B actifs » dans le sélecteur | Étapes 1 (pastille) et 5 (fiche) | Ollama `/api/show`, catalogue, `qb.results/1` |
 | Export de preuve : fiche machine, version d'Ollama, digest des modèles, méthode CO₂, juge | Étape 3 (export de l'Arène) | Table `runs` |

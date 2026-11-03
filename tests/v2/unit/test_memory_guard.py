@@ -10,8 +10,8 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.errors import AppError, build_envelope
-from wavelocalai.hardware.memory import (
+from frugal_ai_workbench.errors import AppError, build_envelope
+from frugal_ai_workbench.hardware.memory import (
     FIT_MARGIN,
     SYSTEM_RAM_BUFFER_GB,
     MemoryReading,
@@ -21,11 +21,11 @@ from wavelocalai.hardware.memory import (
     required_gb,
     shortfall_gb,
 )
-from wavelocalai.inference.memory_guard import MemoryGuard
-from wavelocalai.inference.unload import unload_idle_models
-from wavelocalai.models.ollama_ps import LoadedModel, unload_model
-from wavelocalai.models.port import ModelRef
-from wavelocalai.models.registry import ModelNeed
+from frugal_ai_workbench.inference.memory_guard import MemoryGuard
+from frugal_ai_workbench.inference.unload import unload_idle_models
+from frugal_ai_workbench.models.ollama_ps import LoadedModel, unload_model
+from frugal_ai_workbench.models.port import ModelRef
+from frugal_ai_workbench.models.registry import ModelNeed
 
 HOST = "http://127.0.0.1:11434"
 
@@ -194,7 +194,7 @@ async def test_a_guard_that_breaks_does_not_block_the_answer():
 
 
 def test_ram_guard_declares_its_machine_keys_and_keeps_the_text_french():
-    from wavelocalai.errors import ERRORS
+    from frugal_ai_workbench.errors import ERRORS
 
     spec = ERRORS["ram_guard"]
     assert spec.detail_keys == ("needed_gb", "free_gb", "suggested_model")

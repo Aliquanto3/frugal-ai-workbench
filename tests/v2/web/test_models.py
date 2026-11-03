@@ -10,12 +10,12 @@ import httpx
 from fastapi import Request
 from fastapi.testclient import TestClient
 
-from wavelocalai.config import load_settings
-from wavelocalai.hardware.memory import MemoryAdvisor, MemoryReading
-from wavelocalai.models.facts import InMemoryFactsStore, facts_from_ollama
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor, MemoryReading
+from frugal_ai_workbench.models.facts import InMemoryFactsStore, facts_from_ollama
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 
@@ -227,7 +227,7 @@ def test_default_temperature_comes_from_the_cache_under_300_ms_with_ollama_down(
 
 
 def test_the_toml_is_unchanged_after_choosing_a_model_and_reading_its_default(tmp_path):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text("[server]\nport = 8502\n", encoding="utf-8")
     before = hashlib.sha256(toml.read_bytes()).hexdigest()
     settings = load_settings(

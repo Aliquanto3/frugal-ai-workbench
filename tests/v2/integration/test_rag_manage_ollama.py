@@ -15,8 +15,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from wavelocalai.config import load_settings
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, needs_vec
 from .test_rag_ollama import _installed_embedding_model

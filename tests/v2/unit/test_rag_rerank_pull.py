@@ -9,7 +9,7 @@ import types
 
 import pytest
 
-from wavelocalai.rag import rerank_fetch, rerank_pull
+from frugal_ai_workbench.rag import rerank_fetch, rerank_pull
 
 MODEL = "jinaai/jina-reranker-v2-base-multilingual"
 
@@ -113,7 +113,7 @@ async def test_the_subprocess_runs_the_fetch_module_and_reports_failures(monkeyp
     monkeypatch.setattr(rerank_pull.asyncio, "create_subprocess_exec", spawn)
     with pytest.raises(rerank_pull.RerankerFetchError, match="Timeout de connexion"):
         await rerank_pull.fetch_in_subprocess(MODEL, tmp_path, tmp_path / ".env")
-    assert seen[0][1:3] == ("-m", "wavelocalai.rag.rerank_fetch")
+    assert seen[0][1:3] == ("-m", "frugal_ai_workbench.rag.rerank_fetch")
     assert seen[0][3:5] == (MODEL, str(tmp_path))
 
     async def missing(*args, **kwargs):

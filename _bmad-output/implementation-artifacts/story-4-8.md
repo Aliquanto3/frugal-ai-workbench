@@ -8,40 +8,40 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-4.md'
 warnings: []
 deferred:
   - summary: >-
       Écarts additifs à `contrat-api.md` (déjà consignés dans le contrat, à ratifier) : `POST /api/models/unload` rend `{unloaded, kept: [{tag, run_id}], failed, free_gb}` et publie aussitôt un `system_state` ; `memory.available_gb` s'ajoute à la mémoire du flux système ; `ram_guard` a le statut 503 ; `detail.needed_gb` n'est PAS le `needed_gb` brut de `GET /api/models` mais la mémoire à avoir de libre (besoin × 1,1 + 0,5 Go de réserve, arrondi au dixième supérieur), pour que « nécessaires » dépasse toujours « libres » quand le garde-fou refuse ; la route de test accepte `{"fail": "<code>", "detail": {...}}`.
     evidence: |-
-      `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md`, `inference/memory_guard.py` (docstring), `test_memory_guard_api.py::test_a_chat_that_does_not_fit_...`.
-    location: _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
+      `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md`, `inference/memory_guard.py` (docstring), `test_memory_guard_api.py::test_a_chat_that_does_not_fit_...`.
+    location: _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
     severity: low
   - summary: >-
       Le garde-fou compare le besoin à la **RAM** libre seulement. Sur un poste avec GPU, un modèle qui tient en mémoire vidéo (ou qu'Ollama charge en partie sur le GPU) peut être refusé à tort quand la RAM libre est basse. La mémoire vidéo libre (NVML, `hardware/nvml.py`) n'est pas lue. Le besoin d'un modèle est aussi l'estimation `taille × 1,25` de `hardware/memory.py` : le cache de contexte (KV) d'un long contexte n'y est pas.
     evidence: |-
       `inference/memory_guard.py::_check` (`reader().available_gb`), `hardware/memory.py` (`SIZE_TO_LOADED`).
-    location: src/wavelocalai/inference/memory_guard.py
+    location: src/frugal_ai_workbench/inference/memory_guard.py
     severity: medium
   - summary: >-
       Écart §7(d) n° 13 (« message de `ram_guard` adapté à l'import »), non tranché : variante la plus conservatrice, **l'import et l'embedding ne sont pas gardés** (seul l'appel de génération l'est ; le modèle d'embedding est petit) et le message est celui du chat. Si Anaël veut un refus à l'import, il faut un texte propre (« Mémoire insuffisante pour indexer… ») et un `ram_guard` sur la feuille `embedding` d'`IngestService`.
     evidence: |-
       `inference/memory_guard.py` (docstring), `rag/embedding_leaf.py` (pas d'appel au garde-fou).
-    location: src/wavelocalai/rag/embedding_leaf.py
+    location: src/frugal_ai_workbench/rag/embedding_leaf.py
     severity: low
   - summary: >-
       Arène : « Prendre un modèle plus petit » remplace le modèle de la colonne en échec dans le sélecteur (sans relancer) et le dit par la région `aria-live` seulement : `screens/arena.js` est au plafond de 600 lignes (`test_arena_static`), la notice visible du Chat n'y tient pas. Le changement se voit aux pastilles du sélecteur. Une notice visible est une ligne si le plafond est relevé ou l'écran découpé.
     evidence: |-
       `screens/arena.js` (`onSmallerModel`), `core/ram-guard.js::swapModel`.
-    location: src/wavelocalai/web/static/screens/arena.js
+    location: src/frugal_ai_workbench/web/static/screens/arena.js
     severity: low
   - summary: >-
       Écran Discussion (4.5) : son branchement du garde-fou reste à faire (voir « Contrat laissé à la 4.5 »). L'écran Modèles (5.x) peut appeler `POST /api/models/unload` tel quel : `kept` donne déjà les modèles tenus par un run actif (« Utilisé par une réponse en cours »).
     evidence: |-
       `core/ram-guard.js` (en-tête), `web/routes_models.py::unload_models`.
-    location: src/wavelocalai/web/static/core/ram-guard.js
+    location: src/frugal_ai_workbench/web/static/core/ram-guard.js
     severity: low
 ---
 
@@ -91,11 +91,11 @@ Le rendu de `ram_guard` est **déjà réutilisable** : l'écran Discussion n'éc
 
 ## Fichiers
 
-- `src/wavelocalai/inference/memory_guard.py` (nouveau), `inference/unload.py` (nouveau), `inference/streaming.py` (`guard`, `NOT_LOADED_CO2`), `inference/chat.py`, `inference/arena.py`, `rag/query.py` (`guard=`)
-- `src/wavelocalai/hardware/memory.py` (`required_gb`, `shortfall_gb`, arrondis), `hardware/monitor.py` (`available_gb`), `models/registry.py` (`memory_needs`, `ModelNeed`), `models/ollama_ps.py` (`unload_model`), `runs/hub.py` (`active_models`)
-- `src/wavelocalai/web/routes_models.py` (`POST /api/models/unload`), `web/app.py`, `web/routes_test.py`, `errors.py` (`ram_guard`, nombres à la française)
-- `src/wavelocalai/web/static/components/wl-error.js`, `core/ram-guard.js` et `core/tab-keys.js` (nouveaux), `core/api.js`, `core/topbar.js`, `screens/chat.js`, `screens/arena.js`, `components.css`, `index.html`, `i18n/fr.json`
-- `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md` (route, `available_gb`, `ram_guard`)
+- `src/frugal_ai_workbench/inference/memory_guard.py` (nouveau), `inference/unload.py` (nouveau), `inference/streaming.py` (`guard`, `NOT_LOADED_CO2`), `inference/chat.py`, `inference/arena.py`, `rag/query.py` (`guard=`)
+- `src/frugal_ai_workbench/hardware/memory.py` (`required_gb`, `shortfall_gb`, arrondis), `hardware/monitor.py` (`available_gb`), `models/registry.py` (`memory_needs`, `ModelNeed`), `models/ollama_ps.py` (`unload_model`), `runs/hub.py` (`active_models`)
+- `src/frugal_ai_workbench/web/routes_models.py` (`POST /api/models/unload`), `web/app.py`, `web/routes_test.py`, `errors.py` (`ram_guard`, nombres à la française)
+- `src/frugal_ai_workbench/web/static/components/wl-error.js`, `core/ram-guard.js` et `core/tab-keys.js` (nouveaux), `core/api.js`, `core/topbar.js`, `screens/chat.js`, `screens/arena.js`, `components.css`, `index.html`, `i18n/fr.json`
+- `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md` (route, `available_gb`, `ram_guard`)
 - Tests : `tests/v2/unit/test_memory_guard.py`, `test_memory_guard_static.py`, `tests/v2/web/test_memory_guard_api.py`, `tests/v2/e2e/test_memory_guard.py`, `tests/v2/integration/test_memory_guard_ollama.py` ; `fake_ollama.py`, `e2e/conftest.py`, `test_hardware.py`, `test_system.py` réalignés
 
 ## Vérification

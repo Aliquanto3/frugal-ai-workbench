@@ -6,7 +6,7 @@ utiles identiques et l'écart de fidélité de bout en bout sont **rapportés** 
 `-s`, et `record_property`). Un juge de 1,5 milliard de paramètres est peu fiable : le test
 n'échoue pas sous le seuil `minimum_agreement` de `cases.json`, ni s'il ne fait pas mieux qu'un
 juge trivial (toujours le verdict le plus fréquent, ou « tous utiles » / « aucun utile ») : il émet
-un avertissement « juge non informatif » (`WAVELOCALAI_JUDGE_STRICT=1` le rend bloquant, pour une
+un avertissement « juge non informatif » (`FRUGAL_AI_JUDGE_STRICT=1` le rend bloquant, pour une
 campagne de mesure ou un changement du juge). Les verdicts attendus étant proposés et non relus (`review`), l'accord mesuré est indicatif.
 
 La même mesure en ligne de commande : `python -m tests.v2.eval_fixed_set measure --model <tag>`.
@@ -20,9 +20,9 @@ import warnings
 
 import pytest
 
-from wavelocalai.config import load_settings
-from wavelocalai.models.ollama import OllamaChatModel, make_client
-from wavelocalai.models.port import ModelRef
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.models.ollama import OllamaChatModel, make_client
+from frugal_ai_workbench.models.port import ModelRef
 
 from .. import eval_fixed_set as fixed
 from .test_rag_question_ollama import CHAT_MODEL, _require_chat_model
@@ -54,5 +54,5 @@ async def test_the_real_judge_is_measured_against_the_fixed_set(record_property,
     below = agreement.shortfalls(doc["minimum_agreement"])
     if below:
         message = f"Garde du jeu fixe non passée ({' ; '.join(below)}). {summary}"
-        assert os.environ.get("WAVELOCALAI_JUDGE_STRICT") != "1", message
+        assert os.environ.get("FRUGAL_AI_JUDGE_STRICT") != "1", message
         warnings.warn(message, stacklevel=1)

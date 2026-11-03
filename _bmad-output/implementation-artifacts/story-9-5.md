@@ -8,7 +8,7 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-21.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
 warnings: []
 deferred: []
 ---
@@ -62,7 +62,7 @@ Après `uv sync` seul, le bouton télécharge directement le modèle par le run 
    texte de la story reprise de la proposition de sprint ; AD-2 est la bonne, amendée en conséquence,
    et la divergence est consignée dans `.memlog.md`. Fait directement dans le style du document
    (mention datée), sans relancer `bmad-architecture` (consigne explicite de la story).
-6. **Essai réel du bouton (seul téléchargement autorisé)** : serveur `wavelocalai-v2` lancé depuis le
+6. **Essai réel du bouton (seul téléchargement autorisé)** : serveur `frugal-ai-workbench-v2` lancé depuis le
    worktree (`--port 8799`, `--data-dir` temporaire, pas de navigateur — le lanceur n'en ouvre aucun) ;
    `POST /api/models/reranker/pull` → `{"run_id": "70f66…"}`, `GET /api/runs/{id}` passe de `running`
    à **`ok`** en ~26 s ; `GET /api/rag/settings` rend ensuite
@@ -80,18 +80,18 @@ Après `uv sync` seul, le bouton télécharge directement le modèle par le run 
   l'extra `rerank` : laissés tels quels, comme les autres artefacts de planification gelés
   (`_bmad-output/planning-artifacts/epics.md`, `sprint-change-proposal-2026-10-21.md`) — ce sont des
   snapshots d'une décision passée, pas l'interface ni la doc courante de l'app.
-  `_bmad-output/specs/spec-wavelocalai-v2/contrat/5-5.md` (contrat d'API vivant, cité par
+  `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat/5-5.md` (contrat d'API vivant, cité par
   `contrat-api.md`) a lui été amendé : c'est une doc qui décrit le comportement actuel de l'API.
 
 ## Fichiers
 
 - Dépendances : `pyproject.toml`, `uv.lock`.
-- Code : `src/wavelocalai/rag/rerank.py`, `rerank_pull.py`, `rerank_fetch.py`, `rag/manage.py`,
+- Code : `src/frugal_ai_workbench/rag/rerank.py`, `rerank_pull.py`, `rerank_fetch.py`, `rag/manage.py`,
   `rag/query.py` (docstring), `web/routes_models.py`, `web/routes_test.py`.
 - Front : `web/static/screens/models-rerank.js`, `web/static/core/api/models.js`,
   `web/static/i18n/fr/models.json`.
-- Doc : `README.md`, `_bmad-output/specs/spec-wavelocalai-v2/contrat/5-5.md`,
-  `_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md`
+- Doc : `README.md`, `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat/5-5.md`,
+  `_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md`
   et `.memlog.md`.
 - Tests : `tests/v2/unit/test_rag_rerank.py`, `test_rag_rerank_pull.py` ;
   `tests/v2/web/test_models_reranker_api.py`, `test_rag_rerank_api.py` ;

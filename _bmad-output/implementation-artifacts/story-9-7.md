@@ -7,7 +7,7 @@ baseline_commit: 'c7804ec'
 context:
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/docs/maquette-v2-mise-en-page/DECISIONS.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
 warnings: []
 deferred:
   - 'Captures du README (docs/assets/v2-*.png, v2-demo.gif) à régénérer'

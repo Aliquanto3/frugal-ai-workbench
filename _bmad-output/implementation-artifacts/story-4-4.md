@@ -8,8 +8,8 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-1.md'
 warnings: []
 deferred:
@@ -17,37 +17,37 @@ deferred:
       Écarts additifs à `contrat-api.md` (déjà consignés dans le contrat, à ratifier) : `sources` porte `{strategy, sources: [...]}` (une liste par événement) ; `retrieval_step` vaut `{strategy, step, duration_s}`, publié à la fin de chaque étape (`embedding`, `search`) ; `metrics` d'un run `rag` gagne `retrieval_s` ; codes `rag_base_empty` (409) et `chunk_not_found` (404, `detail.chunk_id`).
     evidence: |-
       `rag/query.py` (docstring), `web/test_rag_run_api.py::test_the_sources_come_before_the_first_token_...`, `::test_an_empty_base_leads_to_the_document_base_...`, `::test_a_chunk_is_read_whole_...`.
-    location: _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
+    location: _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
     severity: low
   - summary: >-
       Écran Discussion (4.5) : le message assistant d'un run `rag` rend, dans `GET /api/conversations/{id}`, la ligne du run **racine**, qui n'a ni métriques ni `co2` (AD-5 : elles sont sur les feuilles). Le pied de réponse (débit, CO₂, « Recherche 0,06 s · Génération 5,8 s ») se lit dans l'événement `metrics` rejoué, ou dans `GET /api/runs/{id}` (`children`). Si 4.5 préfère une seule lecture, `conversation_view` peut ajouter `children` à `run` (additif).
     evidence: |-
       `runs/conversations.py::_run_view` (inchangé), `test_the_question_and_the_generation_are_two_leaves_each_with_its_co2`.
-    location: src/wavelocalai/runs/conversations.py
+    location: src/frugal_ai_workbench/runs/conversations.py
     severity: medium
   - summary: >-
       Positions de `passage` en points de code Python (`str`), pas en unités UTF-16 comme `String.slice` de JavaScript : identiques tant que l'extrait n'a pas de caractère hors du plan multilingue de base (emoji). Le front (4.5) doit convertir (`Array.from(text)`) ou le contrat passer en UTF-16.
     evidence: |-
       `rag/passage.py` (docstring), `test_passage.py::test_positions_count_code_points_not_utf16_units`.
-    location: src/wavelocalai/rag/passage.py
+    location: src/frugal_ai_workbench/rag/passage.py
     severity: low
   - summary: >-
       `nomic-embed-text` sépare mal le pertinent du hors-sujet quand la question et l'extrait sont embeddés sans préfixe de tâche (`search_query: ` / `search_document: ` que recommande le modèle) : mesuré le 2026-10-19, des extraits pertinents à 0,63 à 0,80 de similarité, des hors-sujet jusqu'à 0,65. Les libellés (0,70 et 0,60) sont donc des bandes de similarité, pas un jugement de pertinence. Un préfixe par rôle exigerait d'élargir le port `Embedder` (document ou question) et de réindexer.
     evidence: |-
       Calibrage sur 5 extraits et 7 questions contre le vrai `nomic-embed-text` (journal ci-dessous) ; `integration/test_rag_question_ollama.py`.
-    location: src/wavelocalai/models/port.py
+    location: src/frugal_ai_workbench/models/port.py
     severity: low
   - summary: >-
       Avec le repli `NumpyIndex` (sans sqlite-vec), les vecteurs sont perdus au redémarrage : une question sur une base « prête » ne trouve alors aucun extrait et le run s'arrête en `rag_base_empty` (message « aucun document prêt », trompeur). Le refus explicite d'une base sans vecteurs reste à décider avec 4.2 ou 4.3 (report de la 4.1).
     evidence: |-
       `rag/query.py::_retrieve` (`found` vide), `rag/index.py::select_index`.
-    location: src/wavelocalai/rag/query.py
+    location: src/frugal_ai_workbench/rag/query.py
     severity: low
   - summary: >-
-      `retrieval_s` mesure l'attente de la place Ollama comprise : si un chat local ou un lot d'ingestion tient la place, la recherche affichée est plus longue que le calcul seul. `top_k` (4) et les seuils de pertinence ne se règlent que dans `wavelocalai.toml` ; `PUT /api/rag/settings` (4.3) les portera en préférences. Le prompt `naive` ne reprend pas l'historique de la conversation (une question est indépendante).
+      `retrieval_s` mesure l'attente de la place Ollama comprise : si un chat local ou un lot d'ingestion tient la place, la recherche affichée est plus longue que le calcul seul. `top_k` (4) et les seuils de pertinence ne se règlent que dans `frugal-ai-workbench.toml` ; `PUT /api/rag/settings` (4.3) les portera en préférences. Le prompt `naive` ne reprend pas l'historique de la conversation (une question est indépendante).
     evidence: |-
       `rag/query.py::_retrieve`, `config.py::RagSettings`.
-    location: src/wavelocalai/rag/query.py
+    location: src/frugal_ai_workbench/rag/query.py
     severity: low
 ---
 
@@ -71,7 +71,7 @@ deferred:
 
 ## Règles écrites
 
-**`relevance_label`** (`rag/passage.py`, seuils dans `[rag]` de `wavelocalai.toml`). La distance cosinus de l'index devient `s = 1 − distance`, ramenée dans [0, 1] (négatif = 0). `s ≥ 0,70` → « très proche » ; `s ≥ 0,60` → « proche » ; sinon « éloignée » (seuils inclus dans la classe haute). La règle ne regarde que le score de l'extrait, pas les autres résultats ; elle est monotone (un rang plus bas n'a jamais un meilleur libellé). Seuils calés le 2026-10-19 sur `nomic-embed-text` (voir le journal) ; un autre modèle se règle dans le `.toml` (`relevance_very_close` > `relevance_close`, validé au chargement). `raw_score` est la similarité brute `1 − distance`, arrondie à 4 décimales.
+**`relevance_label`** (`rag/passage.py`, seuils dans `[rag]` de `frugal-ai-workbench.toml`). La distance cosinus de l'index devient `s = 1 − distance`, ramenée dans [0, 1] (négatif = 0). `s ≥ 0,70` → « très proche » ; `s ≥ 0,60` → « proche » ; sinon « éloignée » (seuils inclus dans la classe haute). La règle ne regarde que le score de l'extrait, pas les autres résultats ; elle est monotone (un rang plus bas n'a jamais un meilleur libellé). Seuils calés le 2026-10-19 sur `nomic-embed-text` (voir le journal) ; un autre modèle se règle dans le `.toml` (`relevance_very_close` > `relevance_close`, validé au chargement). `raw_score` est la similarité brute `1 − distance`, arrondie à 4 décimales.
 
 **`passage`** (`rag/passage.py`, D-21). La phrase de l'extrait qui partage le plus de termes avec la question, sinon `null` :
 
@@ -94,10 +94,10 @@ Positions : indices de `str` Python dans `text`, `end` exclu (`text[start:end]` 
 
 ## Fichiers
 
-- `src/wavelocalai/rag/query.py` (nouveau : `RagService`, `RagCommand`, `chunk_view`), `rag/passage.py` (nouveau : règles de libellé et de passage), `rag/embedding_leaf.py` (nouveau, extrait de l'ingestion), `rag/repo.py` (`search_chunks`, SQL de la base prête et d'un extrait), `rag/ingest.py` (appelle `embed_into_leaf`)
-- `src/wavelocalai/runs/hub.py` (`events_after` réhydrate `sources`), `inference/streaming.py` (`metrics_extra`), `store/db.py` (`read_with`, `aread_with`)
-- `src/wavelocalai/web/routes_rag.py` (`POST /api/rag/runs`, `GET /api/rag/chunks/{id}`), `web/app.py` (`app.state.rag`, index partagé), `errors.py` (`rag_base_empty`, `chunk_not_found`), `config.py` + `wavelocalai.toml` (`top_k`, seuils)
-- `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md` (événements, codes, routes de la Discussion)
+- `src/frugal_ai_workbench/rag/query.py` (nouveau : `RagService`, `RagCommand`, `chunk_view`), `rag/passage.py` (nouveau : règles de libellé et de passage), `rag/embedding_leaf.py` (nouveau, extrait de l'ingestion), `rag/repo.py` (`search_chunks`, SQL de la base prête et d'un extrait), `rag/ingest.py` (appelle `embed_into_leaf`)
+- `src/frugal_ai_workbench/runs/hub.py` (`events_after` réhydrate `sources`), `inference/streaming.py` (`metrics_extra`), `store/db.py` (`read_with`, `aread_with`)
+- `src/frugal_ai_workbench/web/routes_rag.py` (`POST /api/rag/runs`, `GET /api/rag/chunks/{id}`), `web/app.py` (`app.state.rag`, index partagé), `errors.py` (`rag_base_empty`, `chunk_not_found`), `config.py` + `frugal-ai-workbench.toml` (`top_k`, seuils)
+- `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md` (événements, codes, routes de la Discussion)
 - Tests : `tests/v2/unit/test_passage.py`, `tests/v2/web/test_rag_run_api.py`, `tests/v2/integration/test_rag_question_ollama.py`
 
 ## Vérification

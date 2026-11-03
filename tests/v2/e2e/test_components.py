@@ -44,9 +44,9 @@ def test_badge_tones_follow_the_origin(components):
         """() => [...document.querySelectorAll('#badges wl-badge')].map(
             (badge) => getComputedStyle(badge).getPropertyValue('--badge-tone').trim())"""
     )
-    # Local = chart-2 (vert), Cloud = chart-4 (orange), inconnu et étiquettes = gris.
-    assert tones[0] == "#0E9F5E" and tones[1] == "#C98A00"
-    assert tones[2] == tones[3] == tones[4] == tones[7] == "#8A8A9E"
+    # Local = chart-2 (vert), Cloud = chart-4 (or), inconnu et étiquettes = gris.
+    assert tones[0] == "#1D7337" and tones[1] == "#9A7400"
+    assert tones[2] == tones[3] == tones[4] == tones[7] == "#737E85"
 
 
 def test_badge_follows_its_attribute(components):

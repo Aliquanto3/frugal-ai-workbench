@@ -8,10 +8,10 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-5-3.md'
 warnings: []
 deferred:
@@ -19,19 +19,19 @@ deferred:
       Écart nouveau, non couvert par les décisions du 2026-10-19 : variante conservatrice gardée. (1) Les critères d'`epics.md` disent « Définir par défaut » ; EXPERIENCE.md (qui prime pour le comportement) et la maquette disent « Changer » puis « Enregistrer » / « Annuler » et « Revenir au choix automatique » : ce sont ces libellés. (2) Éligibilité à l'usage (décision n° 17) : `epics.md` ne la définit pas ; la maquette la donne (`agent` : outils vérifiés et 3 B actifs, `rag` : 3 B actifs). Reprise telle quelle, calculée par le serveur (`models/defaults.py::is_eligible`), sans regard à la mémoire (un modèle qui ne tient pas se choisit) ; les modèles cloud sont éligibles sauf pour l'Arène ; `arena` demande 2 à 3 modèles locaux. (3) Le filtre du sélecteur est un attribut facultatif `eligible-only` : le Chat, l'Arène et la Discussion gardent leur sélecteur inchangé (tout modèle de conversation) ; les sélecteurs des Epics 6 et 7 (Agent, Évaluation) décideront de l'employer. (4) Le serveur écrit un défaut avec `PUT /api/models/defaults/{purpose}` `{tags, allow_cloud}` ; sans `allow_cloud`, un tag cloud est refusé (`403 cloud_not_allowed`). La raison du choix est « Choisi par vous » (le texte précédent, « Votre choix enregistré pour cet usage. », n'était lu par aucun test v2). (5) `GET /api/models/defaults` gagne `eligible` et `inactive` : un choix cloud enregistré tant que le cloud n'est pas autorisé tombe sur la règle et l'écran le dit (« inactif tant que le cloud n'est pas autorisé », EXPERIENCE.md), « Revenir » restant offert.
     evidence: |-
       `models/defaults.py` (`is_eligible`, `ModelDefaults.choose`, `.get`), `web/routes_models.py`, `screens/models-defaults.js`, `components/wl-model-picker.js` (`eligible-only`), `tests/v2/web/test_models_manage_api.py::test_the_defaults_say_*`, `::test_an_ineligible_model_*`, `::test_a_cloud_choice_*`, `tests/v2/e2e/test_models_manage.py::test_the_picker_proposes_*`.
-    location: src/wavelocalai/models/defaults.py
+    location: src/frugal_ai_workbench/models/defaults.py
     severity: medium
   - summary: >-
       Choix de conception à confirmer, variante conservatrice dans chaque cas. (1) « Utilisé par un run actif » vient d'un champ ajouté au flux système, `models_in_use` (`{tag: run_id}`, `hub.active_models()`), plutôt que d'un champ de `runs_active` (que `test_system` fige) ; un run `pull` d'un modèle installé l'emploie aussi. (2) Supprimer décharge d'abord le modèle (sinon il reste en mémoire) et traite le `404` d'Ollama comme une suppression réussie ; le contrôle d'usage est refait entre le déchargement et l'appel d'Ollama. (3) Les préférences qui visaient le modèle sont effacées (pas seulement ignorées à la lecture) : réinstallé, il ne redevient pas un défaut sans un nouveau geste (« jamais retenu sans geste », décision Q2) ; le critère « retombe sur la règle » est tenu dans les deux cas. (4) Le dialogue ne nomme que les usages dont le défaut est un choix de la personne (liste lue à la dernière relecture de l'écran), pas ceux que la règle donne. (5) « Décharger » annonce « 2 modèles déchargés. » puis, s'il y a lieu, les modèles gardés (un run les emploie) et ceux qu'Ollama a refusés. (6) La liste de l'écran suit le mode cloud (relue quand il change) pour nommer un défaut cloud ; « Sur ce poste » ne montre toujours que les modèles locaux. (7) Dans le tableau des défauts, la liste du sélecteur s'ouvre dans la cellule (la zone du tableau, qui défile, rognerait une liste flottante) ; la ligne s'agrandit. (8) Nom accessible des boutons : « Changer le modèle de l'usage Agent », « Revenir au choix automatique pour l'usage Agent », « Supprimer <nom> ».
     evidence: |-
       `runs/hub.py::active_models`, `web/system_state.py`, `inference/delete.py`, `models-delete.js`, `models-unload.js`, `models.css`, `tests/v2/e2e/test_models_manage.py`.
-    location: src/wavelocalai/inference/delete.py
+    location: src/frugal_ai_workbench/inference/delete.py
     severity: low
   - summary: >-
       Rien n'a été supprimé ni déchargé pour de vrai : la suppression passe par un faux Ollama (`FakeOllama`, `ThreadedOllama`), jamais par le vrai `http://127.0.0.1:11434`. L'appel `DELETE /api/delete` avec `{"model": tag}` est celui que documente Ollama ; le `404` d'un modèle absent et le texte d'erreur d'un refus (disque, droits) sont à vérifier à la recette sur un modèle jetable, comme l'effet sur la mémoire (déchargé avant la suppression).
     evidence: |-
       `models/ollama_delete.py`, `tests/v2/unit/test_model_delete.py`, `tests/v2/pull_fake.py::ThreadedOllama.do_DELETE`.
-    location: src/wavelocalai/models/ollama_delete.py
+    location: src/frugal_ai_workbench/models/ollama_delete.py
     severity: medium
 ---
 

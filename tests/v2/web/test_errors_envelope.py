@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from fastapi.testclient import TestClient
 
-from wavelocalai.errors import AppError
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.errors import AppError
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 
@@ -72,6 +72,6 @@ def test_unknown_route_and_validation_errors_use_the_envelope(client):
 
 
 def test_unexpected_exception_is_logged_without_the_key(client, caplog):
-    with caplog.at_level("ERROR", logger="wavelocalai.web"):
+    with caplog.at_level("ERROR", logger="frugal_ai_workbench.web"):
         client.get("/test/boom")
     assert any("Erreur non prévue" in r.message for r in caplog.records)

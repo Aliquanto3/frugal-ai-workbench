@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import re
 
-from wavelocalai.runs.system_bus import STATE_EVENT, SystemBus, SystemFeed
+from frugal_ai_workbench.runs.system_bus import STATE_EVENT, SystemBus, SystemFeed
 
 ISO_UTC = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$")
 

@@ -113,11 +113,13 @@ class MetricsExporter:
         }
         now = datetime.now()
 
-        self.record("wavelocalai_inference_duration_seconds", duration_s, labels, now)
-        self.record("wavelocalai_inference_tokens_per_second", tokens_per_second, labels, now)
-        self.record("wavelocalai_inference_input_tokens", input_tokens, labels, now)
-        self.record("wavelocalai_inference_output_tokens", output_tokens, labels, now)
-        self.record("wavelocalai_inference_carbon_mg", carbon_mg, labels, now)
+        self.record("frugal_ai_workbench_inference_duration_seconds", duration_s, labels, now)
+        self.record(
+            "frugal_ai_workbench_inference_tokens_per_second", tokens_per_second, labels, now
+        )
+        self.record("frugal_ai_workbench_inference_input_tokens", input_tokens, labels, now)
+        self.record("frugal_ai_workbench_inference_output_tokens", output_tokens, labels, now)
+        self.record("frugal_ai_workbench_inference_carbon_mg", carbon_mg, labels, now)
 
     def export_prometheus(self, include_help: bool = True) -> str:
         """
@@ -134,12 +136,12 @@ class MetricsExporter:
         if include_help:
             lines.extend(
                 [
-                    "# HELP wavelocalai_inference_duration_seconds Duration of inference in seconds",
-                    "# TYPE wavelocalai_inference_duration_seconds gauge",
-                    "# HELP wavelocalai_inference_tokens_per_second Token generation speed",
-                    "# TYPE wavelocalai_inference_tokens_per_second gauge",
-                    "# HELP wavelocalai_inference_carbon_mg Carbon emissions in milligrams",
-                    "# TYPE wavelocalai_inference_carbon_mg gauge",
+                    "# HELP frugal_ai_workbench_inference_duration_seconds Duration of inference in seconds",
+                    "# TYPE frugal_ai_workbench_inference_duration_seconds gauge",
+                    "# HELP frugal_ai_workbench_inference_tokens_per_second Token generation speed",
+                    "# TYPE frugal_ai_workbench_inference_tokens_per_second gauge",
+                    "# HELP frugal_ai_workbench_inference_carbon_mg Carbon emissions in milligrams",
+                    "# TYPE frugal_ai_workbench_inference_carbon_mg gauge",
                     "",
                 ]
             )

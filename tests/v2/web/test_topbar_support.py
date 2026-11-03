@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.models.ollama_probe import OllamaProbe
-from wavelocalai.runs.system_bus import SAMPLE_INTERVAL_S
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.ollama_probe import OllamaProbe
+from frugal_ai_workbench.runs.system_bus import SAMPLE_INTERVAL_S
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import make_settings
 from .test_system import Stream

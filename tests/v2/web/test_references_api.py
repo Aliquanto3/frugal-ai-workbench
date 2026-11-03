@@ -10,8 +10,8 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from wavelocalai.models.usage_references import NONE_INSTALLED, OLLAMA_DOWN
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.usage_references import NONE_INSTALLED, OLLAMA_DOWN
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import closed_port, make_settings
 from .test_model_card_api import BASE, FIXTURE, card_app

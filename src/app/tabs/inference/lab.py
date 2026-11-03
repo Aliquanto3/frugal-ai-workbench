@@ -39,7 +39,7 @@ USE_CASES = {
     },
     "Extraction (JSON)": {
         "system": "Extrais les entités (Date, Montant, Vendeur). Réponds UNIQUEMENT en JSON.",
-        "user": "Facture du 12/12/2024 de Wavestone pour 500€.",
+        "user": "Facture du 12/12/2024 de Exemple Conseil pour 500€.",
     },
     "Assistant de code (Python)": {
         "system": "Tu es un expert Python. Génère du code typé et documenté.",

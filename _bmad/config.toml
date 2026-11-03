@@ -11,7 +11,7 @@
 # ─────────────────────────────────────────────────────────────────
 
 [core]
-project_name = "wavelocalai"
+project_name = "frugal-ai-workbench"
 document_output_language = "French"
 output_folder = "_bmad-output"
 

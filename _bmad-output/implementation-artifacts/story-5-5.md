@@ -8,8 +8,8 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-7.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-5-3.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-5-4.md'
@@ -19,13 +19,13 @@ deferred:
       Aucun vrai téléchargement n'a été fait : le téléchargement du reranker passe par un faux (`FakeFetcher`, octets simulés) ou par des tests de son processus avec un faux `fastembed`. À vérifier à la recette d'Anaël, avec l'extra `rerank` installé : le clic sur « Installer le reranker » télécharge `jinaai/jina-reranker-v2-base-multilingual` (environ 1,1 Go) dans `<données>/models/fastembed`, la barre avance (taille du dossier du cache), le run finit `ok`, la ligne passe à « Installé » et la recherche suivante dit « Reclassement… » sans redémarrage ; annuler en cours retire le dossier partiel.
     evidence: |-
       `rag/rerank_pull.py`, `rag/rerank_fetch.py`, `tests/v2/unit/test_rag_rerank_pull.py`, `tests/v2/web/test_models_reranker_api.py`, `tests/v2/e2e/test_models_reranker.py`.
-    location: src/wavelocalai/rag/rerank_pull.py
+    location: src/frugal_ai_workbench/rag/rerank_pull.py
     severity: medium
   - summary: >-
       Écarts non couverts par les décisions du 2026-10-19 : variante conservatrice gardée. (1) Pas de reprise d'un téléchargement annulé ou échoué : le dossier partiel est retiré (sinon `_model_in_cache`, qui ne regarde que la présence du dossier, dirait « installé » pour un modèle tronqué) ; un dossier qui existait avant le run est gardé. Un témoin `.models--<org>--<nom>.installing` (`rerank.install_marker`), écrit avant le téléchargement et retiré après la vérification, couvre l'arrêt brutal du serveur : tant qu'il reste, le modèle n'est pas installé et le `pull` suivant repart d'un dossier vide (revue). (2) La progression n'est pas celle de fastembed (qui n'en rend aucune) mais la taille du dossier du modèle dans le cache rapportée à la taille annoncée par fastembed (`size_in_GB`) ; elle plafonne à 99 % tant que le chargement de vérification tourne. (3) Le téléchargement se fait dans un processus à part, tué à l'annulation : un téléchargement `huggingface_hub` ne s'interrompt pas dans un thread. (4) Route : `POST /api/models/reranker/pull` plutôt qu'un paramètre de `POST /api/models/pull` (qui ne prend que des noms d'Ollama), même type de run `pull`. (5) Sans l'extra, la route répond `422 invalid_request` (aucun code nouveau) et le texte « Installez l'option de reclassement : uv sync --extra rerank » est celui de l'écran. (6) `reranker_failed` est une quatrième cause de `pull_failed` (message propre, sans « La liste des modèles est inchangée »).
     evidence: |-
       `rag/rerank_pull.py`, `rag/rerank.py::RerankerService.refresh`, `errors.py::PULL_CAUSES`, `contrat-api.md` (« Modèles : reranker »).
-    location: src/wavelocalai/rag/rerank_pull.py
+    location: src/frugal_ai_workbench/rag/rerank_pull.py
     severity: low
 ---
 

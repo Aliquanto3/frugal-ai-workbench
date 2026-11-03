@@ -11,7 +11,7 @@ from pathlib import Path
 from .static_files import catalog, read_static
 
 ROOT = Path(__file__).resolve().parents[3]
-STATIC = ROOT / "src" / "wavelocalai" / "web" / "static"
+STATIC = ROOT / "src" / "frugal_ai_workbench" / "web" / "static"
 CATALOG = catalog()
 
 
@@ -80,7 +80,7 @@ def test_the_screen_reads_the_run_stream_once_and_resumes_by_after():
 
 def test_the_stop_error_code_is_the_one_of_the_server():
     # AD-5 : la coupure répétée est `generation_interrupted`, jamais `interrupted` (un statut).
-    from wavelocalai.errors import ERRORS
+    from frugal_ai_workbench.errors import ERRORS
 
     assert "generation_interrupted" in ERRORS and "interrupted" not in ERRORS
     assert "generation_interrupted" not in source("screens/chat.js")  # le front relaie le message
