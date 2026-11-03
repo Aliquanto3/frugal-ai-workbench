@@ -631,6 +631,20 @@ def test_the_draft_survives_a_reload_and_is_cleared_once_sent(chat, server):
     assert field(chat).input_value() == ""
 
 
+def test_a_draft_kept_under_the_legacy_name_is_migrated(chat):
+    """Brouillon tapé avant le renommage (jusqu'à 2.0.0a8) : retrouvé, puis rangé sous le nouveau
+    nom, l'ancienne clé retirée."""
+    chat.evaluate("localStorage.setItem('wavelocalai.draft.chat', 'Ancien brouillon')")
+    chat.reload()
+    wait_ready(chat)
+    assert field(chat).input_value() == "Ancien brouillon"
+    keys = chat.evaluate(
+        "[localStorage.getItem('frugal-ai-workbench.draft.chat'),"
+        " localStorage.getItem('wavelocalai.draft.chat')]"
+    )
+    assert keys == ["Ancien brouillon", None]
+
+
 def test_the_cloud_switch_is_not_stored_and_the_commands_carry_the_store_value(chat, server):
     commands: list[dict] = []
     scripted(chat, server, [{"text": "ok"}], commands)

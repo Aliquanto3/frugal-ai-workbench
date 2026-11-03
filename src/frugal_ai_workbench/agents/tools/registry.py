@@ -20,6 +20,14 @@ from frugal_ai_workbench.errors import AppError
 # Nom vu par le modèle : accepté par les quatre fournisseurs (`^[a-zA-Z0-9_-]{1,64}$`).
 TOOL_ID = re.compile(r"^[a-z][a-z0-9_]{0,63}$")
 EMPTY_PARAMETERS: dict[str, Any] = {"type": "object", "properties": {}}
+# Identifiants de l'ancien nom du projet (jusqu'à 2.0.0a8) : une équipe ou un agent enregistré avec
+# eux se lance encore. Seul alias de compatibilité des outils (lu par `canonical_tool_id`).
+LEGACY_TOOL_IDS: dict[str, str] = {"search_wavestone_internal": "search_internal"}
+
+
+def canonical_tool_id(tool_id: str) -> str:
+    """L'identifiant en vigueur d'un outil, l'ancien nom traduit."""
+    return LEGACY_TOOL_IDS.get(tool_id, tool_id)
 
 
 class ToolError(Exception):
@@ -92,7 +100,7 @@ class ToolRegistry:
         lève `invalid_request` (422) : rien n'est lancé."""
         chosen: list[AgentTool] = []
         for tool_id in ids:
-            tool = self._tools.get(tool_id)
+            tool = self._tools.get(canonical_tool_id(tool_id))
             if tool is None:
                 raise AppError("invalid_request", f"tools : outil inconnu « {tool_id} ».")
             if tool in chosen:

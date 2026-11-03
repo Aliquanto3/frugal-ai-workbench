@@ -24,6 +24,8 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr, ValidationError, m
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_TOML = PROJECT_ROOT / "frugal-ai-workbench.toml"
+# Fichier de réglages de l'ancien nom (jusqu'à 2.0.0a8) : lu en repli si le nouveau manque.
+LEGACY_TOML = PROJECT_ROOT / "wavelocalai.toml"
 DEFAULT_ENV_FILE = PROJECT_ROOT / ".env"
 DEFAULT_PORT = 8502
 LOOPBACK = "127.0.0.1"
@@ -301,6 +303,20 @@ def _read_toml(path: Path) -> dict[str, Any]:
         raise ConfigError(f"Le fichier de réglages {path} est illisible : {exc}") from exc
 
 
+def _default_toml(default: Path | None = None, legacy: Path | None = None) -> Path:
+    """`frugal-ai-workbench.toml`, sinon `wavelocalai.toml` (ancien nom) avec un `FutureWarning`."""
+    default = DEFAULT_TOML if default is None else default
+    legacy = LEGACY_TOML if legacy is None else legacy
+    if not default.is_file() and legacy.is_file():
+        warnings.warn(
+            f"Le fichier de réglages {legacy.name} est déprécié : renommez-le en {default.name}.",
+            FutureWarning,
+            stacklevel=3,
+        )
+        return legacy
+    return default
+
+
 def with_legacy_env(values: Mapping[str, str | None]) -> dict[str, str | None]:
     """Recopie chaque `WAVELOCALAI_X` en `FRUGAL_AI_X` si celle-ci est absente ou vide.
 
@@ -333,7 +349,7 @@ def load_settings(
 
     `environ` vaut l'environnement du processus par défaut ; il l'emporte sur `.env`.
     """
-    toml_file = Path(toml_path) if toml_path is not None else DEFAULT_TOML
+    toml_file = Path(toml_path) if toml_path is not None else _default_toml()
     dotenv_file = Path(env_file) if env_file is not None else DEFAULT_ENV_FILE
     data = _read_toml(toml_file)
     values: dict[str, str | None] = (

@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any, Protocol
 
 from frugal_ai_workbench.agents.tools import ToolRegistry
+from frugal_ai_workbench.agents.tools.registry import canonical_tool_id
 from frugal_ai_workbench.errors import AppError
 from frugal_ai_workbench.models.registry import ModelRegistry
 
@@ -87,7 +88,8 @@ def task_for(agent: CrewAgent, topic: str = TOPIC_MARK) -> dict[str, str]:
 
 def agent_from(raw: Any) -> CrewAgent | None:
     """Agent lu d'un document (fichier, préférence ou corps de requête) ; `None` s'il n'a pas la
-    forme d'un agent. Aucune valeur n'est corrigée : la validation dit ce qui ne va pas."""
+    forme d'un agent. Aucune valeur n'est corrigée (seul un ancien identifiant d'outil est traduit) :
+    la validation dit ce qui ne va pas."""
     if not isinstance(raw, dict):
         return None
     tools = raw.get("tools")
@@ -97,7 +99,7 @@ def agent_from(raw: Any) -> CrewAgent | None:
         role=str(raw.get("role") or "").strip(),
         goal=str(raw.get("goal") or "").strip(),
         backstory=str(backstory).strip() if backstory else DEFAULT_BACKSTORY,
-        tools=tuple(str(t) for t in tools) if isinstance(tools, list) else (),
+        tools=tuple(canonical_tool_id(str(t)) for t in tools) if isinstance(tools, list) else (),
         model=str(model).strip() or None if model else None,
     )
 

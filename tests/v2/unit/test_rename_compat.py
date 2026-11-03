@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import os
 import socket
+import sqlite3
 import subprocess
 import sys
 import warnings
@@ -12,7 +13,7 @@ import warnings
 import pytest
 
 from frugal_ai_workbench.__main__ import main
-from frugal_ai_workbench.config import load_settings, with_legacy_env
+from frugal_ai_workbench.config import _default_toml, load_settings, with_legacy_env
 from frugal_ai_workbench.store.datadir import LEGACY_DB_NAME, migrate_legacy_db
 from frugal_ai_workbench.store.db import DB_NAME
 from frugal_ai_workbench.store.logs import close_logging
@@ -74,23 +75,78 @@ def test_v1_reads_the_legacy_variable_with_a_warning():
         assert env_with_legacy("PUE", "1.1", {}) == "1.1"
 
 
+# --- Fichier de réglages -------------------------------------------------------------------------
+
+
+def test_legacy_toml_is_read_when_the_new_one_is_missing(tmp_path):
+    new, old = tmp_path / "frugal-ai-workbench.toml", tmp_path / "wavelocalai.toml"
+    old.write_text("[server]\nport = 9310\n", encoding="utf-8")
+    with pytest.warns(
+        FutureWarning, match="wavelocalai.toml est déprécié.*frugal-ai-workbench.toml"
+    ):
+        chosen = _default_toml(new, old)
+    assert chosen == old
+    settings = load_settings(chosen, env_file=tmp_path / "absent.env", environ={})
+    assert settings.server.port == 9310
+    new.write_text("[server]\nport = 9320\n", encoding="utf-8")
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert _default_toml(new, old) == new  # le nouveau l'emporte, sans avertissement
+
+
+def test_default_settings_use_the_legacy_toml_in_repli(tmp_path, monkeypatch):
+    from frugal_ai_workbench import config
+
+    old = tmp_path / "wavelocalai.toml"
+    old.write_text("[server]\nport = 9311\n", encoding="utf-8")
+    monkeypatch.setattr(config, "DEFAULT_TOML", tmp_path / "frugal-ai-workbench.toml")
+    monkeypatch.setattr(config, "LEGACY_TOML", old)
+    with pytest.warns(FutureWarning, match="wavelocalai.toml"):
+        settings = load_settings(env_file=tmp_path / "absent.env", environ={})
+    assert settings.server.port == 9311
+    assert settings.base_dir == tmp_path
+
+
 # --- Base de données -----------------------------------------------------------------------------
 
 
-def test_legacy_db_and_wal_are_copied_and_kept(tmp_path):
-    (tmp_path / LEGACY_DB_NAME).write_bytes(b"base")
-    (tmp_path / f"{LEGACY_DB_NAME}-wal").write_bytes(b"journal")
-    created = migrate_legacy_db(tmp_path, DB_NAME)
-    assert created == [tmp_path / f"{DB_NAME}-wal", tmp_path / DB_NAME]
-    assert (tmp_path / DB_NAME).read_bytes() == b"base"
-    assert (tmp_path / f"{DB_NAME}-wal").read_bytes() == b"journal"
-    assert (tmp_path / LEGACY_DB_NAME).read_bytes() == b"base"  # jamais supprimée
-    assert (tmp_path / f"{LEGACY_DB_NAME}-wal").read_bytes() == b"journal"
-    assert not (tmp_path / f"{DB_NAME}.copie").exists()
+def _legacy_wal_db(path, rows=("a", "b", "c")):
+    """Vraie base de l'ancien nom, en mode WAL, dont les lignes restent dans le `-wal` (pas de
+    point de contrôle) : la connexion rendue la tient ouverte, comme un ancien serveur vivant."""
+    conn = sqlite3.connect(path)
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA wal_autocheckpoint=0")
+    conn.execute("CREATE TABLE t (v TEXT)")
+    conn.executemany("INSERT INTO t VALUES (?)", [(r,) for r in rows])
+    conn.commit()
+    return conn
+
+
+def _rows(path):
+    conn = sqlite3.connect(path)
+    try:
+        return [r[0] for r in conn.execute("SELECT v FROM t ORDER BY v")]
+    finally:
+        conn.close()
+
+
+def test_legacy_wal_db_is_copied_with_its_rows_and_kept(tmp_path):
+    old = tmp_path / LEGACY_DB_NAME
+    holder = _legacy_wal_db(old)
+    try:
+        assert (tmp_path / f"{LEGACY_DB_NAME}-wal").stat().st_size > 0  # lignes encore au journal
+        created = migrate_legacy_db(tmp_path, DB_NAME)
+        assert created == [tmp_path / DB_NAME]
+        assert _rows(tmp_path / DB_NAME) == ["a", "b", "c"]
+        assert _rows(old) == ["a", "b", "c"]  # jamais supprimée
+    finally:
+        holder.close()
+    assert not list(tmp_path.glob("*.copie-*"))
+    assert not (tmp_path / f"{DB_NAME}-wal").exists()
 
 
 def test_second_migration_does_nothing(tmp_path):
-    (tmp_path / LEGACY_DB_NAME).write_bytes(b"base")
+    _legacy_wal_db(tmp_path / LEGACY_DB_NAME).close()
     migrate_legacy_db(tmp_path, DB_NAME)
     (tmp_path / DB_NAME).write_bytes(b"nouvelle")
     assert migrate_legacy_db(tmp_path, DB_NAME) == []
@@ -105,7 +161,7 @@ def test_no_legacy_db_means_no_copy(tmp_path):
 def test_launch_copies_the_legacy_db(tmp_path):
     data = tmp_path / "data"
     data.mkdir()
-    (data / LEGACY_DB_NAME).write_bytes(b"base")
+    _legacy_wal_db(data / LEGACY_DB_NAME).close()
     holder = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     holder.bind(("127.0.0.1", 0))
     holder.listen()
@@ -114,42 +170,37 @@ def test_launch_copies_the_legacy_db(tmp_path):
     finally:
         holder.close()
         close_logging()
-    assert (data / DB_NAME).read_bytes() == b"base"
+    assert _rows(data / DB_NAME) == ["a", "b", "c"]
     assert (data / LEGACY_DB_NAME).is_file()
     log = (data / "logs" / "frugal-ai-workbench.log").read_text(encoding="utf-8")
     assert "copiée vers frugal-ai-workbench.db" in log
 
 
 def test_failed_copy_leaves_nothing_behind_and_keeps_the_old_db(tmp_path, monkeypatch):
-    """Disque plein ou verrou au moment de copier la base : rien de partiel ne reste."""
+    """Disque plein ou verrou au moment de poser la base : rien de partiel ne reste."""
     from frugal_ai_workbench.store import datadir
 
-    (tmp_path / LEGACY_DB_NAME).write_bytes(b"base")
-    (tmp_path / f"{LEGACY_DB_NAME}-wal").write_bytes(b"journal")
-    real_copy = datadir.shutil.copy2
-
-    def copy_then_fail(source, target):
-        if source.name == LEGACY_DB_NAME:
-            raise OSError(28, "Plus de place sur le disque")
-        return real_copy(source, target)
-
-    monkeypatch.setattr(datadir.shutil, "copy2", copy_then_fail)
-    with pytest.raises(OSError, match="Plus de place"):
-        migrate_legacy_db(tmp_path, DB_NAME)
-    assert sorted(p.name for p in tmp_path.iterdir()) == [LEGACY_DB_NAME, f"{LEGACY_DB_NAME}-wal"]
-
-
-def test_launch_goes_on_when_the_copy_fails(tmp_path, monkeypatch, capsys):
-    from frugal_ai_workbench.store import datadir
-
-    data = tmp_path / "data"
-    data.mkdir()
-    (data / LEGACY_DB_NAME).write_bytes(b"base")
+    _legacy_wal_db(tmp_path / LEGACY_DB_NAME).close()
 
     def fail(source, target):
-        raise PermissionError(13, "Fichier verrouillé")
+        raise OSError(28, "Plus de place sur le disque")
 
-    monkeypatch.setattr(datadir.shutil, "copy2", fail)
+    monkeypatch.setattr(datadir.os, "replace", fail)
+    with pytest.raises(OSError, match="Plus de place"):
+        migrate_legacy_db(tmp_path, DB_NAME)
+    # Seuls restent l'ancienne base et, au plus, ses `-wal` et `-shm` (posés par SQLite à la lecture).
+    assert {p.name for p in tmp_path.iterdir()} <= {
+        LEGACY_DB_NAME,
+        f"{LEGACY_DB_NAME}-wal",
+        f"{LEGACY_DB_NAME}-shm",
+    }
+    assert _rows(tmp_path / LEGACY_DB_NAME) == ["a", "b", "c"]
+
+
+def test_launch_goes_on_when_the_legacy_db_is_unreadable(tmp_path, capsys):
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / LEGACY_DB_NAME).write_bytes(b"pas une base SQLite" * 10)  # sqlite3.DatabaseError
     holder = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     holder.bind(("127.0.0.1", 0))
     holder.listen()
@@ -162,8 +213,9 @@ def test_launch_goes_on_when_the_copy_fails(tmp_path, monkeypatch, capsys):
     err = capsys.readouterr().err
     assert "copie de l'ancienne base wavelocalai.db impossible" in err
     assert f"port {port} est occupé" in err  # le lancement a continué jusqu'au port
-    assert (data / LEGACY_DB_NAME).read_bytes() == b"base"
+    assert (data / LEGACY_DB_NAME).read_bytes() == b"pas une base SQLite" * 10
     assert not (data / DB_NAME).exists()
+    assert not list(data.glob("*.copie-*"))
 
 
 def test_legacy_variable_warning_is_visible_by_default():

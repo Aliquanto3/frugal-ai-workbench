@@ -179,3 +179,22 @@ def test_an_unknown_crew_is_not_found(tmp_path):
         assert caught.value.code == "not_found"
     with pytest.raises(AppError):
         lib.save("zzz", [CrewAgent("A", "g")])
+
+
+def test_a_crew_stored_with_the_legacy_tool_id_still_runs(tmp_path):
+    """Équipe enregistrée avant le renommage (jusqu'à 2.0.0a8) avec `search_wavestone_internal` :
+    lue, validée et lancée sous `search_internal`."""
+
+    async def run(arguments):
+        return "ok"
+
+    registry = ToolRegistry([AgentTool("search_internal", "Cherche.", run)])
+    lib = library(tmp_path, registry=registry)
+    lib._preferences.put(
+        "agents.crews",
+        {"un": [{"role": "R", "goal": "g", "tools": ["search_wavestone_internal"]}]},
+    )
+    (agent,) = lib.effective_agents("un")
+    assert agent.tools == ("search_internal",)
+    assert fields(lib, [agent]) == {}
+    assert [t.id for t in registry.get(["search_wavestone_internal"])] == ["search_internal"]

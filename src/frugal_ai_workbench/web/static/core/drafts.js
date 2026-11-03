@@ -3,10 +3,19 @@
 // absent ou refusé (fenêtre privée, données bloquées) : chaque accès est protégé, l'écran marche sans.
 
 const PREFIX = "frugal-ai-workbench.draft.";
+// Préfixe de l'ancien nom (jusqu'à 2.0.0a8) : un brouillon gardé sous lui passe sous le nouveau
+// à la première lecture, puis l'ancienne clé est retirée (un brouillon envoyé ne revient pas).
+const LEGACY_PREFIX = "wavelocalai.draft.";
 
 export function loadDraft(name) {
   try {
-    return localStorage.getItem(PREFIX + name) ?? "";
+    const value = localStorage.getItem(PREFIX + name);
+    if (value !== null) return value;
+    const legacy = localStorage.getItem(LEGACY_PREFIX + name);
+    if (legacy === null) return "";
+    localStorage.setItem(PREFIX + name, legacy);
+    localStorage.removeItem(LEGACY_PREFIX + name);
+    return legacy;
   } catch {
     return "";
   }

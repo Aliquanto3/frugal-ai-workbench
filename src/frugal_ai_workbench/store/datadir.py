@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import errno
 import os
-import shutil
+import sqlite3
 import sys
 from pathlib import Path
 from typing import IO
@@ -33,37 +33,45 @@ def ensure_data_dir(path: Path) -> Path:
 
 
 def migrate_legacy_db(data_dir: Path, db_name: str) -> list[Path]:
-    """Copie la base de l'ancien nom (`wavelocalai.db` et son `-wal`) vers `db_name`.
+    """Copie la base de l'ancien nom (`wavelocalai.db`) vers `db_name`, par l'API de sauvegarde
+    de SQLite.
 
     Seulement si la nouvelle base n'existe pas encore : l'ancienne n'est jamais supprimée ni
-    modifiée, et un second appel ne fait rien. Chaque fichier passe par un fichier de transit
-    propre au processus, puis est renommé ; la base vient en dernier. En cas d'`OSError`
-    (verrou, disque plein, lancement concurrent), tout ce qui a été créé est retiré avant de
-    relancer l'erreur : la copie sera retentée au lancement suivant. Rend les fichiers créés.
+    modifiée (ouverte en lecture seule), et un second appel ne fait rien. La sauvegarde lit un
+    instantané cohérent, `-wal` compris, même si un ancien serveur a encore la base ouverte ; elle
+    écrit dans un fichier de transit propre au processus, renommé ensuite : la nouvelle base
+    n'apparaît que complète. En cas d'`OSError` ou de `sqlite3.Error` (verrou, disque plein, base
+    illisible), le fichier de transit est retiré avant de relancer l'erreur : la copie sera
+    retentée au lancement suivant. Rend les fichiers créés.
     """
     new = data_dir / db_name
     old = data_dir / LEGACY_DB_NAME
     if new.exists() or not old.is_file():
         return []
-    pairs = []
-    wal = old.with_name(old.name + "-wal")
-    if wal.is_file():
-        pairs.append((wal, new.with_name(new.name + "-wal")))
-    pairs.append((old, new))
-    created: list[Path] = []
-    staging: Path | None = None
+    staging = new.with_name(f"{new.name}.copie-{os.getpid()}")
     try:
-        for source, target in pairs:
-            staging = target.with_name(f"{target.name}.copie-{os.getpid()}")
-            shutil.copy2(source, staging)
-            os.replace(staging, target)
-            staging = None
-            created.append(target)
-    except OSError:
-        for path in [*created, *([staging] if staging else [])]:
-            path.unlink(missing_ok=True)
+        staging.unlink(missing_ok=True)
+        source = sqlite3.connect(f"{old.resolve().as_uri()}?mode=ro", uri=True)
+        try:
+            target = sqlite3.connect(staging)
+            try:
+                source.backup(target)
+                # La copie garde le mode WAL de l'originale : on la referme propre, sans `-wal`.
+                target.execute("PRAGMA journal_mode=DELETE")
+            finally:
+                target.close()
+        finally:
+            source.close()
+        os.replace(staging, new)
+    except (OSError, sqlite3.Error):
+        for leftover in (staging, *_sidecars(staging)):
+            leftover.unlink(missing_ok=True)
         raise
-    return created
+    return [new]
+
+
+def _sidecars(path: Path) -> tuple[Path, ...]:
+    return tuple(path.with_name(path.name + suffix) for suffix in ("-wal", "-shm", "-journal"))
 
 
 def is_under_onedrive(path: Path) -> bool:

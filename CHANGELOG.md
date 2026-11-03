@@ -25,12 +25,23 @@
 - Variables d'environnement : `FRUGAL_AI_*` remplace `WAVELOCALAI_*` (v2) et `WAVELOCAL_*` (v1,
   `COUNTRY_ISO` et `PUE`). L'ancienne variable reste lue si la nouvelle est absente, avec un
   avertissement visible (`FutureWarning`).
-- Données : au premier lancement de la v2, `data/wavelocalai.db` (et son `-wal`) est copiée vers
-  `data/frugal-ai-workbench.db` si celle-ci n'existe pas encore. L'ancienne base est gardée ;
-  une seconde copie ne se fait jamais. Une copie impossible (verrou, disque plein) ne bloque pas
-  le démarrage : un avertissement s'affiche et la copie est retentée au lancement suivant. Le dossier `data/` ne change pas de nom.
+- Réglages : sans `frugal-ai-workbench.toml`, la v2 lit `wavelocalai.toml` en repli, avec un
+  avertissement visible (`FutureWarning`).
+- Données : au premier lancement de la v2, `data/wavelocalai.db` est copiée vers
+  `data/frugal-ai-workbench.db` si celle-ci n'existe pas encore, par l'API de sauvegarde de SQLite
+  (instantané cohérent, journal `-wal` compris, même si un ancien serveur tient encore la base).
+  L'ancienne base est gardée ; une seconde copie ne se fait jamais. Une copie impossible (verrou,
+  disque plein, base illisible) ne bloque pas le démarrage : un avertissement s'affiche et la copie
+  est retentée au lancement suivant. Le dossier `data/` ne change pas de nom.
 - Les identifiants de données persistées de la v1 (collections Chroma `wavelocal_*`, projets
   CodeCarbon `wavelocal_session` et `wavelocal_audit`) gardent leur nom pour ne pas perdre
   l'historique.
-- Brouillons non envoyés de la v2 (`localStorage`) : la clé passe à `frugal-ai-workbench.draft.*`,
-  les anciens brouillons ne sont pas repris.
+- Brouillons non envoyés de la v2 (`localStorage`) : la clé passe à `frugal-ai-workbench.draft.*` ;
+  un brouillon gardé sous `wavelocalai.draft.*` est repris à la première lecture.
+- Équipes d'agents enregistrées avec l'ancien outil `search_wavestone_internal` : l'identifiant est
+  traduit en `search_internal`, l'équipe se lance comme avant.
+- Métriques Prometheus : `wavelocalai_inference_*` devient `frugal_ai_workbench_inference_*`, sans
+  repli (exporteur sans usage connu).
+- Exports JSON de la v2 : le champ `format` passe de `wavelocalai.conversation/1` et
+  `wavelocalai.arena/1` à `frugal-ai-workbench.conversation/1` et `frugal-ai-workbench.arena/1`
+  (l'application ne relit pas ces fichiers).

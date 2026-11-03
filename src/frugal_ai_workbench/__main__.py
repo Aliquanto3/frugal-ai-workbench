@@ -128,7 +128,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         try:
             try:
                 copied = migrate_legacy_db(data_dir, DB_NAME)
-            except OSError as exc:  # jamais bloquant : on démarre sur la nouvelle base
+            except (
+                OSError,
+                sqlite3.Error,
+            ) as exc:  # jamais bloquant : on démarre sur la nouvelle base
                 copied = []
                 message = (
                     f"copie de l'ancienne base wavelocalai.db impossible ({exc}) : démarrage "
