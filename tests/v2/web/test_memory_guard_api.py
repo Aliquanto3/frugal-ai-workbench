@@ -13,14 +13,14 @@ import contextlib
 import httpx
 import pytest
 
-from wavelocalai.hardware.memory import MemoryAdvisor, MemoryReading
-from wavelocalai.inference.memory_guard import MemoryGuard
-from wavelocalai.models.fake import FakeChatModel, fake_embedders, fake_models
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.ollama_ps import LoadedModel
-from wavelocalai.models.port import ModelRef, TextDelta
-from wavelocalai.models.registry import ModelNeed, ModelRegistry
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor, MemoryReading
+from frugal_ai_workbench.inference.memory_guard import MemoryGuard
+from frugal_ai_workbench.models.fake import FakeChatModel, fake_embedders, fake_models
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.ollama_ps import LoadedModel
+from frugal_ai_workbench.models.port import ModelRef, TextDelta
+from frugal_ai_workbench.models.registry import ModelNeed, ModelRegistry
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..fake_ollama import FakeOllama, Plan, final, part
@@ -42,7 +42,7 @@ def reading(available_gb: float):
 
 @contextlib.asynccontextmanager
 async def chat_app(tmp_path, server: FakeOllama, available_gb: float = FREE_GB):
-    config = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"})
+    config = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"})
     memory = reading(available_gb)
     registry = ModelRegistry(
         config,
@@ -165,7 +165,7 @@ def _fake(tag: str, *words: str) -> FakeChatModel:
 
 @contextlib.asynccontextmanager
 async def guarded_app(tmp_path, guard_needs, available_gb, *fakes: FakeChatModel):
-    config = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"})
+    config = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"})
     refs = [*fake_models(config).values(), *fake_embedders(config).values(), *fakes]
     registry = ModelRegistry(config, extra_refs={m.ref.tag: m.ref for m in refs})
     app = create_app(config, registry=registry)
@@ -372,7 +372,7 @@ async def test_an_arena_lane_after_a_big_lane_is_not_refused_while_ollama_can_ev
     """Poste de 7,5 Go libres : la lane `big:7b` (7,1 Go requis) passe et reste chargée (5,0 Go) ;
     la lane suivante `mid:4b` (4,9 Go requis) ne voit que 2,5 Go libres, mais Ollama évincera
     `big:7b`, inactif : elle passe aussi."""
-    config = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"})
+    config = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"})
     ps: list[LoadedModel] = []
     big = _Loading("big:7b", 5.0, ps, "Grande")
     mid = _Loading("mid:4b", 3.6, ps, "Moyenne")

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.inference.bench import RESPECTED, format_verdict
-from wavelocalai.inference.scenarios import SCENARIOS, find_scenario
+from frugal_ai_workbench.inference.bench import RESPECTED, format_verdict
+from frugal_ai_workbench.inference.scenarios import SCENARIOS, find_scenario
 
 SCHEMA = find_scenario("traduction").schema
 NBSP = " "

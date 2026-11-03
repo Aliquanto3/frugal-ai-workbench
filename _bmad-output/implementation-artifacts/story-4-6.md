@@ -8,8 +8,8 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-4.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-4-5.md'
 warnings: []
@@ -24,25 +24,25 @@ deferred:
       Écarts additifs à `contrat-api.md` (déjà consignés dans le contrat, à ratifier) : `POST /api/rag/runs` accepte `strategy` `naive`, `hyde`, `self_rag` et `top_k` (1 à 20) ; `retrieval_step` gagne les étapes `hypothesis`, `grade`, `rewrite` et les champs `round`, `fallback`, `checked`, `relevant` ; l'événement `citations` `{citations: [{marker, n}]}` ; `GET /api/rag/documents` rend `search: {top_k, max_top_k}` ; `Settings.rag.self_rag_max_iterations` (2). Aucun nouveau code d'erreur.
     evidence: |-
       `contrat-api.md` (événements, Base documentaire, Discussion), `test_rag_strategies_api.py`, `test_rag_list_api.py::test_an_empty_base_lists_nothing_and_states_the_limits`.
-    location: _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
+    location: _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
     severity: low
   - summary: >-
       Résolu à la fusion avec la 4.3 : le palliatif `search: {top_k, max_top_k}` de `GET /api/rag/documents` est retiré ; l'écran Discussion lit `GET /api/rag/settings` (`top_k`, `strategy`, `limits.top_k.max`) et démarre sur la stratégie par défaut enregistrée. `top_k` de la question prime sur le réglage de l'écran Base, qui prime sur le `.toml`.
     evidence: |-
       `web/routes_rag.py::SearchDefaults`, `screens/documents.js::refreshBase`.
-    location: src/wavelocalai/web/routes_rag.py
+    location: src/frugal_ai_workbench/web/routes_rag.py
     severity: medium
   - summary: >-
       Contrats partagés de l'orchestrateur pas sur cette base : `core/ram-guard.js` (4.8) et `components/wl-confirm-dialog.js` (4.3) n'existent pas encore ici. La 4.6 n'en a pas besoin (aucune confirmation) ; `ram_guard` s'affiche toujours par `wl-error` comme en 4.5, le branchement de `core/ram-guard.js` dans `screens/documents.js::submit` se fait à la fusion de la 4.8.
     evidence: |-
       `screens/documents.js::submit` (`error.error = envelopeOf(...)`).
-    location: src/wavelocalai/web/static/screens/documents.js
+    location: src/frugal_ai_workbench/web/static/screens/documents.js
     severity: low
   - summary: >-
       Choix de conception à confirmer. (1) HyDE et Self-RAG appellent **le modèle de réponse choisi** (la v1 prenait `qwen2.5:1.5b` pour l'hypothèse et la notation) : aucun second modèle à charger ni à installer, mais un modèle lourd rédige l'hypothèse et note les extraits ; un modèle « de recherche » distinct serait un réglage de plus. (2) Self-RAG note **tous les extraits en un seul appel** (une ligne `n : oui|non` par extrait) au lieu d'un appel par extrait (v1) : moins de feuilles et de CO₂, mais un petit modèle peut mal suivre le format (un extrait sans verdict est gardé ; une notation illisible garde tous les extraits). (3) Pour HyDE, `relevance_label` et `raw_score` mesurent la similarité entre l'**hypothèse** et l'extrait, pas la question ; le passage surligné reste celui de la question. (4) Seul le marqueur simple `[n]` est vérifié (`[1, 2]` n'est pas lu). (5) HyDE, température 0,3 (0,7 en v1) ; reclassement par reranker : story 4.7.
     evidence: |-
       `rag/strategies.py` (docstring), `rag/query.py::_ask`, `_hyde`, `_self_rag`.
-    location: src/wavelocalai/rag/query.py
+    location: src/frugal_ai_workbench/rag/query.py
     severity: low
 ---
 
@@ -80,9 +80,9 @@ Dans `rag/strategies.py` (règles pures) et `rag/query.py` (orchestration) :
 
 ## Fichiers
 
-- `src/wavelocalai/rag/strategies.py` (nouveau), `rag/query.py`, `runs/hub.py` (`answer_text`), `config.py` + `wavelocalai.toml` (`self_rag_max_iterations`), `web/routes_rag.py` (`strategy`, `top_k`, `search`), `models/fake.py`, `web/routes_test.py`
-- `src/wavelocalai/web/static/screens/documents.js`, `documents-settings.js`, `documents-citations.js`, `documents-replay.js` (nouveaux), `components/wl-chat-thread.js`, `wl-run-status.js`, `wl-source-panel.js`, `components.css`, `documents.css`, `i18n/fr.json`
-- `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md`
+- `src/frugal_ai_workbench/rag/strategies.py` (nouveau), `rag/query.py`, `runs/hub.py` (`answer_text`), `config.py` + `frugal-ai-workbench.toml` (`self_rag_max_iterations`), `web/routes_rag.py` (`strategy`, `top_k`, `search`), `models/fake.py`, `web/routes_test.py`
+- `src/frugal_ai_workbench/web/static/screens/documents.js`, `documents-settings.js`, `documents-citations.js`, `documents-replay.js` (nouveaux), `components/wl-chat-thread.js`, `wl-run-status.js`, `wl-source-panel.js`, `components.css`, `documents.css`, `i18n/fr.json`
+- `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md`
 - Tests : `tests/v2/unit/test_rag_strategies.py`, `tests/v2/web/test_rag_strategies_api.py`, `tests/v2/e2e/test_discussion_strategies.py` (nouveaux) ; complétés ou réalignés : `test_discussion_static.py`, `test_discussion.py`, `test_rag_run_api.py`, `test_rag_list_api.py`, `test_fake_model.py`, `test_hub_stream.py`, `test_config.py`
 
 ## Vérification

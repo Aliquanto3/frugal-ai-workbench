@@ -2,7 +2,7 @@
 // `localStorage` seulement (jamais la bascule cloud, qui vit dans le store). Le stockage peut être
 // absent ou refusé (fenêtre privée, données bloquées) : chaque accès est protégé, l'écran marche sans.
 
-const PREFIX = "wavelocalai.draft.";
+const PREFIX = "frugal-ai-workbench.draft.";
 
 export function loadDraft(name) {
   try {

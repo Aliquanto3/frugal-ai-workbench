@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.agents.tools import AgentTool, ToolRegistry
-from wavelocalai.errors import AppError
+from frugal_ai_workbench.agents.tools import AgentTool, ToolRegistry
+from frugal_ai_workbench.errors import AppError
 
 
 async def _noop(arguments):

@@ -7,9 +7,9 @@ baseline_commit: '2eed892'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-2-2.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-3-1.md'
 warnings: []
@@ -18,13 +18,13 @@ deferred:
       La notation est la story 3.3 : l'écran affiche seulement le statut `judging` (« Notation ») s'il arrive, sans note `/100`, sans critères repliés, sans avertissement « note peu fiable ». Le formulaire n'envoie ni `judge` ni `criteria`. Une lane `done` accepte un `judging` ensuite (seuls timeout, failed, cancelled et interrupted sont définitifs) : l'ordre `done` puis `judging` ou `judging` puis `done` que choisira la 3.3 marche des deux façons.
     evidence: |-
       `test_a_notation_status_is_shown_as_a_status_only` (`tests/v2/e2e/test_arena.py`).
-    location: src/wavelocalai/web/static/components/wl-arena-lane.js
+    location: src/frugal_ai_workbench/web/static/components/wl-arena-lane.js
     severity: low
   - summary: >-
       Rouvrir par URL (story 3.6) : `#/arene/comparer/<run_id>` suit le run en rejouant son flux depuis le début (le serveur garde `run_events`), ce qui reconstruit colonnes, statuts et mesures d'un run terminé sans relancer de modèle. L'URL n'est pas posée au lancement : changer le `hash` démonte l'écran et casserait le flux en cours. Reconstruction depuis l'instantané (verdict, classement) et pose de l'URL à `run_ended` sont à décider avec la 3.4 et la 3.6. Un run inconnu dit « Cette comparaison est introuvable ».
     evidence: |-
       `test_a_running_arena_is_joined_on_run_busy_and_by_its_url`, `test_an_unknown_run_in_the_url_is_said`.
-    location: src/wavelocalai/web/static/screens/arena.js
+    location: src/frugal_ai_workbench/web/static/screens/arena.js
     severity: low
   - summary: >-
       Hors périmètre, pour les stories suivantes : classement et matrice (3.4), actions Relancer, Modifier la question et Exporter (UX-DR20, 3.4 et 3.5). Le mode focus est une bascule d'affichage de l'écran, sans effet serveur.
@@ -36,7 +36,7 @@ deferred:
       Huit symboles d'état ajoutés au sprite `icons.svg` (`hourglass-empty`, `sync`, `edit`, `gavel`, `timer`, `block`, `open-in-full`, `close-fullscreen`) sont des Material Icons 24 px (même licence Apache 2.0), pas des Material Symbols Rounded comme le reste du sprite : aucun jeu Symbols n'était disponible hors ligne. À remplacer par les Symbols Rounded au prochain passage sur le sprite pour homogénéiser le tracé.
     evidence: |-
       `test_every_lane_status_of_the_server_has_a_text_and_an_icon`.
-    location: src/wavelocalai/web/static/icons.svg
+    location: src/frugal_ai_workbench/web/static/icons.svg
     severity: low
 ---
 
@@ -57,12 +57,12 @@ deferred:
 
 ## Fichiers
 
-- `src/wavelocalai/web/static/screens/arena.js` : l'écran (formulaire, bandeau, un lecteur du flux, onglets, mode focus)
-- `src/wavelocalai/web/static/components/wl-arena-lane.js` : la colonne (en-tête collant, statut, fil muet)
-- `src/wavelocalai/web/static/arena.css`, `index.html`, `i18n/fr.json`, `icons.svg` : styles, textes, icônes d'état
+- `src/frugal_ai_workbench/web/static/screens/arena.js` : l'écran (formulaire, bandeau, un lecteur du flux, onglets, mode focus)
+- `src/frugal_ai_workbench/web/static/components/wl-arena-lane.js` : la colonne (en-tête collant, statut, fil muet)
+- `src/frugal_ai_workbench/web/static/arena.css`, `index.html`, `i18n/fr.json`, `icons.svg` : styles, textes, icônes d'état
 - `core/registry.js` (`arena-compare` disponible), `core/api.js` (`startArena`), `core/format.js` (`formatClock`)
 - `components/wl-chat-thread.js` (options `firstToken` et attribut `silent`), `components/wl-model-picker.js` (`modelFor`, `selectedModels`)
-- `src/wavelocalai/web/routes_test.py` : `POST /api/test/arena` (lanes `fake` scriptées par le vrai service, `WAVELOCALAI_TESTING` seulement)
+- `src/frugal_ai_workbench/web/routes_test.py` : `POST /api/test/arena` (lanes `fake` scriptées par le vrai service, `FRUGAL_AI_TESTING` seulement)
 - Tests : `tests/v2/e2e/test_arena.py`, `tests/v2/unit/test_arena_static.py`, `tests/v2/web/test_arena_api.py` ; réalignés : `test_shell_static.py`, `test_chat_static.py`, `e2e/test_shell.py`, `e2e/test_chat.py` (l'écran Arène n'est plus « à venir »)
 
 ## Reports

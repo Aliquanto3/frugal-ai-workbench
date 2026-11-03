@@ -331,20 +331,20 @@ def _fake_options(options: dict):
 
 def test_ink_expr_from_theme(monkeypatch):
     """Encres claire et sombre du thème : expression exacte, choisie contre le fond."""
-    options = {"theme.light.textColor": "#0A0A14", "theme.dark.textColor": "#F6F5FA"}
+    options = {"theme.light.textColor": "#141A1F", "theme.dark.textColor": "#E7ECEE"}
     monkeypatch.setattr(charts, "st", SimpleNamespace(get_option=_fake_options(options)))
     assert ink_expr() == {
-        "expr": "contrast(background, '#0A0A14') >= contrast(background, '#F6F5FA') "
-        "? '#0A0A14' : '#F6F5FA'"
+        "expr": "contrast(background, '#141A1F') >= contrast(background, '#E7ECEE') "
+        "? '#141A1F' : '#E7ECEE'"
     }
 
 
 def test_ink_expr_falls_back_to_common_text_color(monkeypatch):
-    options = {"theme.textColor": "#0A0A14"}
+    options = {"theme.textColor": "#141A1F"}
     monkeypatch.setattr(charts, "st", SimpleNamespace(get_option=_fake_options(options)))
     assert ink_expr() == {
-        "expr": "contrast(background, '#0A0A14') >= contrast(background, '#0A0A14') "
-        "? '#0A0A14' : '#0A0A14'"
+        "expr": "contrast(background, '#141A1F') >= contrast(background, '#141A1F') "
+        "? '#141A1F' : '#141A1F'"
     }
 
 

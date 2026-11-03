@@ -5,8 +5,12 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.greenops.local_meter import LocalMeter
-from wavelocalai.greenops.local_meter import load_tracker_class as real_loader  # avant le double
+from frugal_ai_workbench.greenops.local_meter import (
+    LocalMeter,
+)
+from frugal_ai_workbench.greenops.local_meter import (
+    load_tracker_class as real_loader,  # avant le double
+)
 
 
 @pytest.fixture

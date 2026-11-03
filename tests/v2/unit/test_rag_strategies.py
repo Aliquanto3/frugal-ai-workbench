@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.rag.strategies import (
+from frugal_ai_workbench.rag.strategies import (
     GRADE_EXCERPT_CHARS,
     HYDE_MAX_TOKENS,
     REWRITE_MAX_CHARS,

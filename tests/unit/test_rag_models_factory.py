@@ -132,4 +132,4 @@ def test_real_loaders_raise_oserror_on_cache_miss_offline(loader, monkeypatch, t
 
     cls = getattr(sentence_transformers, loader)
     with pytest.raises(OSError):
-        cls("wavelocalai-test/absent-model", device="cpu", local_files_only=True)
+        cls("frugal-ai-workbench-test/absent-model", device="cpu", local_files_only=True)

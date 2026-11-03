@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.runs.models import (
+from frugal_ai_workbench.runs.models import (
     CO2_ALLOCATIONS,
     CO2_METHODS,
     CONVERSATION_KINDS,
@@ -24,7 +24,7 @@ from wavelocalai.runs.models import (
     STATUSES,
     TPS_SOURCES,
 )
-from wavelocalai.store.migrate import discover, migrate
+from frugal_ai_workbench.store.migrate import discover, migrate
 
 SNAPSHOTS = Path(__file__).parent / "snapshots"
 NOW = "2026-10-18T12:00:00.000Z"
@@ -57,7 +57,7 @@ def test_every_migration_has_its_snapshot():
 
 @pytest.mark.parametrize("version", [m.version for m in discover()])
 def test_schema_matches_the_versioned_snapshot(tmp_path, version):
-    db = tmp_path / "wavelocalai.db"
+    db = tmp_path / "frugal-ai-workbench.db"
     assert migrate(db, target=version) == version
     expected = _snapshot(version).read_text(encoding="utf-8").replace("\r\n", "\n")
     assert dump_schema(db) == expected
@@ -68,7 +68,7 @@ def test_schema_matches_the_versioned_snapshot(tmp_path, version):
 
 @pytest.fixture
 def conn(tmp_path):
-    db = tmp_path / "wavelocalai.db"
+    db = tmp_path / "frugal-ai-workbench.db"
     migrate(db)
     connection = sqlite3.connect(db)
     connection.execute("PRAGMA foreign_keys=ON")
@@ -189,7 +189,7 @@ if __name__ == "__main__":  # écrit l'instantané de la version donnée
 
     target = int(sys.argv[1])
     with tempfile.TemporaryDirectory() as tmp:
-        database = Path(tmp) / "wavelocalai.db"
+        database = Path(tmp) / "frugal-ai-workbench.db"
         migrate(database, target=target)
         _snapshot(target).write_text(dump_schema(database), encoding="utf-8", newline="\n")
     print(f"instantané écrit : {_snapshot(target)}")

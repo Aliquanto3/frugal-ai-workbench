@@ -8,7 +8,7 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat/8-1c.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat/8-1c.md'
 warnings: []
 deferred:
   - 'Le chat (`screens/chat.js`) et le Banc (`screens/bench.js`) n''appellent pas non plus le retrait de `onSmallerModel` au démontage : le Banc est dans le lot Banc, `chat.js` est touché par le lot b (message `timeout`) ; à traiter à l''intégration.'

@@ -1,12 +1,12 @@
-# 📝 Guide de Configuration - WaveLocalAI
+# 📝 Guide de Configuration - Frugal AI Workbench
 
-Ce document explique comment configurer WaveLocalAI pour différents environnements.
+Ce document explique comment configurer Frugal AI Workbench pour différents environnements.
 
 ## 🚀 Configuration de Base (Requis)
 
 ### 1. Variables d'Environnement
 
-WaveLocalAI utilise des variables d'environnement pour la configuration. Deux méthodes :
+Frugal AI Workbench utilise des variables d'environnement pour la configuration. Deux méthodes :
 
 **Méthode A : Fichier `.env` (Recommandé)**
 ```bash
@@ -20,11 +20,11 @@ nano .env  # ou notepad .env sur Windows
 **Méthode B : Variables système**
 ```bash
 # Windows (PowerShell)
-$env:WAVELOCAL_COUNTRY_ISO="FRA"
+$env:FRUGAL_AI_COUNTRY_ISO="FRA"
 $env:OLLAMA_BASE_URL="http://localhost:11434"
 
 # Linux/Mac
-export WAVELOCAL_COUNTRY_ISO="FRA"
+export FRUGAL_AI_COUNTRY_ISO="FRA"
 export OLLAMA_BASE_URL="http://localhost:11434"
 ```
 
@@ -61,8 +61,8 @@ SMTP_PASSWORD=votre-app-password
 ### Green IT (Empreinte Carbone)
 ```bash
 # .env
-WAVELOCAL_COUNTRY_ISO=FRA  # Code pays ISO 3166
-WAVELOCAL_PUE=1.0          # 1.0 = Local, 1.4 = Datacenter
+FRUGAL_AI_COUNTRY_ISO=FRA  # Code pays ISO 3166
+FRUGAL_AI_PUE=1.0          # 1.0 = Local, 1.4 = Datacenter
 ```
 
 **Codes pays courants :**
@@ -114,8 +114,8 @@ CALCULATOR_TIMEOUT=2  # Secondes (défaut: 2)
 
 **Fichier :** `.env.test` (à créer pour pytest)
 ```bash
-WAVELOCAL_DATA_DIR=./tests/data
-WAVELOCAL_CHROMA_COLLECTION=test_collection
+FRUGAL_AI_DATA_DIR=./tests/data
+FRUGAL_AI_CHROMA_COLLECTION=test_collection
 DEBUG_MODE=true
 ```
 
@@ -134,12 +134,12 @@ pytest tests/
 
 | Variable | Description | Défaut | Obligatoire |
 |----------|-------------|--------|-------------|
-| `WAVELOCAL_DATA_DIR` | Dossier de stockage | `./data` | Non |
-| `WAVELOCAL_LOGS_DIR` | Dossier logs | `./data/logs` | Non |
+| `FRUGAL_AI_DATA_DIR` | Dossier de stockage | `./data` | Non |
+| `FRUGAL_AI_LOGS_DIR` | Dossier logs | `./data/logs` | Non |
 | `OLLAMA_BASE_URL` | URL Ollama | `http://localhost:11434` | Non |
-| `WAVELOCAL_COUNTRY_ISO` | Code pays ISO | `FRA` | Non |
-| `WAVELOCAL_PUE` | PUE datacenter | `1.0` | Non |
-| `WAVELOCAL_EMBEDDING_MODEL` | Modèle embedding | `all-MiniLM-L6-v2` | Non |
+| `FRUGAL_AI_COUNTRY_ISO` | Code pays ISO | `FRA` | Non |
+| `FRUGAL_AI_PUE` | PUE datacenter | `1.0` | Non |
+| `FRUGAL_AI_EMBEDDING_MODEL` | Modèle embedding | `all-MiniLM-L6-v2` | Non |
 | `MISTRAL_API_KEY` | Clé API Mistral | (vide) | Non |
 | `ENABLE_PATH_VALIDATION` | Validation chemins | `true` | Non |
 | `CALCULATOR_TIMEOUT` | Timeout calculs | `2` | Non |

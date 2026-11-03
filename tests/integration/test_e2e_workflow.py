@@ -43,7 +43,7 @@ class TestEndToEndWorkflow:
 
         try:
             test_content = """
-            WaveLocalAI est une application de demonstration IA.
+            Frugal AI Workbench est une application de demonstration IA.
             Elle utilise des modeles locaux via Ollama.
             L'objectif est la confidentialite et le Green IT.
             """
@@ -58,7 +58,7 @@ class TestEndToEndWorkflow:
             assert chunks > 0, "Devrait créer au moins 1 chunk"
 
             # Test de recherche
-            results = rag.search("Quel est l'objectif de WaveLocalAI ?", k=2)
+            results = rag.search("Quel est l'objectif de Frugal AI Workbench ?", k=2)
             assert len(results) > 0, "Devrait trouver des résultats"
 
             combined_text = " ".join([doc.page_content for doc in results])
@@ -99,7 +99,7 @@ class TestEndToEndWorkflow:
         rag.clear_database()
 
         try:
-            test_content = "Le projet WaveLocalAI a ete cree en decembre 2025."
+            test_content = "Le projet Frugal AI Workbench a ete cree en decembre 2025."
 
             with tempfile.NamedTemporaryFile(
                 mode="w", suffix=".txt", delete=False, encoding="utf-8"
@@ -109,7 +109,7 @@ class TestEndToEndWorkflow:
 
             rag.ingest_file(temp_path, "info.txt")
 
-            docs = rag.search("Quand a ete cree WaveLocalAI ?", k=1)
+            docs = rag.search("Quand a ete cree Frugal AI Workbench ?", k=1)
             assert len(docs) > 0
 
             context = docs[0].page_content

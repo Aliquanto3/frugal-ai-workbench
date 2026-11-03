@@ -13,9 +13,9 @@ import json
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.models.fake import FAKE_EMBED_REF, FAKE_REF, Sleep
-from wavelocalai.models.port import TextDelta
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.models.fake import FAKE_EMBED_REF, FAKE_REF, Sleep
+from frugal_ai_workbench.models.port import TextDelta
 
 from .conftest import served  # noqa: F401 - fixture
 from .test_rag_run_api import (

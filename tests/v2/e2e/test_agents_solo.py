@@ -210,7 +210,7 @@ def tool_switch(page, label):
 
 
 def test_the_screen_is_agent_seul_with_the_picker_the_tools_and_the_welcome(agent):
-    assert agent.title() == "Agent seul · WaveLocalAI"
+    assert agent.title() == "Agent seul · Frugal AI Workbench"
     assert agent.get_by_role("heading", level=1).inner_text() == "Agent seul"
     tabs = agent.get_by_role("navigation", name="Écrans du module Agents")
     assert tabs.get_by_role("link", name="Agent seul").get_attribute("aria-current") == "page"
@@ -445,7 +445,7 @@ def test_the_task_cannot_leave_before_the_tools_are_read(page_tolerating_failed_
 
 def test_the_turn_limit_is_a_last_step_that_says_so(page, tmp_path_factory):
     folder = tmp_path_factory.mktemp("e2e-agent-turns")
-    config = folder / "wavelocalai.toml"
+    config = folder / "frugal-ai-workbench.toml"
     config.write_text("[agents]\nmax_turns = 2\n", encoding="utf-8")
     (folder / "data").mkdir()
     backend = Backend(folder / "data", config=config)
@@ -588,7 +588,7 @@ def smtp():
 def mail(tmp_path_factory, smtp):
     """Le serveur dont le SMTP est le faux serveur local ; l'attente d'une validation y dure 3 s."""
     folder = tmp_path_factory.mktemp("e2e-agent-mail")
-    config = folder / "wavelocalai.toml"
+    config = folder / "frugal-ai-workbench.toml"
     config.write_text("[delays]\napproval_expiry_s = 4\n", encoding="utf-8")
     (folder / "data").mkdir()
     # Les équipes livrées, pour l'écran Équipe (story 6.6) : la bibliothèque se lit à côté du `.toml`.

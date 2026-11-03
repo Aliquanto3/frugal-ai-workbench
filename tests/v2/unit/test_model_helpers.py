@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.hardware.memory import (
+from frugal_ai_workbench.hardware.memory import (
     FIT_MARGIN,
     SIZE_TO_LOADED,
     SYSTEM_RAM_BUFFER_GB,
@@ -18,16 +18,16 @@ from wavelocalai.hardware.memory import (
     fits_in_memory,
     read_memory,
 )
-from wavelocalai.models.catalog import load_catalog, parse_size_gb
-from wavelocalai.models.classify import (
+from frugal_ai_workbench.models.catalog import load_catalog, parse_size_gb
+from frugal_ai_workbench.models.classify import (
     is_dedicated_reasoning,
     is_embedding_model,
     is_remote_tag,
     is_reranker_model,
     parse_params_b,
 )
-from wavelocalai.models.facts import InMemoryFactsStore, ModelFacts, facts_from_ollama
-from wavelocalai.models.run_stats import InMemoryRunStats
+from frugal_ai_workbench.models.facts import InMemoryFactsStore, ModelFacts, facts_from_ollama
+from frugal_ai_workbench.models.run_stats import InMemoryRunStats
 
 REPO = Path(__file__).resolve().parents[3]
 
@@ -176,11 +176,15 @@ def test_run_stats_median_keeps_only_ok_ollama_eval_leaves():
 
 
 def test_model_facts_migration_matches_the_dataclass():
-    sql = (REPO / "src/wavelocalai/store/migrations/0002_model_facts.sql").read_text("utf-8")
+    sql = (REPO / "src/frugal_ai_workbench/store/migrations/0002_model_facts.sql").read_text(
+        "utf-8"
+    )
     db = sqlite3.connect(":memory:")
     db.executescript(sql)
     db.executescript(
-        (REPO / "src/wavelocalai/store/migrations/0005_model_parameters.sql").read_text("utf-8")
+        (REPO / "src/frugal_ai_workbench/store/migrations/0005_model_parameters.sql").read_text(
+            "utf-8"
+        )
     )
     columns = [row[1] for row in db.execute("PRAGMA table_info(model_facts)")]
     primary = [row[1] for row in db.execute("PRAGMA table_info(model_facts)") if row[5]]

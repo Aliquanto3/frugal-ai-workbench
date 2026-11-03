@@ -13,7 +13,7 @@ import re
 
 import pytest
 
-from wavelocalai.errors import ERRORS
+from frugal_ai_workbench.errors import ERRORS
 
 from .test_shell import assert_no_axe_violations, wait_for
 

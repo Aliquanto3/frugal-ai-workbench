@@ -621,9 +621,9 @@ ACCEPTED_PILL = {
     "page": "Agent_Lab",
     "rule": "color-contrast",
     "component": "pills",
-    "fg": "#7e65e9",
-    "bg": "#161329",
-    "ratio": 4.24,
+    "fg": "#0b7a86",
+    "bg": "#0e1d21",
+    "ratio": 3.41,
 }
 
 
@@ -632,16 +632,16 @@ def test_accepted_gap_matches_exact_gap_only():
 
     gap = accepted_gap(ACCEPTED_PILL)
     assert gap is not None and "DESIGN.md" in gap["reference"]
-    assert accepted_gap({**ACCEPTED_PILL, "fg": "#7E65E9"}) is gap
+    assert accepted_gap({**ACCEPTED_PILL, "fg": "#0B7A86"}) is gap
 
 
 @pytest.mark.parametrize(
     "change",
     [
-        {"ratio": 4.23},
-        {"ratio": 4.25},
-        {"fg": "#7e65ea"},
-        {"bg": "#0a0a14"},
+        {"ratio": 3.40},
+        {"ratio": 3.42},
+        {"fg": "#0b7a87"},
+        {"bg": "#0e1316"},
         {"component": "stSlider"},
         {"component": None},
         {"page": "Inference_Arena"},
@@ -674,14 +674,14 @@ def test_inactive_and_native_take_priority_over_accepted_gap():
     from tests.e2e.test_accessibility import classify
 
     assert classify(ACCEPTED_PILL, True, _palette()) == "inactive"
-    # Palette sans la primaire : #7e65e9 devient une couleur native.
+    # Palette sans la primaire : #0b7a86 devient une couleur native.
     assert classify(ACCEPTED_PILL, False, {"#ffffff"}) == "natives"
 
 
 def test_neighbouring_gap_routes_to_failures():
     from tests.e2e.test_accessibility import classify
 
-    assert classify({**ACCEPTED_PILL, "ratio": 4.1}, False, _palette()) == "failures"
+    assert classify({**ACCEPTED_PILL, "ratio": 3.3}, False, _palette()) == "failures"
     assert classify({**ACCEPTED_PILL, "rule": "button-name"}, True, _palette()) == "failures"
 
 
@@ -690,7 +690,7 @@ def test_report_and_session_summary_contents():
     avec sa catégorie lisible (renvoi à DESIGN.md pour l'écart accepté)."""
     from tests.e2e.test_accessibility import non_failing, sort_findings
 
-    neighbour = {**ACCEPTED_PILL, "ratio": 4.1}
+    neighbour = {**ACCEPTED_PILL, "ratio": 3.3}
     native = {**ACCEPTED_PILL, "fg": "#00ff00", "component": "stCaption"}
     inactive = {**ACCEPTED_PILL, "component": "stCheckbox"}
     report = sort_findings(

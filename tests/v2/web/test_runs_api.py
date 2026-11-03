@@ -1,5 +1,5 @@
 """Routes des runs : annulation (parent puis enfants), instantané, `409 run_busy`, run en erreur,
-commande de test réservée à `WAVELOCALAI_TESTING` (AD-5, AD-14, AD-18)."""
+commande de test réservée à `FRUGAL_AI_TESTING` (AD-5, AD-14, AD-18)."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ import time
 
 from fastapi.testclient import TestClient
 
-from wavelocalai.runs.models import STATUSES
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.runs.models import STATUSES
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..producers import LOCAL_CO2, produce_arena, produce_chat

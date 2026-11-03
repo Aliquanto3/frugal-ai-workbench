@@ -9,34 +9,34 @@ context:
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
   - '{project-root}/_bmad-output/planning-artifacts/reports-v2-inventaire.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
 warnings: []
 deferred:
   - summary: >-
       Variante conservatrice : aucune dépendance CrewAI. Un enchaînement séquentiel de la boucle d'outils de la 6.1 suffit au critère (la sortie d'un agent est l'entrée du suivant). La v1 (`crew_engine.py`) donnait aussi `allow_delegation=True` (un agent peut déléguer à un autre) ; la délégation n'est pas reprise, l'ordre est fixe. La v2 transmet explicitement le texte de l'agent précédent (tronqué à `agents.result_chars`).
     evidence: '`agents/mission.py::MissionRunner.run`, `agents/crews.py::task_for`.'
-    location: src/wavelocalai/agents/mission.py
+    location: src/frugal_ai_workbench/agents/mission.py
     severity: low
   - summary: >-
       Écarts additifs à confirmer. (1) `PUT /api/agents/crews/{id}` et `DELETE /api/agents/crews/{id}` ne sont pas dans le critère : sans eux « Configurer » et « Revenir à l'équipe d'origine » (Q3) n'ont aucune route. (2) `validate` rend toujours `200 {valid, errors}` (et non un `422`) pour que l'écran affiche un message par champ en direct ; `PUT` et le lancement refusent par `422`. (3) Le `model` d'un agent est facultatif (`null` = le modèle de la mission, champ `model` de la commande). (4) Pas de création d'équipe : on modifie une équipe de la bibliothèque (6.6 : « Configurer »). (5) Rôles uniques dans une équipe (`step.agent` identifie l'agent) ; longueurs bornées (rôle 60, objectif 300, contexte 500). (6) `temperature` 0,2 par défaut pour tous les agents (la v1 : 0,7), comme l'agent seul, car les petits modèles appellent mal les outils à chaud.
     evidence: '`agents/crews.py`, `web/routes_agents.py`, `tests/v2/web/test_agent_crew_api.py`.'
-    location: src/wavelocalai/web/routes_agents.py
+    location: src/frugal_ai_workbench/web/routes_agents.py
     severity: low
   - summary: >-
       Pic de mémoire : mesure du **poste** (mémoire vive occupée, total moins disponible, relevée chaque seconde), non celle des seuls modèles de la mission, car aucun relevé par processus Ollama n'existe dans la v2. Il inclut donc le reste du poste. Publié en événement `mission_totals` (durée, pic, agents terminés) plutôt qu'en colonne de `runs` (pas de migration) ; l'instantané le relit (`mission`).
     evidence: '`agents/mission.py::MissionRunner`, `runs/snapshot.py::mission_totals`.'
-    location: src/wavelocalai/agents/mission.py
+    location: src/frugal_ai_workbench/agents/mission.py
     severity: low
   - summary: >-
       Point d'intégration avec la 6.3 (approbation d'un outil sensible, pas encore dans cette branche) : le refus de la 6.1 est gardé pour un agent d'équipe (`tool_result` en échec, aucun envoi). Quand la 6.3 remplacera ce refus dans `AgentLoop._execute`, la boucle étant partagée, l'approbation vaudra pour l'équipe ; `step.agent` dit quel agent la demande. À vérifier à la fusion : un test d'équipe qui approuve un `send_email`.
     evidence: '`tests/v2/web/test_agent_crew_api.py::test_a_sensitive_tool_is_refused_in_a_crew_until_approval_exists`.'
-    location: src/wavelocalai/agents/loop.py
+    location: src/frugal_ai_workbench/agents/loop.py
     severity: low
   - summary: >-
       Rapport partiel : à l'annulation, c'est la réponse du dernier agent **terminé** (texte complet). Le texte déjà généré par l'agent interrompu n'est pas gardé (la réponse d'un tour n'est publiée qu'une fois le tour fini, 6.1). Une erreur d'un agent ne garde pas de rapport partiel (le critère ne parle que de l'arrêt). Les réponses intermédiaires sont tronquées à `agents.summary_chars` dans leur étape `answer` ; leur texte complet va à l'agent suivant.
     evidence: '`tests/v2/web/test_agent_crew_api.py::test_cancelling_keeps_the_partial_report_and_the_mission_totals`.'
-    location: src/wavelocalai/agents/mission.py
+    location: src/frugal_ai_workbench/agents/mission.py
     severity: low
 ---
 
@@ -61,7 +61,7 @@ Lancer une équipe (chercheur, analyste, rédacteur…) sur un sujet, chaque age
 
 ## Notes de développement
 
-- Nouveaux : `agents/crews.py`, `agents/mission.py`, `config/agent_crews.json`. Modifiés : `agents/service.py` (`_start_crew`), `agents/loop.py` (`agent_totals`), `web/routes_agents.py`, `web/app.py`, `runs/snapshot.py` (`mission`), `config.py` et `wavelocalai.toml` (`memory_sample_s`), `contrat-api.md`.
+- Nouveaux : `agents/crews.py`, `agents/mission.py`, `config/agent_crews.json`. Modifiés : `agents/service.py` (`_start_crew`), `agents/loop.py` (`agent_totals`), `web/routes_agents.py`, `web/app.py`, `runs/snapshot.py` (`mission`), `config.py` et `frugal-ai-workbench.toml` (`memory_sample_s`), `contrat-api.md`.
 - Aucune dépendance nouvelle, aucun fichier du front, aucun code d'erreur nouveau.
 
 ## Rapport de dev

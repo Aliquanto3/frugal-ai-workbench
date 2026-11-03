@@ -11,7 +11,7 @@
           "role": "Chercheur",
           "goal": "Collecter données marché",
           "backstory": "Expert en veille stratégique et analyse concurrentielle",
-          "tools": ["get_current_time", "search_wavestone_internal"]
+          "tools": ["get_current_time", "search_internal"]
         },
         {
           "role": "Analyste",

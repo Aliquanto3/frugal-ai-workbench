@@ -8,9 +8,9 @@ from datetime import date
 import httpx
 import pytest
 
-from wavelocalai.config import CarEquivalence
-from wavelocalai.web.app import create_app
-from wavelocalai.web.system_state import cached_fiche
+from frugal_ai_workbench.config import CarEquivalence
+from frugal_ai_workbench.web.app import create_app
+from frugal_ai_workbench.web.system_state import cached_fiche
 
 from ..conftest import make_settings
 from ..producers import produce_chat
@@ -45,7 +45,7 @@ async def test_the_stream_publishes_the_gpu_and_drops_it_without_nvml(system):  
 
 
 async def test_the_test_route_sets_the_gpu_the_stream_publishes(tmp_path):
-    settings = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"})
+    settings = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"})
     app = create_app(settings)
     async with (
         app.router.lifespan_context(app),
@@ -73,7 +73,7 @@ async def test_identity_reads_the_ollama_version_from_the_cached_probe_state(sys
 async def test_identity_answers_in_under_300_ms_just_after_launch(tmp_path):
     """Lancement à froid : la fiche est préchauffée par le démarrage (NVML est lent), la première
     lecture n'a plus qu'à la servir. Mesure consignée dans la spec de la story."""
-    import wavelocalai.web.system_state as state
+    import frugal_ai_workbench.web.system_state as state
 
     state._fiche = None  # NVML froid : la fiche n'a pas encore été capturée dans ce processus
     app = create_app(make_settings(tmp_path))

@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "wavelocalai"
-version = "2.0.0a8"
+name = "frugal-ai-workbench"
+version = "2.0.0a9"
 description = "Démonstrateur de petits modèles de langage locaux (Ollama) avec mesure carbone (CodeCarbon)."
 readme = "README.md"
 license = "MIT"
@@ -75,7 +75,7 @@ dependencies = [
     # Fix pour CrewAI/LangChain (conflit Pydantic v2)
     "crewai>=0.30.0",
     "graphviz>=0.20.1",
-    # --- V2 (src/wavelocalai/) : serveur local, API et SSE natif (fastapi.sse) ---
+    # --- V2 (src/frugal_ai_workbench/) : serveur local, API et SSE natif (fastapi.sse) ---
     "fastapi==0.143.5",
     "uvicorn==0.54.0",
     "ecologits>=0.11.3,<0.12",
@@ -87,8 +87,8 @@ dependencies = [
 ]
 
 [project.scripts]
-wavelocalai = "src.app.launcher:main"
-wavelocalai-v2 = "wavelocalai.__main__:main"
+frugal-ai-workbench = "src.app.launcher:main"
+frugal-ai-workbench-v2 = "frugal_ai_workbench.__main__:main"
 
 [dependency-groups]
 dev = [
@@ -110,7 +110,7 @@ dev = [
     "pyyaml>=6.0.3",
 ]
 
-# Installation éditable seulement (AD-2) : `src.*` (v1) et `wavelocalai` (v2) s'importent tous deux.
+# Installation éditable seulement (AD-2) : `src.*` (v1) et `frugal_ai_workbench` (v2) s'importent tous deux.
 [tool.hatch.build]
 dev-mode-dirs = [".", "src"]
 

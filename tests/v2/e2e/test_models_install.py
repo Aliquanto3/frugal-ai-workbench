@@ -145,7 +145,7 @@ def wait_notice(page, text: str) -> None:
 
 def test_the_screen_lists_what_is_installed_and_what_can_be_installed(models):
     assert models.get_by_role("heading", level=1).inner_text() == "Modèles"
-    assert models.title() == "Modèles · WaveLocalAI"
+    assert models.title() == "Modèles · Frugal AI Workbench"
     # `text_content()` (story 9.9) : `.section-label` les met en majuscules par CSS (`inner_text()`
     # rendrait "SUR CE POSTE"...). Ordre de la maquette (DECISIONS.md §6) : le reranker d'abord, puis
     # « Sur ce poste », le catalogue, les défauts en dernier (pour atteindre reranker et catalogue
@@ -462,7 +462,7 @@ def test_the_filled_install_button_uses_primary_fill_with_white_text(models):
     style = models.locator(".models-install-named").evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color]; }"
     )
-    assert style == ["rgb(69, 29, 199)", "rgb(255, 255, 255)"]
+    assert style == ["rgb(11, 107, 120)", "rgb(255, 255, 255)"]
 
 
 def test_no_api_call_leaves_before_the_shell_is_ready(page, models_server, ollama):

@@ -9,8 +9,8 @@ context:
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
   - '{project-root}/_bmad-output/planning-artifacts/reports-v2-inventaire.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-6-1.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-6-2.md'
 warnings: []
@@ -19,25 +19,25 @@ deferred:
       Écart nouveau, variante conservatrice : l'épique ne dit pas ce que le client reçoit quand il répond trop tard, ni comment l'écran retrouve l'appel d'outil de la demande. Ajouts au contrat : le code **`409 approval_not_pending`** (demande déjà traitée, expirée, inconnue, ou run terminé ; `404 run_not_found` si le run n'existe pas) et deux champs additifs de `approval_required`, `call_id` (l'appel d'outil de l'étape `tool_call`) et `expiry_s` (le délai que l'écran affiche). Les clés `destinataire`, `objet` et `corps` sont celles de l'épique. `expired` n'est jamais accepté d'un client (`422`). Le délai `approval_expiry_s` (600 s) est confirmé tel quel : un seul réglage global, sans prolongation.
     evidence: |-
       `tests/v2/web/test_email_approval_api.py::test_no_answer_in_time_expires_and_nothing_is_sent`, `::test_the_approval_route_refuses_unknown_runs_requests_and_decisions`, `errors.py` (`approval_not_pending`), `contrat-api.md` § « Agents (story 6.3) ».
-    location: src/wavelocalai/web/routes_agents.py
+    location: src/frugal_ai_workbench/web/routes_agents.py
     severity: low
   - summary: >-
       Écarts nouveaux, variante conservatrice, sur le brouillon et le transport (la v1 acceptait tout `to` contenant `@` et faisait toujours STARTTLS). (1) Un seul destinataire, sans espace, virgule, point-virgule ni chevrons, et aucun saut de ligne dans l'adresse ou l'objet (injection d'en-tête) : sinon `tool_result` en échec **sans** demande. Pas de Cc, Cci ni pièce jointe. (2) Un message qui contient un secret de la configuration (mot de passe SMTP, clé d'API) est refusé avant la demande : le texte montré serait masqué, donc différent du texte envoyé. (3) STARTTLS exigé (TLS implicite sur le port 465) avant d'envoyer le mot de passe ; seul un serveur local (`127.0.0.1`, `localhost`, `::1`) peut s'en passer, ce qui sert aux tests et à un relais local. (4) Texte brut UTF-8, `From` = `SMTP_USER`, délai SMTP de 30 s (constante de `outbox.py`, pas un réglage).
     evidence: |-
       `tests/v2/unit/test_email_approval.py` (`check_draft`, transport), `tests/v2/web/test_email_approval_api.py::test_an_invalid_draft_is_refused_without_asking_the_user`, `::test_the_smtp_password_is_never_shown_nor_sent_by_the_agent`.
-    location: src/wavelocalai/agents/outbox.py
+    location: src/frugal_ai_workbench/agents/outbox.py
     severity: low
   - summary: >-
       Limites connues, variante conservatrice. (1) Annuler le run **après** `approved`, pendant l'envoi SMTP : le fil de l'envoi ne peut pas être interrompu, l'email peut donc partir alors que l'étape `tool_result` n'est jamais publiée (l'utilisateur avait approuvé). Annuler pendant l'**attente** est un refus et rien ne part. (2) Le vrai chiffrement n'est pas rejoué : aucun serveur STARTTLS de test ; les tests prouvent que la négociation précède l'envoi du mot de passe (un faux qui coupe après `STARTTLS`) et qu'un serveur distant sans STARTTLS est refusé, jamais un échange TLS réussi. (3) Aucun vrai serveur SMTP joint, aucun email réel : le test d'intégration (Ollama `qwen2.5:1.5b`) vise le faux SMTP local. (4) `runs_active` du flux système ne porte `awaiting_approval` qu'au prochain instantané : le hub ne pousse pas d'événement système au changement de statut (l'écran de la 6.4 lit `approval_required` sur le flux du run).
     evidence: |-
       `agents/outbox.py::deliver`, `tests/v2/unit/test_email_approval.py::test_starttls_is_negotiated_before_the_password_is_sent`, `::test_a_remote_server_without_starttls_never_receives_the_password`, `tests/v2/integration/test_email_approval_ollama.py`.
-    location: src/wavelocalai/agents/outbox.py
+    location: src/frugal_ai_workbench/agents/outbox.py
     severity: low
   - summary: >-
       Pour la 6.5 et la 6.6 (équipe) : « un outil sensible dans une équipe suit l'approbation de 6.3 ». Le hub accepte plusieurs demandes en attente par run (le run reste `awaiting_approval` tant qu'il en reste une) et la boucle prend ses actions sensibles par paramètre (`AgentLoop(actions=…)`, `build_actions(settings)`), mais `approval_required` n'a pas de champ `agent` : la 6.5 l'ajoute (additif) si l'écran d'équipe doit dire quel agent demande. Rien n'est câblé côté équipe ici.
     evidence: |-
       `runs/hub.py::request_approval`, `tests/v2/unit/test_approval_hub.py::test_the_run_stays_awaiting_until_every_pending_request_is_answered`.
-    location: src/wavelocalai/agents/loop.py
+    location: src/frugal_ai_workbench/agents/loop.py
     severity: low
 ---
 

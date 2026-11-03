@@ -18,7 +18,7 @@ def pyproject_version() -> str:
 
 def lock_version() -> str:
     lock = tomllib.loads((ROOT / "uv.lock").read_text(encoding="utf-8"))
-    return next(pkg["version"] for pkg in lock["package"] if pkg["name"] == "wavelocalai")
+    return next(pkg["version"] for pkg in lock["package"] if pkg["name"] == "frugal-ai-workbench")
 
 
 def citation_version() -> str:

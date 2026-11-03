@@ -1,4 +1,4 @@
-"""Arrêt réel de `python -m wavelocalai` avec des flux ouverts (AD-23).
+"""Arrêt réel de `python -m frugal_ai_workbench` avec des flux ouverts (AD-23).
 
 uvicorn attend la fin des connexions **avant** l'arrêt du cycle de vie : un flux système ou le flux
 d'un run actif, s'ils n'étaient pas fermés d'abord, retiendraient l'arrêt sans fin. Le test lance le
@@ -29,8 +29,8 @@ WINDOWS = sys.platform == "win32"
 def _launch(port: int, data_dir, ollama_port: int) -> subprocess.Popen:
     env = {
         **os.environ,
-        "WAVELOCALAI_OLLAMA_HOST": f"http://127.0.0.1:{ollama_port}",
-        "WAVELOCALAI_TESTING": "1",
+        "FRUGAL_AI_OLLAMA_HOST": f"http://127.0.0.1:{ollama_port}",
+        "FRUGAL_AI_TESTING": "1",
         "PYTHONUTF8": "1",
     }
     flags = subprocess.CREATE_NEW_PROCESS_GROUP if WINDOWS else 0  # Ctrl+Break visé
@@ -38,7 +38,7 @@ def _launch(port: int, data_dir, ollama_port: int) -> subprocess.Popen:
         [
             sys.executable,
             "-m",
-            "wavelocalai",
+            "frugal_ai_workbench",
             "--port",
             str(port),
             "--data-dir",
@@ -105,10 +105,10 @@ def test_shutdown_with_open_streams_ends_quickly_and_cancels_active_runs(tmp_pat
             proc.kill()
             proc.wait(timeout=10)
 
-    log = (data / "logs" / "wavelocalai.log").read_text(encoding="utf-8")
+    log = (data / "logs" / "frugal-ai-workbench.log").read_text(encoding="utf-8")
     assert "Application shutdown complete" in log
     assert "timeout graceful shutdown exceeded" not in log
-    with contextlib.closing(sqlite3.connect(data / "wavelocalai.db")) as db:
+    with contextlib.closing(sqlite3.connect(data / "frugal-ai-workbench.db")) as db:
         status = db.execute("SELECT status FROM runs WHERE id = ?", (run_id,)).fetchone()
     assert status == ("cancelled",)
 
@@ -118,7 +118,7 @@ def test_ctrl_break_closes_the_store_and_releases_the_lock(tmp_path):
     """C7 : uvicorn relève le signal d'arrêt à sa sortie ; sous Windows le gestionnaire par défaut
     de `SIGBREAK` tue alors le processus sans passer par les `finally` du lanceur. Le test vérifie
     en sous-processus : sortie 0, base fermée (plus de fichier WAL), verrou relâché."""
-    from wavelocalai.store.datadir import DataDirLock
+    from frugal_ai_workbench.store.datadir import DataDirLock
 
     port, data = closed_port(), tmp_path / "data"
     proc = _launch(port, data, closed_port())
@@ -134,8 +134,10 @@ def test_ctrl_break_closes_the_store_and_releases_the_lock(tmp_path):
             proc.kill()
             proc.wait(timeout=10)
     assert code == 0
-    log = (data / "logs" / "wavelocalai.log").read_text(encoding="utf-8")
+    log = (data / "logs" / "frugal-ai-workbench.log").read_text(encoding="utf-8")
     assert "base fermée, verrou relâché" in log
-    assert not (data / "wavelocalai.db-wal").exists()  # dernière connexion fermée : WAL retiré
+    assert not (
+        data / "frugal-ai-workbench.db-wal"
+    ).exists()  # dernière connexion fermée : WAL retiré
     with DataDirLock(data):  # le verrou est repris sans attente
         pass

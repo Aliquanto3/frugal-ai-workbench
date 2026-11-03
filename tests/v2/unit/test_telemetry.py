@@ -1,4 +1,4 @@
-"""Télémétries coupées (`wavelocalai/telemetry.py`) et ordre des appels (AST, AD-19, AD-21)."""
+"""Télémétries coupées (`frugal_ai_workbench/telemetry.py`) et ordre des appels (AST, AD-19, AD-21)."""
 
 from __future__ import annotations
 
@@ -9,12 +9,12 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.telemetry import TELEMETRY_OPT_OUTS, disable_telemetry
-from wavelocalai.web.app import FASTAPI_TELEMETRY, create_app
+from frugal_ai_workbench.telemetry import TELEMETRY_OPT_OUTS, disable_telemetry
+from frugal_ai_workbench.web.app import FASTAPI_TELEMETRY, create_app
 
 from ..conftest import make_settings
 
-SRC = Path(__file__).resolve().parents[3] / "src" / "wavelocalai"
+SRC = Path(__file__).resolve().parents[3] / "src" / "frugal_ai_workbench"
 TELEMETRY_LIBS = {"fastembed", "huggingface_hub"}
 
 

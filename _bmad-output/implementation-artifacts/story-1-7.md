@@ -7,7 +7,7 @@ baseline_commit: 'eb81d58'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-4.md'
 warnings: []
 deferred:
@@ -15,31 +15,31 @@ deferred:
       Personne ne publie encore `carbon_updated` : la mesure par feuille (CodeCarbon, ecologits) arrive avec la story 2.3, qui appellera `announce_carbon_updated(bus, store, session_id)` après chaque `hub.finish_leaf`. Le port, l'aide et le flux sont livrés et éprouvés ici avec un producteur de test.
     evidence: |-
       `greenops/session.py::announce_carbon_updated`, `tests/v2/unit/test_carbon_session.py`.
-    location: src/wavelocalai/greenops/session.py
+    location: src/frugal_ai_workbench/greenops/session.py
     severity: low
   - summary: >-
       `POST /api/carbon/session/reset` (ouvre une nouvelle `app_session`, `hub.new_app_session("reset")` existe déjà) et l'historique carbone appartiennent à la story Sobriété ; ici seule la lecture de la session courante.
     evidence: |-
       `contrat-api.md` : « Sobriété » liste la remise à zéro.
-    location: src/wavelocalai/web/routes_system.py
+    location: src/frugal_ai_workbench/web/routes_system.py
     severity: low
   - summary: >-
       La fiche machine rend la version d'Ollama que la sonde a vue en dernier (aucun appel réseau, exigé par le critère) : `null` tant qu'aucun échantillon du flux ni `GET /api/health` n'a vu Ollama ; la fiche exportée par Sobriété devra donc être demandée après l'ouverture de l'écran. Un accès à l'état en cache de la sonde (sans la relancer) la lèverait, mais touche `models/ollama_probe.py` (hors périmètre ici).
     evidence: |-
       `SystemSampler.ollama_version`, `test_identity_has_no_ollama_version_before_the_probe_saw_it`.
-    location: src/wavelocalai/web/system_state.py
+    location: src/frugal_ai_workbench/web/system_state.py
     severity: low
   - summary: >-
       Le GPU (mémoire utilisée, température, bridage) n'est pas dans le flux de 2 s : NVML est lent à initialiser et le critère ne le demande pas. `hardware/nvml.py` et `machine_state.py` sont copiés et testés pour l'export de preuve et la jauge GPU des stories suivantes.
     evidence: |-
       `hardware/machine_state.py` : aucun appelant dans `web/` à ce jour.
-    location: src/wavelocalai/hardware/
+    location: src/frugal_ai_workbench/hardware/
     severity: low
   - summary: >-
       Un client lent du flux perd les plus anciens événements de sa file (64) plutôt que de faire grossir la mémoire ; `carbon_updated` portant la somme complète, le suivant corrige. Une file saturée de `system_state` n'arrive qu'en cas de client bloqué.
     evidence: |-
       `SystemFeed.publish`, `test_a_slow_client_loses_the_oldest_events_not_the_memory`.
-    location: src/wavelocalai/runs/system_bus.py
+    location: src/frugal_ai_workbench/runs/system_bus.py
     severity: low
 ---
 
@@ -61,11 +61,11 @@ L'écran d'accueil sait à tout instant si le poste est prêt : Ollama, processe
 
 ## Fichiers
 
-- `src/wavelocalai/hardware/` : `accelerator.py`, `monitor.py`, `fiche.py`, `nvml.py`, `machine_state.py`
-- `src/wavelocalai/runs/system_bus.py` : `SystemBus` (port), `SystemFeed`
-- `src/wavelocalai/greenops/session.py` : `session_summary`, `announce_carbon_updated`
-- `src/wavelocalai/models/ollama_ps.py` : lecture de `/api/ps`
-- `src/wavelocalai/web/` : `routes_system.py`, `system_state.py`, `app.py` (câblage, préchauffage, fermeture du flux)
+- `src/frugal_ai_workbench/hardware/` : `accelerator.py`, `monitor.py`, `fiche.py`, `nvml.py`, `machine_state.py`
+- `src/frugal_ai_workbench/runs/system_bus.py` : `SystemBus` (port), `SystemFeed`
+- `src/frugal_ai_workbench/greenops/session.py` : `session_summary`, `announce_carbon_updated`
+- `src/frugal_ai_workbench/models/ollama_ps.py` : lecture de `/api/ps`
+- `src/frugal_ai_workbench/web/` : `routes_system.py`, `system_state.py`, `app.py` (câblage, préchauffage, fermeture du flux)
 - `tests/v2/` : `unit/{test_system_bus,test_hardware,test_carbon_session}.py`, `web/test_system.py`
 - Aucune dépendance ajoutée (`psutil` et `nvidia-ml-py` sont déjà déclarées) ; `errors.py` inchangé (aucun code nouveau).
 

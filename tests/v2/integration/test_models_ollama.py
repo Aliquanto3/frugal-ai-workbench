@@ -7,10 +7,10 @@ import time
 import pytest
 from fastapi.testclient import TestClient
 
-from wavelocalai.config import load_settings
-from wavelocalai.hardware.memory import MemoryAdvisor
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT
 
@@ -56,7 +56,7 @@ def test_real_route_is_fast_once_cached(real_settings):
 async def test_real_default_temperature_is_what_ollama_publishes_or_null(real_settings):
     import httpx
 
-    from wavelocalai.models.facts import parse_temperature
+    from frugal_ai_workbench.models.facts import parse_temperature
 
     registry = ModelRegistry(real_settings, advisor=MemoryAdvisor())
     await registry.refresh()

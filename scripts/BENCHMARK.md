@@ -1,4 +1,4 @@
-# 📊 WaveLocalAI - Documentation du Benchmark SLM
+# 📊 Frugal AI Workbench - Documentation du Benchmark SLM
 
 ## Table des matières
 
@@ -46,9 +46,9 @@ pip install ollama codecarbon psutil python-dotenv mistralai
 
 ```env
 # CodeCarbon - Code ISO du pays (Impacte le calcul CO2 selon le mix électrique)
-WAVELOCAL_COUNTRY_ISO=FRA
+FRUGAL_AI_COUNTRY_ISO=FRA
 # PUE du datacenter/bureau (Efficacité énergétique du bâtiment)
-WAVELOCAL_PUE=1.1
+FRUGAL_AI_PUE=1.1
 # API Mistral (optionnel)
 MISTRAL_API_KEY=your_key_here
 ```
@@ -314,4 +314,4 @@ Pour ajouter un modèle au benchmark, ajoutez son entrée dans `models.json` ave
 python benchmark_slm.py -m votre-modele:tag
 ```
 
-*Documentation v2.1 - WaveLocalAI Team*
+*Documentation v2.1 - Frugal AI Workbench Team*

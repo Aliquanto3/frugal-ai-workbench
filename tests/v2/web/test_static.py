@@ -7,9 +7,14 @@ import json
 import pytest
 from fastapi.testclient import TestClient
 
-from wavelocalai.errors import error_texts
-from wavelocalai.web.app import create_app
-from wavelocalai.web.routes_static import STATIC_DIR, module_graph, render_index, text_catalog
+from frugal_ai_workbench.errors import error_texts
+from frugal_ai_workbench.web.app import create_app
+from frugal_ai_workbench.web.routes_static import (
+    STATIC_DIR,
+    module_graph,
+    render_index,
+    text_catalog,
+)
 
 from ..conftest import TEST_PORT, make_settings
 

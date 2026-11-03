@@ -14,8 +14,8 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.config import load_settings
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT
 
@@ -106,7 +106,7 @@ async def test_two_documents_are_indexed_with_a_real_embedding_model(real_settin
 def _search(store, index, vector, k):
     import sqlite3
 
-    from wavelocalai.store.vec import load_vec
+    from frugal_ai_workbench.store.vec import load_vec
 
     conn = sqlite3.connect(store.path)
     try:

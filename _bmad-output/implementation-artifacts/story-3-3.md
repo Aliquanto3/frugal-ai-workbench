@@ -7,7 +7,7 @@ baseline_commit: '8cefd9a'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-2-4.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-3-1.md'
 warnings: []
@@ -16,43 +16,43 @@ deferred:
       Écran (seconde passe) : l'avertissement « note peu fiable » vient de l'événement `judge`, donc il n'apparaît qu'au lancement ; avant, le panneau ne donne qu'une aide statique (« moins de 4 milliards de paramètres actifs »), parce que le front ne calcule rien (la règle `is_weak_judge` reste au serveur). Les critères modifiés ne sont pas gardés d'une visite à l'autre (aucun brouillon, contrairement à la question) ; le classement qui lit ces notes est la story 3.4.
     evidence: |-
       `test_a_column_shows_notation_then_its_score_its_reason_and_the_one_judge_label`, `test_the_criteria_panel_is_folded_and_proposes_the_default_judge_and_criteria` (`tests/v2/e2e/test_arena.py`).
-    location: src/wavelocalai/web/static/screens/arena-judge.js
+    location: src/frugal_ai_workbench/web/static/screens/arena-judge.js
     severity: low
   - summary: >-
       Écran : une colonne en `timeout`, `failed`, `cancelled` ou `interrupted` n'a pas de `judge_score` (contrat) ; l'écran lit son statut et affiche « Non évalué » avec « délai dépassé », « échec du modèle », « comparaison arrêtée » ou « comparaison interrompue ». Le même texte devra être repris par le classement (3.4).
     evidence: |-
       `test_not_evaluated_is_said_with_its_reason_and_is_never_zero`.
-    location: src/wavelocalai/web/static/components/wl-arena-lane.js
+    location: src/frugal_ai_workbench/web/static/components/wl-arena-lane.js
     severity: low
   - summary: >-
-      Ajout à la route de test `POST /api/test/arena` (`judge` : tag, origine, script) : elle câble le vrai service de notation avec un juge `fake`, pour les parcours E2E. Elle n'existe qu'avec `WAVELOCALAI_TESTING`.
+      Ajout à la route de test `POST /api/test/arena` (`judge` : tag, origine, script) : elle câble le vrai service de notation avec un juge `fake`, pour les parcours E2E. Elle n'existe qu'avec `FRUGAL_AI_TESTING`.
     evidence: |-
-      `src/wavelocalai/web/routes_test.py` ; `tests/v2/e2e/test_arena.py` (`scripted(..., judge=...)`).
-    location: src/wavelocalai/web/routes_test.py
+      `src/frugal_ai_workbench/web/routes_test.py` ; `tests/v2/e2e/test_arena.py` (`scripted(..., judge=...)`).
+    location: src/frugal_ai_workbench/web/routes_test.py
     severity: low
   - summary: >-
       Ajouts au contrat d'API, à valider avec la story 3.6 : l'événement `judge` (juge retenu, `unreliable`, `single_judge`, `default_criteria`), la clé `judge` de `judge_score`, le code d'erreur `invalid_output` (502, sortie structurée non conforme au schéma) et `LANE_STATUSES` qui compte `judging`. `judging` ne précède que les réponses réellement notées (pas de `judging` pour une réponse vide ni sans juge).
     evidence: |-
       `contrat-api.md` ; `test_each_finished_lane_is_judged_then_done_and_the_judge_is_a_silent_child`, `test_an_empty_answer_is_not_evaluated_and_never_zero`.
-    location: _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
+    location: _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
     severity: low
   - summary: >-
       Une lane en `timeout`, `failed` ou `cancelled` n'a pas de `judge_score` (la notation ne porte que sur une lane terminée) ; l'écran et le classement (3.4) lisent son statut de lane pour dire « non évalué ». Le juge n'est jamais relancé (pas de `retry_interrupted`) et la réponse est tronquée à 12 000 caractères pour lui ; un seul juge, sans panel (« un seul juge » est toujours vrai tant que le panel n'existe pas).
     evidence: |-
-      `src/wavelocalai/evaluation/judge.py` (`MAX_ANSWER_CHARS`), `test_invalid_or_unavailable_judge_gives_null_with_a_reason_never_zero`.
-    location: src/wavelocalai/evaluation/judge.py
+      `src/frugal_ai_workbench/evaluation/judge.py` (`MAX_ANSWER_CHARS`), `test_invalid_or_unavailable_judge_gives_null_with_a_reason_never_zero`.
+    location: src/frugal_ai_workbench/evaluation/judge.py
     severity: low
   - summary: >-
       Le validateur de sortie structurée est minimal (type, required, properties, additionalProperties, enum, minimum, maximum, items) parce que `jsonschema` n'est qu'une dépendance de développement. Les schémas plus riches (`oneOf`, `$ref`, `pattern`) ne sont pas vérifiés : à étendre si un service en a besoin (Self-RAG, évaluation).
     evidence: |-
       `tests/v2/unit/test_structured_output.py`.
-    location: src/wavelocalai/models/structured.py
+    location: src/frugal_ai_workbench/models/structured.py
     severity: low
   - summary: >-
       Le schéma est envoyé en mode `strict` à OpenAI seulement ; Groq et Mistral le reçoivent sans garantie de conformité stricte (Mistral en `strict: true`, Groq non strict : tous ses modèles ne supportent pas `json_schema`), d'où la vérification côté serveur. Les adaptateurs cloud n'ont pas été éprouvés contre les vrais services dans cette passe (aucun appel payant) : les corps de requête le sont contre les vrais SDK avec un faux transport.
     evidence: |-
       `test_openai_compatible_sends_json_schema_response_format`, `test_mistral_sends_json_schema_and_validates`, `test_anthropic_forces_a_tool_carrying_the_schema_and_returns_its_json`.
-    location: src/wavelocalai/models/openai_compat.py
+    location: src/frugal_ai_workbench/models/openai_compat.py
     severity: low
 ---
 
@@ -74,11 +74,11 @@ Chaque lane terminée de l'Arène est notée sur 100 par un modèle juge, avec s
 
 ## Fichiers
 
-- `src/wavelocalai/models/structured.py` (nouveau) : `parse_structured`, `StructuredCheck`, validateur minimal ; `models/{ollama,openai_compat,mistral,anthropic}.py` : `response_schema` ; `errors.py` : `invalid_output`
-- `src/wavelocalai/evaluation/judge.py` (nouveau) : `Judge`, `build_request`, `JUDGE_SCHEMA`
-- `src/wavelocalai/inference/judge_port.py` (nouveau) : `LaneJudge`, `JudgeVerdict`, raisons « non évalué » (`inference/` n'importe pas `evaluation/` : le service est câblé dans `web/app.py`)
-- `src/wavelocalai/inference/arena.py` : juge par défaut, événement `judge`, `_judge_lane`, enveloppe d'enregistrement de la réponse ; `inference/streaming.py` : `capture` (appel silencieux) ; `models/defaults.py` : `is_weak_judge`
-- `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md` : événements `judge` et `judge_score`, paramètres de lancement
+- `src/frugal_ai_workbench/models/structured.py` (nouveau) : `parse_structured`, `StructuredCheck`, validateur minimal ; `models/{ollama,openai_compat,mistral,anthropic}.py` : `response_schema` ; `errors.py` : `invalid_output`
+- `src/frugal_ai_workbench/evaluation/judge.py` (nouveau) : `Judge`, `build_request`, `JUDGE_SCHEMA`
+- `src/frugal_ai_workbench/inference/judge_port.py` (nouveau) : `LaneJudge`, `JudgeVerdict`, raisons « non évalué » (`inference/` n'importe pas `evaluation/` : le service est câblé dans `web/app.py`)
+- `src/frugal_ai_workbench/inference/arena.py` : juge par défaut, événement `judge`, `_judge_lane`, enveloppe d'enregistrement de la réponse ; `inference/streaming.py` : `capture` (appel silencieux) ; `models/defaults.py` : `is_weak_judge`
+- `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md` : événements `judge` et `judge_score`, paramètres de lancement
 - Tests : `unit/test_structured_output.py`, `web/test_arena_judge_api.py`, `integration/test_judge_ollama.py` ; `web/test_arena_api.py` (feuilles `judge`) et `integration/test_arena_ollama.py` (juge nommé) réalignés
 
 ## Seconde passe : l'écran

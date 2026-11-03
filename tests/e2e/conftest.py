@@ -41,13 +41,13 @@ FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 # Rôle → (variable d'environnement, tag Ollama par défaut). Petits modèles du catalogue
 # (config/models_catalog.json), ceux des parcours d'audit.
 MODEL_ENV = {
-    "chat": ("WAVELOCALAI_E2E_MODEL_CHAT", "gemma3:1b"),
-    "small": ("WAVELOCALAI_E2E_MODEL_SMALL", "granite4:350m"),
-    "agent": ("WAVELOCALAI_E2E_MODEL_AGENT", "qwen3.5:0.8b"),
+    "chat": ("FRUGAL_AI_E2E_MODEL_CHAT", "gemma3:1b"),
+    "small": ("FRUGAL_AI_E2E_MODEL_SMALL", "granite4:350m"),
+    "agent": ("FRUGAL_AI_E2E_MODEL_AGENT", "qwen3.5:0.8b"),
     # Juge de l'Arène : par défaut, le modèle de chat.
-    "judge": ("WAVELOCALAI_E2E_MODEL_JUDGE", None),
+    "judge": ("FRUGAL_AI_E2E_MODEL_JUDGE", None),
 }
-CHROMIUM_ENV = "WAVELOCALAI_E2E_CHROMIUM"
+CHROMIUM_ENV = "FRUGAL_AI_E2E_CHROMIUM"
 # Services de fond de Chromium (mises à jour de composants, synchronisation…) : coupés, pour
 # qu'aucune requête ne quitte la machine, même hors des pages.
 CHROMIUM_ARGS = [
@@ -57,7 +57,7 @@ CHROMIUM_ARGS = [
     "--disable-sync",
     "--no-pings",
 ]
-TIMEOUT_ENV = "WAVELOCALAI_E2E_TIMEOUT_S"
+TIMEOUT_ENV = "FRUGAL_AI_E2E_TIMEOUT_S"
 
 # Largeur de la cible principale (EXPERIENCE.md, Responsive) ; fenêtre haute : le contenu
 # défile dans un conteneur interne.
@@ -96,7 +96,7 @@ USER_DATA_PATHS = (
 
 
 def _timeout_ms() -> int:
-    """Délai de génération (WAVELOCALAI_E2E_TIMEOUT_S) en ms : un nombre de secondes > 0."""
+    """Délai de génération (FRUGAL_AI_E2E_TIMEOUT_S) en ms : un nombre de secondes > 0."""
     raw = os.environ.get(TIMEOUT_ENV)
     if raw is None or raw == "":
         return helpers.GENERATION_TIMEOUT_MS
@@ -408,7 +408,7 @@ def app(ollama_models, app_extra_env, tmp_path_factory):
 @pytest.fixture(scope="session")
 def browser():
     """Chromium de Playwright (déjà installé : `python -m playwright install chromium`), ou
-    l'exécutable de WAVELOCALAI_E2E_CHROMIUM. Aucun téléchargement pendant les tests."""
+    l'exécutable de FRUGAL_AI_E2E_CHROMIUM. Aucun téléchargement pendant les tests."""
     from playwright.sync_api import sync_playwright
 
     executable = os.environ.get(CHROMIUM_ENV) or None
@@ -472,7 +472,7 @@ def page(context):
 
 @pytest.fixture
 def generation_timeout_ms() -> int:
-    """Délai d'une génération réelle (WAVELOCALAI_E2E_TIMEOUT_S, 300 s par défaut)."""
+    """Délai d'une génération réelle (FRUGAL_AI_E2E_TIMEOUT_S, 300 s par défaut)."""
     return _timeout_ms()
 
 

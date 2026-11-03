@@ -17,15 +17,15 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.rag import rerank
-from wavelocalai.rag.rerank import (
+from frugal_ai_workbench.rag import rerank
+from frugal_ai_workbench.rag.rerank import (
     FakeReranker,
     RerankerService,
     RerankerUnavailableError,
     cache_dir,
     load_fastembed,
 )
-from wavelocalai.rag.strategies import (
+from frugal_ai_workbench.rag.strategies import (
     RERANK_POOL_MAX,
     merge_best,
     rerank_pool,

@@ -13,7 +13,7 @@ import asyncio
 import httpx
 import pytest
 
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT
 from ..web.conftest import parse_sse

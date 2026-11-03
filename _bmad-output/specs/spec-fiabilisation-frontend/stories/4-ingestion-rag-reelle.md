@@ -8,7 +8,7 @@ review_loop_iteration: 0
 followup_review_recommended: true
 context:
   - '{project-root}/AGENTS.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
 warnings: []
 deferred:
   - summary: >-

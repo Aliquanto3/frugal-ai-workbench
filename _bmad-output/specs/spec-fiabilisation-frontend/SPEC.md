@@ -3,18 +3,18 @@ id: SPEC-fiabilisation-frontend
 companions:
   - ../../../AGENTS.md
   - ../../../docs/audits/frontend-2026-09/SYNTHESE.md
-  - ../../planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md
-  - ../../planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md
+  - ../../planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md
+  - ../../planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md
 sources: []
 ---
 
 > **Canonical contract.** This SPEC and the files in `companions:` are the complete, preservation-validated contract for what to build, test, and validate. Source documents listed in frontmatter are for traceability — consult them only if you need narrative rationale or prose color this contract intentionally omits.
 
-# Fiabilisation et refonte UI/UX du front Streamlit (WaveLocalAI v1)
+# Fiabilisation et refonte UI/UX du front Streamlit (Frugal AI Workbench v1)
 
 ## Why
 
-C'est une douleur à résoudre, liée à une échéance d'usage. Deux audits (`poste-rtx3060` et `pro-elitebook-x360`) montrent un front qui ment : import RAG factice, CO₂ affiché ×1000, succès affichés sur des échecs. Ce front expose aussi le serveur au réseau, perd des réponses et ne ressemble ni à Wavestone ni à son propos souverain. Les consultants qui le montrent en avant-vente et en formation interne ne peuvent pas s'y fier. Les constats (E1–E3, F1–F17, U1–U20) sont catalogués dans `SYNTHESE.md`, avec leur fichier et leur ligne.
+C'est une douleur à résoudre, liée à une échéance d'usage. Deux audits (`poste-rtx3060` et `pro-elitebook-x360`) montrent un front qui ment : import RAG factice, CO₂ affiché ×1000, succès affichés sur des échecs. Ce front expose aussi le serveur au réseau, perd des réponses et ne n'a ni identité propre ni ne ressemble à son propos souverain. Les consultants qui le montrent en avant-vente et en formation interne ne peuvent pas s'y fier. Les constats (E1–E3, F1–F17, U1–U20) sont catalogués dans `SYNTHESE.md`, avec leur fichier et leur ligne.
 
 ## Capabilities
 
@@ -51,7 +51,7 @@ C'est une douleur à résoudre, liée à une échéance d'usage. Deux audits (`p
     - le juge par défaut fait au moins ~4B quand un tel modèle tient ; sinon, un avertissement s'affiche ;
     - l'Arène exige 2 modèles.
 - **CAP-6** — Interface à la charte, accessible et cohérente
-  - **intent:** L'interface ressemble à Wavestone et se lit sans effort.
+  - **intent:** L'interface a une identité propre et se lit sans effort.
   - **success:**
     - zéro violation axe `color-contrast` ou `heading-order` imputable au thème de l'app, en clair comme en sombre ;
     - un seul nom par module et par commande ;

@@ -99,9 +99,9 @@ def names(page, usage: str) -> list[str]:
 def leave_and_return(page, server) -> None:
     """Quitte l'écran pour l'Accueil puis y revient (le routeur le garde monté et le masque)."""
     page.goto(f"{server.base_url}/#/")
-    wait_for(page, "() => document.title === 'Accueil · WaveLocalAI'")
+    wait_for(page, "() => document.title === 'Accueil · Frugal AI Workbench'")
     page.goto(f"{server.base_url}/#/arene/references")
-    wait_for(page, "() => document.title === 'Références · WaveLocalAI'")
+    wait_for(page, "() => document.title === 'Références · Frugal AI Workbench'")
 
 
 def arena_values(page) -> str:
@@ -118,7 +118,7 @@ def arena_values(page) -> str:
 def test_one_card_per_usage_with_the_best_group_by_name_and_no_rank(page, refs_server):
     open_references(page, refs_server)
     assert page.get_by_role("heading", level=1).inner_text() == "Références"
-    assert page.title() == "Références · WaveLocalAI"
+    assert page.title() == "Références · Frugal AI Workbench"
     assert page.locator(".screen-tabs [aria-current='page']").inner_text() == "Références"
     assert [h.inner_text() for h in page.locator(".ref-card h3").all()] == [
         "Raisonnement",

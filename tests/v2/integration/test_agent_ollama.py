@@ -12,9 +12,9 @@ import asyncio
 import httpx
 import pytest
 
-from wavelocalai.agents.tools import AgentTool
-from wavelocalai.config import load_settings
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.agents.tools import AgentTool
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT
 from ..web.conftest import parse_sse

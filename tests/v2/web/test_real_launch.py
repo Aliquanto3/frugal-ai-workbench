@@ -1,4 +1,4 @@
-"""Lancement réel de `python -m wavelocalai` en sous-processus (données en dossier temporaire,
+"""Lancement réel de `python -m frugal_ai_workbench` en sous-processus (données en dossier temporaire,
 Ollama pointé sur un port fermé : aucun vrai réseau hors de la boucle locale)."""
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ def _get(port: int, path: str, host: str | None = None):
 def _launch(port: int, data_dir, ollama_port: int) -> subprocess.Popen:
     env = {
         **os.environ,
-        "WAVELOCALAI_OLLAMA_HOST": f"http://127.0.0.1:{ollama_port}",
+        "FRUGAL_AI_OLLAMA_HOST": f"http://127.0.0.1:{ollama_port}",
         # Sortie tubée sous Windows : sinon encodée en cp1252, illisible en UTF-8.
         "PYTHONIOENCODING": "utf-8",
     }
@@ -36,7 +36,7 @@ def _launch(port: int, data_dir, ollama_port: int) -> subprocess.Popen:
         [
             sys.executable,
             "-m",
-            "wavelocalai",
+            "frugal_ai_workbench",
             "--port",
             str(port),
             "--data-dir",
@@ -86,7 +86,7 @@ def test_real_server_answers_health_refuses_foreign_host_and_a_second_launch(tmp
         # Un second serveur sur le même dossier de données refuse de démarrer.
         second = _launch(closed_port(), data, closed_port())
         _, err = second.communicate(timeout=30)
-        assert second.returncode == 1 and "autre wavelocalai-v2" in err
+        assert second.returncode == 1 and "autre frugal-ai-workbench-v2" in err
 
         # Un second serveur sur le même port (autre dossier) aussi.
         third = _launch(port, tmp_path / "autre", closed_port())
@@ -95,4 +95,4 @@ def test_real_server_answers_health_refuses_foreign_host_and_a_second_launch(tmp
     finally:
         proc.terminate()
         proc.communicate(timeout=30)
-    assert (data / "logs" / "wavelocalai.log").is_file()
+    assert (data / "logs" / "frugal-ai-workbench.log").is_file()

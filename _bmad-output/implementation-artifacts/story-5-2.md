@@ -8,9 +8,9 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-5-1.md'
   - '{project-root}/docs/maquette-v2/notes/sobriete.md'
 warnings: []
@@ -19,19 +19,19 @@ deferred:
       Écarts nouveaux de l'historique, non couverts par `epics.md` ni les décisions du 2026-10-19 : variante la plus conservatrice gardée pour chacun. (1) « Fin » d'une session = fin de sa dernière réponse comptée : `app_sessions` ne stocke que le début, et ajouter une colonne `closed_at` demanderait une migration (aucune n'est ajoutée : pas de `0007`). Une session close par un redémarrage n'a ainsi pas la durée d'arrêt du serveur dans sa « fin ». (2) La période (`7d`, `30d`) filtre sur cette dernière réponse, non sur le début : une session commencée il y a 8 jours dont la dernière réponse date de la veille figure dans « 7 jours ». (3) Une session sans aucune feuille comptée (un démarrage sans réponse) n'est pas listée : chaque lancement ajouterait sinon une ligne vide. (4) Local et Cloud : une origine sans aucune réponse vaut 0 (« aucun appel » au tableau, comme la maquette), une origine dont toutes les réponses sont sans mesure est nulle (« non mesuré ») ; `total_mg` est nul quand aucune réponse de la session n'est mesurée (barre absente, jamais 0).
     evidence: |-
       `greenops/history.py`, `tests/v2/unit/test_carbon_history.py` (`test_a_session_with_nothing_measured_*`, `test_an_origin_*`, `test_windows_*`, `test_a_session_without_any_counted_run_*`).
-    location: src/wavelocalai/greenops/history.py
+    location: src/frugal_ai_workbench/greenops/history.py
     severity: low
   - summary: >-
       Choix de conception à confirmer. (1) « un run actif pendant la remise à zéro reste compté dans la session où il a commencé » a exigé une correction du hub (story 2.x, code livré) : une feuille enfant créée après la remise à zéro prend la session de son run racine (`_Run.app_session`), non la session courante, sinon la deuxième voie d'une Arène lancée avant le clic partait dans la nouvelle session. Une feuille racine garde la session où elle a été créée, comme avant. (2) `POST /api/carbon/session/reset` sur une session vide est accepté côté serveur (une session vide de plus, non listée) : seul l'écran le désactive, comme le demande la décision n° 16 ; variante la plus simple, sans nouveau code d'erreur ni `409`. (3) « Remettre le compteur à zéro » n'ouvre pas `wl-confirm-dialog` : EXPERIENCE.md dit « sans confirmation » (la session close reste dans l'historique). Après le clic le bouton se désactive : le focus passe au titre de la section, la fin est annoncée en `polite`. (4) L'historique est relu à chaque `carbon_updated` (une lecture SQL par réponse, jamais en boucle) : un run actif au moment de la remise à zéro finit dans la session close, dont le total change après coup ; avec une période sans session, une lecture de `all` de plus dit si des sessions plus anciennes existent (« Aucune session sur cette période… » ou « Aucune session mesurée pour l'instant. »).
     evidence: |-
       `runs/hub.py::create_run`, `tests/v2/unit/test_carbon_history.py::test_an_active_run_keeps_counting_*`, `tests/v2/web/test_carbon_history_api.py`, `screens/sobriety-reset.js`, `screens/sobriety-history.js::read`.
-    location: src/wavelocalai/runs/hub.py
+    location: src/frugal_ai_workbench/runs/hub.py
     severity: medium
   - summary: >-
-      Composants et contrat partagés. `wl-chart-svg` ne traçait que des nuages de points : un graphique qui porte `bars` (au lieu de `points`) est maintenant tracé en barres par `components/chart-bars.js` (même titre, description et bouton « Voir le tableau » ; mode d'emploi en tête du fichier). `core/chart-scale.js` gagne `barBands`, `barHeight`, `labelStride` et `core/format.js` `formatShortDateTime` (étiquette d'abscisse). Une barre trop basse garde 2 px (jamais invisible), les étiquettes d'abscisse sont espacées quand elles se chevaucheraient, la valeur est écrite au-dessus de la barre quand sa bande est assez large. Route de test `POST /api/test/carbon-sessions` (sessions closes du passé, `WAVELOCALAI_TESTING`). `contrat-api.md` : sous-section « Historique carbone et remise à zéro (story 5.2) ». Aucune migration, aucun ajout à `errors.py`, aucune dépendance.
+      Composants et contrat partagés. `wl-chart-svg` ne traçait que des nuages de points : un graphique qui porte `bars` (au lieu de `points`) est maintenant tracé en barres par `components/chart-bars.js` (même titre, description et bouton « Voir le tableau » ; mode d'emploi en tête du fichier). `core/chart-scale.js` gagne `barBands`, `barHeight`, `labelStride` et `core/format.js` `formatShortDateTime` (étiquette d'abscisse). Une barre trop basse garde 2 px (jamais invisible), les étiquettes d'abscisse sont espacées quand elles se chevaucheraient, la valeur est écrite au-dessus de la barre quand sa bande est assez large. Route de test `POST /api/test/carbon-sessions` (sessions closes du passé, `FRUGAL_AI_TESTING`). `contrat-api.md` : sous-section « Historique carbone et remise à zéro (story 5.2) ». Aucune migration, aucun ajout à `errors.py`, aucune dépendance.
     evidence: |-
       `components/chart-bars.js`, `tests/v2/e2e/test_sobriety_history.py::test_the_bar_scale_helpers`, `test_many_sessions_keep_the_chart_readable_*`.
-    location: src/wavelocalai/web/static/components/chart-bars.js
+    location: src/frugal_ai_workbench/web/static/components/chart-bars.js
     severity: low
 ---
 

@@ -24,7 +24,7 @@ Chaque module est marqué `e2e`. Le `-m "not e2e"` de `pytest.ini` les exclut de
   .venv-app/bin/python -m playwright install chromium
   ```
 
-  Pour un Chromium déjà présent ailleurs, indiquer son exécutable dans `WAVELOCALAI_E2E_CHROMIUM`.
+  Pour un Chromium déjà présent ailleurs, indiquer son exécutable dans `FRUGAL_AI_E2E_CHROMIUM`.
 - **L'app habituelle arrêtée.** La suite vérifie que les données réelles sont identiques avant et après : `data/chroma`, `data/logs`, `data/exports`, `data/benchmarks.db`, `data/models.json` et `outputs/`. Une app lancée à côté, qui écrit ses émissions dans `data/logs`, ferait échouer cette vérification.
 
 ## Lancer
@@ -41,13 +41,13 @@ Compter 10 à 20 minutes selon la machine. Chaque module lance sa propre instanc
 
 | Variable | Défaut | Rôle |
 |---|---|---|
-| `WAVELOCALAI_E2E_MODEL_CHAT` | `gemma3:1b` | Chat libre, banc d'essai, Arène, assistant documentaire |
-| `WAVELOCALAI_E2E_MODEL_SMALL` | `granite4:350m` | Second modèle de l'Arène. Dans `test_arena_timeout.py`, il reçoit un délai volontairement trop court. Il doit donc différer du modèle de chat et du juge. |
-| `WAVELOCALAI_E2E_MODEL_AGENT` | `qwen3.5:0.8b` | Agent seul et équipe d'agents. Il doit savoir appeler des outils (calculatrice, email). |
-| `WAVELOCALAI_E2E_MODEL_JUDGE` | le modèle de chat | Juge de l'Arène |
-| `WAVELOCALAI_E2E_TIMEOUT_S` | `300` | Délai d'attente des tests pour une génération réelle, premier chargement compris (secondes, > 0) |
-| `WAVELOCALAI_E2E_SHORT_TIMEOUT_S` | `0.05` | Délai d'inférence imposé par le lanceur au seul petit modèle dans `test_arena_timeout.py`, pour provoquer « Délai dépassé » (secondes, > 0) |
-| `WAVELOCALAI_E2E_CHROMIUM` | Chromium de Playwright | Exécutable Chromium à utiliser |
+| `FRUGAL_AI_E2E_MODEL_CHAT` | `gemma3:1b` | Chat libre, banc d'essai, Arène, assistant documentaire |
+| `FRUGAL_AI_E2E_MODEL_SMALL` | `granite4:350m` | Second modèle de l'Arène. Dans `test_arena_timeout.py`, il reçoit un délai volontairement trop court. Il doit donc différer du modèle de chat et du juge. |
+| `FRUGAL_AI_E2E_MODEL_AGENT` | `qwen3.5:0.8b` | Agent seul et équipe d'agents. Il doit savoir appeler des outils (calculatrice, email). |
+| `FRUGAL_AI_E2E_MODEL_JUDGE` | le modèle de chat | Juge de l'Arène |
+| `FRUGAL_AI_E2E_TIMEOUT_S` | `300` | Délai d'attente des tests pour une génération réelle, premier chargement compris (secondes, > 0) |
+| `FRUGAL_AI_E2E_SHORT_TIMEOUT_S` | `0.05` | Délai d'inférence imposé par le lanceur au seul petit modèle dans `test_arena_timeout.py`, pour provoquer « Délai dépassé » (secondes, > 0) |
+| `FRUGAL_AI_E2E_CHROMIUM` | Chromium de Playwright | Exécutable Chromium à utiliser |
 
 Les tags sont ceux d'Ollama (`ollama list`). Les sélecteurs de l'app affichent le nom du catalogue (`data/models.json`). Les tests le retrouvent à partir du tag.
 
@@ -111,7 +111,7 @@ Chaque constat de `docs/audits/frontend-2026-09/SYNTHESE.md` (§3) a au moins un
 
 | Constat | Test e2e | Couverture hors navigateur |
 |---|---|---|
-| U1 Aucune identité Wavestone | `test_pages.py::test_primary_action_uses_brand_color` (couleur, police Inter locale, fond), `test_accessibility.py` (fond clair et sombre) | `tests/app/test_theme.py::test_theme_colors_match_design` |
+| U1 Aucune identité visuelle | `test_pages.py::test_primary_action_uses_brand_color` (couleur, police Inter locale, fond), `test_accessibility.py` (fond clair et sombre) | `tests/app/test_theme.py::test_theme_colors_match_design` |
 | U2 Emojis en guise d'icônes et de titres | `test_pages.py::test_page_structure` : aucun emoji dans h1–h4 | `tests/app/test_theme.py::test_app_sources_have_no_emoji` |
 | U3 Barre d'outils de développement | `test_pages.py::test_home_is_local_and_available` : pas de bouton Deploy | `tests/app/test_theme.py::test_toolbar_and_static_serving` |
 | U4 Rouge pour l'action principale | `test_pages.py::test_primary_action_uses_brand_color` | — |

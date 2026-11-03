@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Synchronise les résultats de benchmark publiés par slm-quality-bench.
 
-wavelocalai ne produit plus de résultats de benchmark : ils viennent de la
+frugal-ai-workbench ne produit plus de résultats de benchmark : ils viennent de la
 dernière release de `Aliquanto3/slm-quality-bench`, qui publie l'asset
 `slm-quality-results.json`. Ce script :
 
@@ -121,7 +121,7 @@ def _write_outputs(env: Mapping[str, str], changed: bool, version: str) -> None:
 def _api_headers(env: Mapping[str, str]) -> dict[str, str]:
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "wavelocalai-sync-slm-results",
+        "User-Agent": "frugal-ai-workbench-sync-slm-results",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     token = env.get("GITHUB_TOKEN")
@@ -265,7 +265,9 @@ def sync(
         _write_outputs(env, False, tag)
         return 0
 
-    status, asset_bytes = transport(asset_url, {"User-Agent": "wavelocalai-sync-slm-results"})
+    status, asset_bytes = transport(
+        asset_url, {"User-Agent": "frugal-ai-workbench-sync-slm-results"}
+    )
     if status != 200:
         raise SyncError(f"Téléchargement de {asset_url} impossible (HTTP {status}).")
     asset_sha = _sha256(asset_bytes)
@@ -277,7 +279,9 @@ def sync(
         f"https://raw.githubusercontent.com/{repo}/{urllib.parse.quote(tag)}/"
         + SCHEMA_PATH.format(schema_id=schema_id)
     )
-    status, schema_bytes = transport(schema_url, {"User-Agent": "wavelocalai-sync-slm-results"})
+    status, schema_bytes = transport(
+        schema_url, {"User-Agent": "frugal-ai-workbench-sync-slm-results"}
+    )
     if status != 200:
         raise SyncError(f"Téléchargement du JSON Schema impossible (HTTP {status}) : {schema_url}")
     schema = _loads(schema_bytes, "Le JSON Schema téléchargé")

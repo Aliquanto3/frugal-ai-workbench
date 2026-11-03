@@ -1,7 +1,7 @@
 """Verdict local/cloud (story 3.5) : table de prix de `Settings` et calcul pur, sans serveur.
 
 Les prix de ces tests sont fictifs (ils servent à vérifier l'arithmétique) : la vraie table de
-`wavelocalai.toml` est vide tant qu'aucun prix sourcé n'est relevé.
+`frugal-ai-workbench.toml` est vide tant qu'aucun prix sourcé n'est relevé.
 """
 
 from __future__ import annotations
@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.config import DEFAULT_TOML, ConfigError, PriceTable, load_settings
-from wavelocalai.runs.verdict import (
+from frugal_ai_workbench.config import DEFAULT_TOML, ConfigError, PriceTable, load_settings
+from frugal_ai_workbench.runs.verdict import (
     MODEL_NOT_PRICED,
     NO_PRICE_TABLE,
     REQUESTS,
@@ -70,7 +70,7 @@ def test_the_shipped_toml_loads_with_its_price_table():
 
 
 def test_a_price_table_is_read_from_the_toml_with_its_date(tmp_path):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text(
         '[cloud.prices]\ncurrency = "USD"\nretrieved_at = 2026-03-04\nsource = "https://x.invalid"\n'
         '[cloud.prices.models]\n"fake/cloud" = { input_per_mtok = 2.0, output_per_mtok = 10.0 }\n',
@@ -97,7 +97,7 @@ def test_a_price_table_is_read_from_the_toml_with_its_date(tmp_path):
     ],
 )
 def test_a_price_table_needs_a_date_and_a_source(tmp_path, content):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text(content, encoding="utf-8")
     with pytest.raises(ConfigError, match="Réglages invalides"):
         load_settings(toml, tmp_path / "absent.env", environ={})

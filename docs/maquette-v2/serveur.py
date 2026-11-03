@@ -60,7 +60,7 @@ def make_server(port: int = 0, root: Path = ROOT) -> Server:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Sert la maquette de WaveLocalAI v2.")
+    parser = argparse.ArgumentParser(description="Sert la maquette de Frugal AI Workbench v2.")
     parser.add_argument("--port", type=int, default=0, help="port (libre par défaut)")
     parser.add_argument(
         "--sans-navigateur", action="store_true", help="ne pas ouvrir le navigateur"

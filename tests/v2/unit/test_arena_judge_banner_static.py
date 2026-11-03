@@ -9,12 +9,12 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.evaluation.judge import _PhasedModel
-from wavelocalai.inference.judge_port import NOT_EVALUATED_UNAVAILABLE
-from wavelocalai.models.fake import FakeChatModel, Sleep
-from wavelocalai.models.port import ChatMessage, ChatRequest, LoadState, ModelRef, TextDelta
+from frugal_ai_workbench.evaluation.judge import _PhasedModel
+from frugal_ai_workbench.inference.judge_port import NOT_EVALUATED_UNAVAILABLE
+from frugal_ai_workbench.models.fake import FakeChatModel, Sleep
+from frugal_ai_workbench.models.port import ChatMessage, ChatRequest, LoadState, ModelRef, TextDelta
 
-STATIC = Path(__file__).parents[3] / "src" / "wavelocalai" / "web" / "static"
+STATIC = Path(__file__).parents[3] / "src" / "frugal_ai_workbench" / "web" / "static"
 BANNER = (STATIC / "screens" / "arena-judge-banner.js").read_text(encoding="utf-8")
 ARENA = (STATIC / "screens" / "arena.js").read_text(encoding="utf-8")
 REQUEST = ChatRequest([ChatMessage("user", "Note.")])
@@ -64,7 +64,7 @@ async def test_phases_follow_the_real_order_and_never_repeat(script, origin, exp
 
 
 async def test_a_judge_that_fails_before_answering_says_no_phase():
-    from wavelocalai.errors import ProviderError
+    from frugal_ai_workbench.errors import ProviderError
 
     with pytest.raises(ProviderError):
         await phases_of([ProviderError("ollama_down", "éteint")])

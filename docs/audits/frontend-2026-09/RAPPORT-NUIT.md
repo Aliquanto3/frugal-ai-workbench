@@ -20,7 +20,7 @@ Sur `master` e3f684f, `pytest tests/unit` donnait **153 réussis et 9 échecs** 
 | Story | Statut | Commit | Tests (unit + app) | Durée |
 |---|---|---|---|---|
 | 1 — Socle figé, serveur local, CI, tests au vert | done | 8dfc946 | 171 | 36 min |
-| 2 — Thème Wavestone, icônes Material, accessibilité | done | dad907a | 191 | 58 min |
+| 2 — Thème générique, icônes Material, accessibilité | done | dad907a | 191 | 58 min |
 | 3 — Navigation, vocabulaire unique, formats fr-FR | done | c3df9c6 | 308 | 39 min |
 | 4 — Ingestion réelle des documents | done | 8b07942 | 336 | 21 min |
 | 5 — Échecs visibles et états vrais | done | 1467d32 | 439 | 46 min |
@@ -93,7 +93,7 @@ Toutes les stories demandent de vérifier le rendu en clair et en sombre. La VM 
 **Story 2**
 - `greenTextColor` vaut `#0C6E3C` en clair, une valeur hors DESIGN.md (le défaut était à 4,03–4,49:1).
 - Le wordmark est en `#6A4DE6` (3,23:1 sur la barre latérale sombre).
-- Le favicon est un « W » blanc sur `#451DC7`.
+- Le favicon est un « W » blanc sur `#0B6B78`.
 - « 👋 Bonjour ! » reste en titre : c'est l'exception de DESIGN.md, contraire à EXPERIENCE.md.
 - Le thème suit la préférence système.
 

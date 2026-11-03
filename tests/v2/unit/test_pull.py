@@ -6,10 +6,21 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from wavelocalai.errors import PULL_CAUSES, AppError, pull_failed_envelope
-from wavelocalai.hardware.memory import FIT_MARGIN, MemoryAdvisor, MemoryReading, required_gb
-from wavelocalai.inference.pull import clean_tag, progress_data
-from wavelocalai.models.ollama_pull import Layers, PullError, PullUpdate, parse_line, pull_updates
+from frugal_ai_workbench.errors import PULL_CAUSES, AppError, pull_failed_envelope
+from frugal_ai_workbench.hardware.memory import (
+    FIT_MARGIN,
+    MemoryAdvisor,
+    MemoryReading,
+    required_gb,
+)
+from frugal_ai_workbench.inference.pull import clean_tag, progress_data
+from frugal_ai_workbench.models.ollama_pull import (
+    Layers,
+    PullError,
+    PullUpdate,
+    parse_line,
+    pull_updates,
+)
 
 from ..pull_fake import GB, PullOllama, PullScript, download, layer, manifest, success
 

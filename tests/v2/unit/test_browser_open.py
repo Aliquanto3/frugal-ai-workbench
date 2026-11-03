@@ -11,9 +11,9 @@ import time
 
 import pytest
 
-import wavelocalai.__main__ as launcher
-from wavelocalai.__main__ import _open_browser_when_ready, main
-from wavelocalai.store.logs import close_logging
+import frugal_ai_workbench.__main__ as launcher
+from frugal_ai_workbench.__main__ import _open_browser_when_ready, main
+from frugal_ai_workbench.store.logs import close_logging
 
 from ..conftest import closed_port
 
@@ -126,7 +126,7 @@ class _FakeThreadingModule:
 @pytest.fixture
 def no_real_server(monkeypatch):
     monkeypatch.setattr(launcher, "threading", _FakeThreadingModule)
-    monkeypatch.setattr("wavelocalai.web.server.serve", _fake_serve)
+    monkeypatch.setattr("frugal_ai_workbench.web.server.serve", _fake_serve)
     _ThreadSpy.created = []
     yield _ThreadSpy
     _ThreadSpy.created = []
@@ -152,7 +152,7 @@ def test_no_browser_flag_skips_the_guard(no_real_server, tmp_path):
 
 
 def test_open_browser_false_setting_skips_the_guard(no_real_server, tmp_path):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text("[server]\nopen_browser = false\n", encoding="utf-8")
     code = main(
         [

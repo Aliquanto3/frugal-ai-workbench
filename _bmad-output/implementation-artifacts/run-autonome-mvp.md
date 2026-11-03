@@ -10,8 +10,8 @@ Démarré le 2026-10-18. Orchestrateur : session principale (Opus 5.5). Contrat 
 4. Journal daté : après chaque étape, ajouter une ligne `- AAAA-MM-JJ HH:MM · story · étape · résultat · commit` à la section « Journal » de `run-autonome.md` (lu par `/agent-cost-kit:avancement-run`). **Depuis le 2026-10-19 (décision d'Anaël), les trois fichiers d'état (`sprint-status.yaml`, ce fichier, `run-autonome.md`) ne partent plus avec les PR de story** : ils restent modifiés dans le dépôt principal et partent dans une PR `chore/etat-run-*` ouverte par `_outils/etat_pr.sh "<libellé>"` (à chaque fin d'epic et toutes les 3 à 4 fusions), fusionnée par merge commit quand la CI est verte. `finalize.sh` ramène les fichiers d'état d'une branche à ceux de `origin/master` avant le push. Après toute fusion : dans le dépôt principal, sauvegarder ces trois fichiers, `git checkout -- <ces fichiers>`, `git pull`, puis les restaurer (la version locale l'emporte).
 5. Avant la PR d'une story : la CI d'une PR teste déjà la fusion avec master ; ne fusionner `origin/master` dans la branche que s'il y a conflit (GitHub ne lance pas la CI d'une PR en conflit) ou si une story fusionnée touche les mêmes fichiers. `rerere` est activé dans le dépôt (résolutions rejouées). Vagues planifiées par fichiers touchés : deux stories qui modifient le même écran passent l'une après l'autre.
 6. Les fusions de branches (`git merge`) sont faites par l'orchestrateur : le classifieur de permissions les refuse aux sous-agents. Conflit sémantique : laisser la fusion en cours et confier la résolution au reviewer (« étape 1 obligatoire »).
-7. Outils de l'orchestrateur, dans `C:\Users\Utilisateur\Documents\GitHub\wavelocalai-wt\_outils\` (lancer avec `.venv\Scripts\python` du dépôt principal ; `finalize.ps1 <worktree> <branche> <préfixe de clé> <libellé>`) : `set_status.py` (statut du sprint), `set_row.py` (ligne du tableau ci-dessous), `finalize.sh` (statut `done` dans le dépôt principal, fichiers d'état de la branche ramenés à ceux de master, push), `etat_pr.sh` (PR des fichiers d'état), `keep_both.py` / `ours_then_theirs.py` (conflits « garder les deux »), `bump_version.py`.
-8. E2E : `$env:WAVELOCALAI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"`. Tests : `$env:PYTHONUTF8 = "1"`. Ollama : `http://127.0.0.1:11434`, `qwen2.5:1.5b` installé.
+7. Outils de l'orchestrateur, dans `C:\Users\Utilisateur\Documents\GitHub\frugal-ai-workbench-wt\_outils\` (lancer avec `.venv\Scripts\python` du dépôt principal ; `finalize.ps1 <worktree> <branche> <préfixe de clé> <libellé>`) : `set_status.py` (statut du sprint), `set_row.py` (ligne du tableau ci-dessous), `finalize.sh` (statut `done` dans le dépôt principal, fichiers d'état de la branche ramenés à ceux de master, push), `etat_pr.sh` (PR des fichiers d'état), `keep_both.py` / `ours_then_theirs.py` (conflits « garder les deux »), `bump_version.py`.
+8. E2E : `$env:FRUGAL_AI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"`. Tests : `$env:PYTHONUTF8 = "1"`. Ollama : `http://127.0.0.1:11434`, `qwen2.5:1.5b` installé.
 9. **Depuis le 2026-10-19 vers 8 h (accord d'Anaël, amélioration continue d'agent-cost-kit n° 1, 3, 4, 10, 16)** : la CI de branche (3 OS) joue `tests/v2` et la v1. En local, `checks.sh <wt>` lance le contrôle rapide, les **E2E ciblés** (`e2e_cibles.sh` : écrans touchés, composants et coquille si `core/`, `components/` ou CSS changent, fumée Accueil + coquille) et l'integration, et relance une fois seuls les tests en échec ; `checks.sh <wt> complet` pour tout. **Suite E2E complète sur master** après chaque lot de 3 à 4 fusions : `e2e_master.sh` (worktree `v2-master`) ; un échec y ouvre un correctif avant la fusion suivante. Un seul contrôle local à la fois ; au plus 5 agents actifs (dev + revue). Chaque prompt de dev et de revue cite la section « Contrats partagés en cours ». Second avis : comparer à `git merge-base HEAD origin/master` et signaler « base en retard de N fusions » ; le reviewer part d'une branche à jour de master (l'orchestrateur fusionne d'abord). Une décision qui revient à Anaël ne bloque que les stories qui en dépendent. Après la 5.0 : pile de branches revues fusionnée par lots (n° 3).
 
 ## État courant (2026-10-19 vers 22 h 15, avant /clear pour l'Epic 8)
@@ -21,7 +21,7 @@ Démarré le 2026-10-18. Orchestrateur : session principale (Opus 5.5). Contrat 
 - **Préversions** (manifeste seulement, sans tag ni release, `_outils/bump_version.py`) : 2.0.0a5, a6, a7 dans une seule PR `chore/` **après la fusion de #110** (5.8 = a5, 6.6 = a6 déjà fusionnée, 7.4 = a7 déjà fusionnée), journal : une ligne `version` par préversion.
 - **Essai du levier 3** (PR par pile, décision d'Anaël) : #108 fusionnée du premier coup (1 run au lieu de 2 à 4) ; #110 à suivre ; bilan dans les apprentissages de fin de projet.
 - **Epic 8** : branche `feat/v2-dette` (worktree `v2-8-1`, `.venv` prêt) = master + toutes les stories revues + commit du budget 1d70820. Avant de reprendre la 8.1 : fusionner `origin/master` (après #109 et #110). Le test E2E `test_chat.py::test_the_arena_module_is_available_and_its_other_tabs_are_disabled_with_their_reason` est à réaligner (fait dans #110 : reprendre). Spec : `story-8-1.md` (budget fait ; le reste en `deferred`). Puis 8.2, 8.3.
-- **Ajouts à la 8.1** (revues du soir) : `onSmallerModel` non retiré dans Arène, Discussion, Base (7.3) ; `agents-solo.js` rejoint une mission d'équipe active sans vérifier `params.mode` (6.6) ; message `timeout` côté serveur avec le délai (7.4, n° 1) ; verrou par modèle entre contrôle d'usage et suppression (5.4) ; tests instables (`test_topbar` serveur relancé, `test_shell` 300 ms) ; icône Références provisoire `help` en attendant le sprite officiel (5.8). **Moins de conflits entre stories parallèles (décision d'Anaël, 21 h 30)** : (a) contrat découpé, une sous-section par story dans son propre fichier (`_bmad-output/specs/spec-wavelocalai-v2/contrat/<story>.md`, indexé par `contrat-api.md`) au lieu d'ajouts en fin de `contrat-api.md` ; (b) tests de la coquille (`test_shell_static.py`, `test_shell.py`, `test_home.py`, statiques des écrans) qui lisent le nombre d'écrans `available` et les routes `planned` dans le registre (`core/routes/*.js`) au lieu de comptes écrits en dur.
+- **Ajouts à la 8.1** (revues du soir) : `onSmallerModel` non retiré dans Arène, Discussion, Base (7.3) ; `agents-solo.js` rejoint une mission d'équipe active sans vérifier `params.mode` (6.6) ; message `timeout` côté serveur avec le délai (7.4, n° 1) ; verrou par modèle entre contrôle d'usage et suppression (5.4) ; tests instables (`test_topbar` serveur relancé, `test_shell` 300 ms) ; icône Références provisoire `help` en attendant le sprite officiel (5.8). **Moins de conflits entre stories parallèles (décision d'Anaël, 21 h 30)** : (a) contrat découpé, une sous-section par story dans son propre fichier (`_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat/<story>.md`, indexé par `contrat-api.md`) au lieu d'ajouts en fin de `contrat-api.md` ; (b) tests de la coquille (`test_shell_static.py`, `test_shell.py`, `test_home.py`, statiques des écrans) qui lisent le nombre d'écrans `available` et les routes `planned` dans le registre (`core/routes/*.js`) au lieu de comptes écrits en dur.
 - **Journal** (lu par `/agent-cost-kit:avancement-run` 0.7.1) : après une CI rouge relancée ou corrigée, écrire une ligne `CI · verte` quand elle passe ; `PR · #n ouverte` à l'ouverture ; une story ne passe à `in-progress` qu'au lancement de son agent de dev (la 8.1 est remise à `backlog` jusque-là).
 - **Ollama** : gardé jusqu'à la fin (décision d'Anaël, 19 h 40). **Prévenir Anaël dès que le run n'en a plus besoin** (après les contrôles de la 8.3) : il lancera slm-quality-bench, puis la 5.7.
 - **5.7** : reportée après le run (décision d'Anaël, 19 h 30 ; version sans les chiffres du banc acceptée).
@@ -48,7 +48,7 @@ Démarré le 2026-10-18. Orchestrateur : session principale (Opus 5.5). Contrat 
 - **Ensuite** : 4.6 et 4.7 (après fusion de 4.5 : leur écran vit dans la Discussion) ; 3.6 (+ 2.0.0a3) après 3.5 ; 4.9 (+ 2.0.0a4) ; puis 5.0 (découpage du front), Epics 5 à 8 (vagues par fichiers à écrire dans `run-autonome.md`). Au plus 3 stories en développement.
 - Outils : `_outils/finalize.sh <worktree> <branche> <préfixe> <libellé>`, `_outils/etat_pr.sh "<libellé>"`, `_outils/checks.sh <worktree>` (en arrière-plan, sortie dans le scratchpad), `keep_both.py <fichier> [séparateur]`.
 - Pièges vus : **`git stash` est partagé entre worktrees** : aucun agent ne l'utilise (WIP commité ou copie) ; **`keep_both.py` sur un CSS peut couper une règle** (conflit au milieu d'un bloc) : vérifier les accolades (`test_every_stylesheet_has_balanced_braces`, ajouté par la 4.5) ou reconstruire « master + ajouts de la branche » ; « uvx black a échoué » sans détail = un fichier à reformater (`uvx --offline black@25.12.0 <fichier>`) ; `uv sync` dans un worktree après toute fusion qui change `uv.lock` ; un test E2E qui lance un run attend sa fin ; espaces insécables avant « : ; ! ? » dans `fr.json` ; sqlite-vec absent sur la CI macOS (tests `needs_vec`, valeurs qui suivent `store.vec_available`) ; tests instables sous charge (`test_read_budget` 300 ms, `test_topbar` serveur relancé, `test_arena` panneau au clavier « Response has been disposed », axe du pied de message en sombre) : relancer seul, à stabiliser en 8.1.
-- Worktrees : `C:/Users/Utilisateur/Documents/GitHub/wavelocalai-wt/<clé>`, chacun avec son `.venv` ; supprimer ceux des stories fusionnées. Spec de story : `_bmad-output/implementation-artifacts/story-<n>-<m>.md`.
+- Worktrees : `C:/Users/Utilisateur/Documents/GitHub/frugal-ai-workbench-wt/<clé>`, chacun avec son `.venv` ; supprimer ceux des stories fusionnées. Spec de story : `_bmad-output/implementation-artifacts/story-<n>-<m>.md`.
 
 ## Fin du run du 2026-10-19 (décision d'Anaël vers 8 h 40)
 
@@ -85,7 +85,7 @@ Noms, modules et constantes décidés pour plusieurs stories ; à citer dans cha
 - Dialogue de confirmation : `components/wl-confirm-dialog.js` (4.3).
 - Graphiques : `components/wl-chart-svg.js`, `core/chart-scale.js` (3.4).
 - Formats : `core/format.js` (`formatMoney`, `formatDate`, `co2Group`, `formatScore`…), jamais de calcul de métrique à l'écran (AD-20).
-- Prix cloud : `[cloud.prices]` de `wavelocalai.toml` (`PriceTable`, devise ISO 4217), vide tant qu'Anaël ne l'a pas remplie (3.5).
+- Prix cloud : `[cloud.prices]` de `frugal-ai-workbench.toml` (`PriceTable`, devise ISO 4217), vide tant qu'Anaël ne l'a pas remplie (3.5).
 - `onSmallerModel` (`core/ram-guard.js`) rend une fonction de retrait de l'écouteur, à appeler au démontage (7.3) ; Arène, Discussion et Base ne l'appellent pas encore (8.1).
 - Trace d'étapes d'agent : `components/wl-step-trace.js` (6.4), réutilisée par l'Équipe (6.6).
 - Résultats du banc côté serveur : `models/bench_results.py` (5.6), réutilisé par 5.7 et 5.8.
@@ -99,14 +99,14 @@ Noms, modules et constantes décidés pour plusieurs stories ; à citer dans cha
 - Préversions 2.0.0a5 (5.8), a6 (6.6), a7 (7.4) : version dans le manifeste, tags et releases en attente d'Anaël.
 - 6.3 (email) : SMTP factice seulement, aucun envoi réel. 5.3 et 5.5 (installation de modèle, reranker) : téléchargements simulés ; un vrai téléchargement est une ressource à activer par Anaël (le prévenir, avancer sur le reste).
 - Écrans des Epics 5 à 7 : référence visuelle `docs/maquette-v2/` (une fois la PR #58 fusionnée) ; les documents de contrat priment sur la maquette.
-- **Second message de `wavelocalai-d7` (2026-10-19 vers 0 h 30, annoncé par Anaël), appliqué** : PR #58 (maquette, f4e48b8) et #61 (correct course, 72137a4) fusionnées ; **garde-fou de l'Epic 5 levé**. Consignes détaillées : `_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md` §7 ((a) ajustements des stories en cours, (b) stories 1.12 et 2.7, (c) changements du backlog, (d) 18 écarts ouverts).
+- **Second message de `frugal-ai-workbench-d7` (2026-10-19 vers 0 h 30, annoncé par Anaël), appliqué** : PR #58 (maquette, f4e48b8) et #61 (correct course, 72137a4) fusionnées ; **garde-fou de l'Epic 5 levé**. Consignes détaillées : `_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md` §7 ((a) ajustements des stories en cours, (b) stories 1.12 et 2.7, (c) changements du backlog, (d) 18 écarts ouverts).
 - **Décision d'Anaël (2026-10-19 vers 7 h)** : (1) fichiers d'état hors des PR de story (PR `chore/etat-run-*`) ; (2) story technique **5.0 « Découper les fichiers partagés du front »** avant l'Epic 5 (textes par écran, CSS par composant, `api.js` par domaine, routes déclarées par écran, job E2E dans la CI) ; (3) vagues des Epics 5 à 8 planifiées par fichiers touchés ; `rerere` activé, journal `run-autonome.md` fusionné par `union` (`.gitattributes`).
 - **Ordre confirmé** : finir le MVP (Epics 3 et 4 jusqu'à la 4.9, avec 1.12 et 2.7 fusionnées avant 3.6 ; 1.12 aussi avant 4.9), puis 5.1 à 5.8, 6.1 à 6.6, 7.1 à 7.4, 8.1 à 8.3 dans l'ordre ; au plus 3 stories en développement à la fois. 1.12 et 2.7 ne changent pas la version.
 - **Ajustements avant PR** (§7(a)) : 3.2 (D-15 4 colonnes repliées à 1 440 px, D-16 résumé pendant l'exécution, légendes « Choisissez 4 modèles au plus » et « Saisissez une question », D-11 sans modèle local) ; 3.3 (« Choisissez un juge ») ; 4.1 (consigner le champ échec/doublon d'`ingest_progress` dans `contrat-api.md`) ; 4.2 (un seul « Annuler l'import », D-25 ; documents `failed` dans le tableau et dans `GET /api/rag/documents` avec leur raison, hors compte, D-26).
 - **Specs des stories du backlog** : rédigées depuis `epics.md` de master à jour (stories ajustées listées au §7(c)).
 - **18 écarts du §7(d)** : ne pas les trancher ; prendre la variante la plus conservatrice (critère actuel de la story), la signaler dans la PR de la story et au journal.
 - **Incident** : le commit b7703cd (sur master, par un sous-agent de l'autre session) contient les 3 fichiers d'état d'alors ; `run-autonome.md` est suivi sur master. À chaque synchronisation, la version locale l'emporte (vérifié le 2026-10-19 : aucune ligne du statut perdue). Annulation éventuelle : décision d'Anaël.
-- Anaël (2026-10-18, 23 h 25) : un second message de la session `wavelocalai-d7` sur le périmètre arrivera dans la nuit, quand ses évolutions fonctionnelles pour la suite des epics seront finies ; le prendre en compte (stories ajoutées ou ajustées), en gardant les arrêts ci-dessus (8.4, envois et téléchargements réels, tags et releases).
+- Anaël (2026-10-18, 23 h 25) : un second message de la session `frugal-ai-workbench-d7` sur le périmètre arrivera dans la nuit, quand ses évolutions fonctionnelles pour la suite des epics seront finies ; le prendre en compte (stories ajoutées ou ajustées), en gardant les arrêts ci-dessus (8.4, envois et téléchargements réels, tags et releases).
 
 ## Parallélisation (autorisée par Anaël le 2026-10-18)
 
@@ -161,7 +161,7 @@ Vagues prévues selon les dépendances, fusion dans l'ordre du sprint (fusionner
 - `models/port.py` : `ModelRef` de la story 1.5 retenu (AD-9 : `origin` avec `unknown`, `kind` en `Literal`) ; la 1.4 s'y aligne à l'identique et y ajoute les types du port `ChatModel` d'AD-8.
 - Story 2.1 : débit de prefill exigé par le critère alors que `ChatResult` est figé par AD-8 → champ optionnel ajouté en fin de `ChatResult` (écart additif à AD-8, à ratifier). Code de coupure `generation_interrupted` (AD-5 interdit un code qui reprend un statut) au lieu de `interrupted` d'epics.md.
 - Story 2.5 : zone de mix électrique du CO₂ cloud = celle du centre de données du fournisseur (`electricity_mix_zone=None`, défaut d'ecologits), et non le pays du poste (`Settings.carbon.country_iso`), qui décrit la machine locale. À confirmer par Anaël si une zone réglable est voulue.
-- E2E : Chromium de Playwright absent, mais Edge installé fonctionne avec Playwright (vérifié, Edge 155). Le conftest E2E de la v2 accepte `WAVELOCALAI_E2E_CHROMIUM` (comme la v1) ; en local : `$env:WAVELOCALAI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"`. Aucun téléchargement.
+- E2E : Chromium de Playwright absent, mais Edge installé fonctionne avec Playwright (vérifié, Edge 155). Le conftest E2E de la v2 accepte `FRUGAL_AI_E2E_CHROMIUM` (comme la v1) ; en local : `$env:FRUGAL_AI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"`. Aucun téléchargement.
 - Ollama : utiliser `http://127.0.0.1:11434` (`localhost` échoue en IPv6 sur ce poste).
 
 - `tests/app/test_nothing_lost.py::test_agent_*` (v1) : échec intermittent vu une fois en revue de 1.10, vert en relance sur la branche ; 4 échecs dans le dépôt principal dont le `.venv` n'est plus synchronisé depuis la 1.1 (non modifié par le run). Pour Anaël : `uv sync` dans le dépôt principal remettra le `.venv` au verrou actuel (Python 3.11+, deps v2).
@@ -182,7 +182,7 @@ Vagues prévues selon les dépendances, fusion dans l'ordre du sprint (fusionner
 
 - PR #48 (stories des Epics 5 à 8, inventaire des reports, décisions Q1 à Q7) et PR #49 (mise à jour UX) vont sur master, fusionnées par Anaël.
 - Prérequis UX de la 2.2 et de l'Epic 5 levé par la PR #49. La 2.2 ne continue qu'une fois master contenant le commit « Docs: jeton primary-fill (décision Q1) et écrans v2 des Epics 5 à 7 » ; master est alors fusionné dans sa branche (pas de rebase).
-- Story 2.2, critère A19 (décision Q1, option C) : tout fond violet portant du texte blanc utilise `var(--color-primary-fill)` (#451DC7 clair, #6A4DE6 sombre, déjà dans `tokens.css`) ; `--color-primary` pour texte violet, bordures, contours, interrupteur coché ; bouton plein désactivé = fond `surface-alt`, bordure `line`, texte `ink-secondary` (jamais la seule opacité) ; E2E axe-core en sombre sur le premier bouton plein, zéro violation `color-contrast`, sans exclusion ; test de dérive `test_shell_static.py` vert, aucune couleur en dur. Lire dans DESIGN.md la « Note `primary-fill` » et « Composants de la v2 ».
+- Story 2.2, critère A19 (décision Q1, option C) : tout fond violet portant du texte blanc utilise `var(--color-primary-fill)` (#0B6B78 clair, #6A4DE6 sombre, déjà dans `tokens.css`) ; `--color-primary` pour texte violet, bordures, contours, interrupteur coché ; bouton plein désactivé = fond `surface-alt`, bordure `line`, texte `ink-secondary` (jamais la seule opacité) ; E2E axe-core en sombre sur le premier bouton plein, zéro violation `color-contrast`, sans exclusion ; test de dérive `test_shell_static.py` vert, aucune couleur en dur. Lire dans DESIGN.md la « Note `primary-fill` » et « Composants de la v2 ».
 - Epics 5 à 7 : EXPERIENCE.md, section « Écrans v2 des Epics 5 à 7 », prime pour le comportement à l'écran ; epics.md prime pour le contrat d'API ; `[ASSUMPTION]` appliqués tels quels ; « Open Questions » 3 à 5 non implémentées sans décision.
 - Toute branche en cours fusionne `origin/master` après l'arrivée de #48/#49 (sans rebase).
 
@@ -200,40 +200,40 @@ Vagues prévues selon les dépendances, fusion dans l'ordre du sprint (fusionner
 Version `2.0.0a1` posée dans `pyproject.toml`, `uv.lock` et `CITATION.cff` par la PR de la story 1.11. **Tag `v2.0.0-alpha.1` et release GitHub non créés** : à faire par Anaël après la recette.
 
 Commandes (après recette) :
-`git tag -a v2.0.0-alpha.1 -m "wavelocalai 2.0.0a1 : coquille de la v2"` sur le merge commit de la PR 1.11, `git push origin v2.0.0-alpha.1`, puis `gh release create v2.0.0-alpha.1 --prerelease --title "2.0.0a1 : coquille de la v2" --notes-file <notes ci-dessous>`.
+`git tag -a v2.0.0-alpha.1 -m "frugal-ai-workbench 2.0.0a1 : coquille de la v2"` sur le merge commit de la PR 1.11, `git push origin v2.0.0-alpha.1`, puis `gh release create v2.0.0-alpha.1 --prerelease --title "2.0.0a1 : coquille de la v2" --notes-file <notes ci-dessous>`.
 
 Brouillon des notes :
 
-> Première préversion de la v2, à côté de la v1 (toujours lancée par `wavelocalai`, port 8501). La v2 se lance par `wavelocalai-v2` (port 8502) et demande Python 3.11 ou plus.
+> Première préversion de la v2, à côté de la v1 (toujours lancée par `frugal-ai-workbench`, port 8501). La v2 se lance par `frugal-ai-workbench-v2` (port 8502) et demande Python 3.11 ou plus.
 >
 > - Serveur local FastAPI protégé : écoute sur `127.0.0.1` seulement, en-têtes `Host` et `Origin` étrangers refusés, télémétries coupées, verrou du dossier de données, journaux en rotation, arrêt propre même avec des flux ouverts.
 > - Hub des exécutions : toute exécution est un run enregistré dans SQLite, suivi en flux (SSE), rejouable sans perte ni doublon, annulable.
 > - Registre des modèles : modèles Ollama et cloud configurés, origine (Local, Cloud, Origine inconnue), « tient en mémoire », débit mesuré sur ce poste, modèle par défaut par usage avec sa raison.
 > - Flux système en direct et session carbone.
-> - Coquille du front aux couleurs de Wavestone (modules JS natifs, aucune dépendance tierce, aucune requête hors de la machine) : barre haute (Ollama, cloud, CO₂ de session), Accueil qui dit en 5 secondes si la démo peut partir ; composants sélecteur de modèle au clavier et suivi d'un run, prêts pour le chat de la préversion suivante.
+> - Coquille du front aux couleurs de la charte générique (modules JS natifs, aucune dépendance tierce, aucune requête hors de la machine) : barre haute (Ollama, cloud, CO₂ de session), Accueil qui dit en 5 secondes si la démo peut partir ; composants sélecteur de modèle au clavier et suivi d'un run, prêts pour le chat de la préversion suivante.
 > - Accessibilité vérifiée par axe-core en clair et sombre sur chaque écran livré.
 >
 > Pas encore là : chat, Arène, base documentaire (préversions suivantes). Les modules à venir sont visibles et désactivés, avec leur raison.
 
 Recette humaine à jouer (environ 10 min) :
-1. `uv sync` dans le dépôt principal, puis `uv run wavelocalai-v2` ; ouvrir `http://127.0.0.1:8502`.
+1. `uv sync` dans le dépôt principal, puis `uv run frugal-ai-workbench-v2` ; ouvrir `http://127.0.0.1:8502`.
 2. Ollama arrêté : l'Accueil s'affiche tout de suite, pastille « Ollama ne répond pas », carte Système « Indisponible » avec la marche à suivre ; relancer Ollama : la pastille repasse « disponible » en moins de 3 s.
 3. Barre haute : interrupteur « Autoriser le cloud » (aide lisible, remis à faux au rechargement), panneau CO₂, menu Affichage (thème sombre, mode projection).
 4. Modules non livrés visibles, désactivés, avec « Pas encore disponible dans cette préversion ».
 5. Navigation au clavier seul (lien d'évitement, focus visible) ; fenêtre réduite à 320 px sans défilement horizontal.
 6. Arrêter le serveur (Ctrl+C) avec l'Accueil ouvert : il s'arrête en quelques secondes ; un second lancement sur le même dossier est refusé avec un message clair.
-7. `uv run wavelocalai` : la v1 se lance toujours sur 8501.
+7. `uv run frugal-ai-workbench` : la v1 se lance toujours sur 8501.
 
 ### 2.0.0a2 (fin de l'Epic 2) — en attente d'Anaël
 
 Version `2.0.0a2` posée dans `pyproject.toml`, `uv.lock` et `CITATION.cff` par la PR de la story 2.6. **Tag `v2.0.0-alpha.2` et release GitHub non créés** : à faire par Anaël après la recette.
 
 Commandes (après recette) :
-`git tag -a v2.0.0-alpha.2 -m "wavelocalai 2.0.0a2 : chat local et cloud"` sur le merge commit de la PR 2.6, `git push origin v2.0.0-alpha.2`, puis `gh release create v2.0.0-alpha.2 --prerelease --title "2.0.0a2 : chat local et cloud" --notes-file <notes ci-dessous>`.
+`git tag -a v2.0.0-alpha.2 -m "frugal-ai-workbench 2.0.0a2 : chat local et cloud"` sur le merge commit de la PR 2.6, `git push origin v2.0.0-alpha.2`, puis `gh release create v2.0.0-alpha.2 --prerelease --title "2.0.0a2 : chat local et cloud" --notes-file <notes ci-dessous>`.
 
 Brouillon des notes :
 
-> Deuxième préversion de la v2 (`wavelocalai-v2`, port 8502 ; la v1 reste sur 8501). Elle apporte le chat libre, local et cloud, avec son empreinte carbone.
+> Deuxième préversion de la v2 (`frugal-ai-workbench-v2`, port 8502 ; la v1 reste sur 8501). Elle apporte le chat libre, local et cloud, avec son empreinte carbone.
 >
 > - Chat en flux avec un modèle Ollama : réponse et raisonnement en direct, débit, premier token, chargement et durée dans le pied de réponse ; Arrêter (Échap) garde le texte partiel ; une génération coupée est relancée une fois ; quitter l'écran puis revenir reprend le flux sans perte ni doublon.
 > - Chat avec un modèle cloud (OpenAI, Groq, Anthropic, Mistral), seulement si « Autoriser le cloud » est activé et la clé présente dans `.env` ; erreurs de clé, de réseau ou de quota expliquées avec la marche à suivre.
@@ -243,7 +243,7 @@ Brouillon des notes :
 > Pas encore là : Arène, base documentaire (préversions suivantes).
 
 Recette humaine à jouer (environ 15 min) :
-1. `uv sync` puis `uv run wavelocalai-v2` ; ouvrir `http://127.0.0.1:8502`, aller dans Chat.
+1. `uv sync` puis `uv run frugal-ai-workbench-v2` ; ouvrir `http://127.0.0.1:8502`, aller dans Chat.
 2. Chat local (`qwen2.5:1.5b` ou un autre modèle Ollama) : 3 échanges ; la réponse arrive en flux, le pied affiche débit, durée et « CO₂ … mg » ; le CO₂ de session de la barre haute augmente. Arrêter une réponse longue avec Échap : le partiel reste.
 3. Quitter l'écran pendant une réponse, revenir : le flux reprend sans doublon.
 4. Chat cloud : activer « Autoriser le cloud », choisir un modèle d'un fournisseur dont la clé est dans `.env` ; la réponse arrive, le pied affiche « CO₂ … (estimé) » et l'aide cite EcoLogits. Sans clé : message « La clé d'API de … n'est pas configurée » avec la marche à suivre.
@@ -255,11 +255,11 @@ Recette humaine à jouer (environ 15 min) :
 
 Version `2.0.0a3` posée par la PR de la story 3.6 (#76, merge commit 360c6a4). **Tag `v2.0.0-alpha.3` et release GitHub non créés** : à faire par Anaël après la recette.
 
-Commandes (après recette) : `git tag -a v2.0.0-alpha.3 360c6a4 -m "wavelocalai 2.0.0a3 : l'Arène des modèles"`, `git push origin v2.0.0-alpha.3`, puis `gh release create v2.0.0-alpha.3 --prerelease --title "2.0.0a3 : l'Arène des modèles" --notes-file <notes ci-dessous>`.
+Commandes (après recette) : `git tag -a v2.0.0-alpha.3 360c6a4 -m "frugal-ai-workbench 2.0.0a3 : l'Arène des modèles"`, `git push origin v2.0.0-alpha.3`, puis `gh release create v2.0.0-alpha.3 --prerelease --title "2.0.0a3 : l'Arène des modèles" --notes-file <notes ci-dessous>`.
 
 Brouillon des notes :
 
-> Troisième préversion de la v2 (`wavelocalai-v2`, port 8502 ; la v1 reste sur 8501). Elle apporte l'Arène des modèles : la même question posée à 2 à 4 modèles, côte à côte, notée, classée et chiffrée.
+> Troisième préversion de la v2 (`frugal-ai-workbench-v2`, port 8502 ; la v1 reste sur 8501). Elle apporte l'Arène des modèles : la même question posée à 2 à 4 modèles, côte à côte, notée, classée et chiffrée.
 >
 > - Colonnes qui se remplissent au fil du flux, avec le statut de chaque modèle en texte. Un modèle en échec ou en délai ne bloque pas les autres.
 > - Notation par un juge (local par défaut, cloud seulement si « Autoriser le cloud » est actif) sur des critères modifiables ; « non évalué » avec sa raison, jamais 0 ; avertissements « note peu fiable » et « un seul juge ».
@@ -270,7 +270,7 @@ Brouillon des notes :
 > - Accueil : carte « Démo recommandée » qui présélectionne les modèles prêts et lance l'Arène.
 
 Recette humaine (environ 15 min, Flow 1) :
-1. `uv sync` puis `uv run wavelocalai-v2`, ouvrir `http://127.0.0.1:8502` ; avec Ollama et au moins 3 petits modèles, l'Accueil dit « Disponible ».
+1. `uv sync` puis `uv run frugal-ai-workbench-v2`, ouvrir `http://127.0.0.1:8502` ; avec Ollama et au moins 3 petits modèles, l'Accueil dit « Disponible ».
 2. Carte « Démo recommandée » : modèles prêts avec badge Local ; Ollama arrêté : « Aucun modèle local disponible », « Lancer une comparaison » reste actif.
 3. Ollama relancé, « Lancer une comparaison » : modèles présélectionnés ; Lancer ; colonnes en flux, classement qui se fige, matrice et CO₂, sans rechargement.
 4. Avec « Autoriser le cloud » et une clé dans `.env` : un modèle local contre un cloud ; le verdict chiffre écart de note, coût (USD) et CO₂ (estimé pour le cloud).
@@ -285,11 +285,11 @@ Recette humaine (environ 15 min, Flow 1) :
 
 Version `2.0.0a4` posée par la PR de la story 4.9 (#79, merge commit de1288c). **Tag `v2.0.0-alpha.4` et release GitHub non créés** : à faire par Anaël après la recette.
 
-Commandes (après recette) : `git tag -a v2.0.0-alpha.4 de1288c -m "wavelocalai 2.0.0a4 : MVP, atelier documentaire"`, `git push origin v2.0.0-alpha.4`, puis `gh release create v2.0.0-alpha.4 --prerelease --title "2.0.0a4 : MVP, atelier documentaire" --notes-file <notes ci-dessous>`.
+Commandes (après recette) : `git tag -a v2.0.0-alpha.4 de1288c -m "frugal-ai-workbench 2.0.0a4 : MVP, atelier documentaire"`, `git push origin v2.0.0-alpha.4`, puis `gh release create v2.0.0-alpha.4 --prerelease --title "2.0.0a4 : MVP, atelier documentaire" --notes-file <notes ci-dessous>`.
 
 Brouillon des notes :
 
-> Quatrième préversion de la v2 (`wavelocalai-v2`, port 8502 ; la v1 reste sur 8501). Elle clôt le MVP : Arène des modèles et assistant documentaire, de bout en bout, sur le poste.
+> Quatrième préversion de la v2 (`frugal-ai-workbench-v2`, port 8502 ; la v1 reste sur 8501). Elle clôt le MVP : Arène des modèles et assistant documentaire, de bout en bout, sur le poste.
 >
 > - Arène : comparer 2 à 4 petits modèles sur une question, avec juge, matrice qualité/CO₂, verdict local/cloud chiffré, historique et exports (préversion a3).
 > - Base documentaire : importer PDF, TXT, MD ou DOCX avec suivi par fichier ; supprimer un document ou vider la base avec confirmation chiffrée ; réglages (embedding, découpe, extraits, stratégie).
@@ -301,7 +301,7 @@ Brouillon des notes :
 > Pas encore là : Sobriété, Modèles, Agents, Évaluation, Banc d'essai (préversions suivantes).
 
 Recette humaine (10 à 15 min, PC de 16 Go sans GPU) :
-1. `uv sync` puis `uv run wavelocalai-v2` ; l'Accueil dit « Disponible » ; carte « Documents » : « 0 document indexé · 0 extrait ».
+1. `uv sync` puis `uv run frugal-ai-workbench-v2` ; l'Accueil dit « Disponible » ; carte « Documents » : « 0 document indexé · 0 extrait ».
 2. Flow 1 rapide (3 min) : Arène, 3 petits modèles locaux, une question, un juge ; matrice et chiffres lisibles du fond de la salle.
 3. Flow 2 : carte « Documents » → « Votre base documentaire est vide » ; importer un `.docx` ; la ligne suit le fichier, puis « N extraits ajoutés depuis 1 document » ; l'Accueil dit « 1 document indexé · N extraits ».
 4. Discussion : modèle local par défaut avec sa raison ; une question : « Chargement du modèle en mémoire… », puis réponse avec débit, CO₂, durée ; sources avant la réponse.

@@ -30,11 +30,11 @@ Avant l'archivage de la v1 (8.4), la mainteneuse sait ce que chaque page et chaq
    - Flow 1 (`test_flow1.py`) et Flow 2 (`test_flow2.py`) couvrent déjà leurs parcours ; Flow 2 reçoit la même preuve de non-rechargement (3 lignes). Mêmes doublures que les tests existants : Ollama n'est jamais sollicité.
 3. **Rien ne sort de `127.0.0.1`** : le garde par test (fixture `context`, déjà là) est complété à l'échelle de la suite. Chaque contexte verse ses sorties dans un bilan (`SUITE_OUTSIDE`), et la fixture de session `no_request_left_the_machine` fait échouer la suite en fin de course si une seule requête est sortie, quel que soit le test. Preuve : `test_parcours_hors_machine.py` (une navigation vers un autre hôte est bloquée et relevée, puis retirée du bilan ; le bilan est vide en cours de suite) et un essai à vide : une fuite ajoutée à `SUITE_OUTSIDE` fait échouer la session.
 4. **CI nocturne** : `.github/workflows/e2e-nocturne.yml` (`schedule` à 02 h 30 UTC + `workflow_dispatch`), Ubuntu, `uv sync --locked`, Chromium de Playwright installé par la CI, `pytest tests/v2 -m e2e`, 90 min au plus ; versions d'actions reprises de `tests.yml` (`checkout@v7`, `setup-uv@v10.3.0`). Mode d'emploi dans `AGENTS.md` (« La v2 »). `tests.yml` n'est pas touché.
-5. **README** : la v2 d'abord (installation par `uv sync`, lanceur `uv run wavelocalai-v2`, port 8502, options, tests), cinq captures `docs/assets/v2-*.png` et un GIF `docs/assets/v2-demo.gif` (ces captures à la suite, 2,5 s chacune, Pillow), produits par `scripts/readme_captures_v2.py` (Playwright, doublures, aucun document réel). La doc et la démo de la v1 restent, sous « La v1 (Streamlit) » (la bascule est la 8.4).
+5. **README** : la v2 d'abord (installation par `uv sync`, lanceur `uv run frugal-ai-workbench-v2`, port 8502, options, tests), cinq captures `docs/assets/v2-*.png` et un GIF `docs/assets/v2-demo.gif` (ces captures à la suite, 2,5 s chacune, Pillow), produits par `scripts/readme_captures_v2.py` (Playwright, doublures, aucun document réel). La doc et la démo de la v1 restent, sous « La v1 (Streamlit) » (la bascule est la 8.4).
 
 ## Règles écrites
 
-- Aucun écran, composant, CSS ni module de `src/wavelocalai/` n'est modifié ; aucun hook de test n'a été nécessaire.
+- Aucun écran, composant, CSS ni module de `src/frugal_ai_workbench/` n'est modifié ; aucun hook de test n'a été nécessaire.
 - Les tests `test_shell*.py`, `test_home.py`, `test_topbar.py`, `test_arena*.py`, `test_layers.py` et `contrat-api.md` ne sont pas modifiés (les parcours en importent des aides).
 - Aucun bug d'écran révélé par les parcours : aucun `xfail`.
 

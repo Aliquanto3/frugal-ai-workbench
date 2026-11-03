@@ -8,8 +8,8 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-21.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
 warnings: []
 deferred: []
 ---
@@ -37,7 +37,7 @@ Avant toute refonte visuelle (stories 9.7 à 9.9), Anaël valide une maquette st
 
 ## Règles écrites
 
-- Aucun fichier de `src/wavelocalai/` n'est modifié : la maquette est un document autonome dans `docs/`.
+- Aucun fichier de `src/frugal_ai_workbench/` n'est modifié : la maquette est un document autonome dans `docs/`.
 - Aucune donnée réelle : tous les modèles, documents et résultats affichés sont fictifs ; les noms de modèles sont pris dans `config/models_catalog.json` (« Qwen 3.5 2B », « Gemma 4 12B »…) ou dans les identifiants cloud de `models/defaults.py` (« gpt-oss-120b »), les documents sont inventés (« note-cadrage.docx »).
 - Aucun téléchargement de modèle, aucun appel à Ollama : la vérification Playwright ouvre le fichier en local (`file://`).
 
@@ -55,7 +55,7 @@ Avant toute refonte visuelle (stories 9.7 à 9.9), Anaël valide une maquette st
 
 ## Rapport de dev
 
-- Vérification : script Playwright (Edge headless, `WAVELOCALAI_E2E_CHROMIUM`) ouvrant `index.html` en `file://`, parcourant les 5 écrans × {1920, 390} × {clair, sombre} : aucune erreur console/page, aucun défilement horizontal (`scrollWidth` ≤ `clientWidth`), captures prises hors dépôt (scratchpad de session).
+- Vérification : script Playwright (Edge headless, `FRUGAL_AI_E2E_CHROMIUM`) ouvrant `index.html` en `file://`, parcourant les 5 écrans × {1920, 390} × {clair, sombre} : aucune erreur console/page, aucun défilement horizontal (`scrollWidth` ≤ `clientWidth`), captures prises hors dépôt (scratchpad de session).
 - Pas de suite de tests du projet à lancer : aucun fichier Python ni JS applicatif modifié.
 - Contrôle rapide du projet (ruff/black/isort sur les fichiers modifiés) : sans objet côté code, aucun fichier suivi par le contrôle rapide n'est touché ; exécuté quand même pour vérifier qu'il reste propre.
 - Reports : amendements de `DESIGN.md`/`EXPERIENCE.md` et simulateur interactif complet (`docs/maquette-v2/`-like) laissés à la story 9.7, après validation d'Anaël sur les 6 questions de `DECISIONS.md`.
@@ -98,4 +98,4 @@ Amendements reportés dans `DESIGN.md` et `EXPERIENCE.md`, à jour des correctio
 
 Aucun jeton ni classe n'est posé dans le code par cette story (`tokens.css`, `base.css`, `screens.css` non modifiés) : le test de dérive `tests/v2/unit/test_shell_static.py::test_tokens_css_mirrors_design_md` reste vert, les nouveaux jetons sont documentés comme « à poser » dans `DESIGN.md` et dans `DECISIONS.md` §6 (« Pour les stories 9.7 à 9.9 »), avec l'écran → story qui les posera.
 
-Fichiers modifiés : `_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md`, `_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md`, `docs/maquette-v2-mise-en-page/DECISIONS.md`, `_bmad-output/implementation-artifacts/story-9-6.md`.
+Fichiers modifiés : `_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md`, `_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md`, `docs/maquette-v2-mise-en-page/DECISIONS.md`, `_bmad-output/implementation-artifacts/story-9-6.md`.

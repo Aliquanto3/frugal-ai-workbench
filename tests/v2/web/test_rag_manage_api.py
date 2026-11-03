@@ -15,10 +15,16 @@ from pathlib import Path
 import httpx
 import pytest
 
-from wavelocalai.models.fake import FAKE_EMBED_REF, FAKE_REF, FakeEmbedder, Sleep, fake_vector
-from wavelocalai.models.port import ModelRef, TextDelta
-from wavelocalai.rag.index import NumpyIndex
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.fake import (
+    FAKE_EMBED_REF,
+    FAKE_REF,
+    FakeEmbedder,
+    Sleep,
+    fake_vector,
+)
+from frugal_ai_workbench.models.port import ModelRef, TextDelta
+from frugal_ai_workbench.rag.index import NumpyIndex
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings, needs_vec
 from .conftest import served  # noqa: F401 - fixture
@@ -85,7 +91,7 @@ def _stored_bytes(app) -> bytes:
 @contextlib.asynccontextmanager
 async def rag_app(tmp_path, **settings):
     """App avec un second modèle d'embedding (`fake-other:8`) résolvable."""
-    app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, **settings))
+    app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, **settings))
     app.state.embedders[OTHER.tag] = FakeEmbedder(ref=OTHER, dim=8)
     app.state.registry._extra_refs[OTHER.tag] = OTHER
     async with app.router.lifespan_context(app):
@@ -430,7 +436,7 @@ async def test_an_unknown_or_chat_model_cannot_be_the_embedding(served):
 
 
 async def test_the_app_never_writes_the_toml_file(served, tmp_path):
-    toml = Path(__file__).resolve().parents[3] / "wavelocalai.toml"
+    toml = Path(__file__).resolve().parents[3] / "frugal-ai-workbench.toml"
     before = toml.read_bytes() if toml.exists() else None
     _, client = served
     await client.put("/api/rag/settings", json={"chunk_size": 300, "top_k": 3})
@@ -458,7 +464,7 @@ async def test_a_base_whose_vectors_were_lost_is_refused_with_its_own_message(
 ):
     """Repli numpy : les vecteurs vivent en mémoire. Après un redémarrage, une base « prête » n'a
     plus de vecteurs ; la question le dit (`vector_index_lost`), au lieu de « aucun document »."""
-    monkeypatch.setattr("wavelocalai.web.app.select_index", lambda available: NumpyIndex())
+    monkeypatch.setattr("frugal_ai_workbench.web.app.select_index", lambda available: NumpyIndex())
     async with rag_app(tmp_path) as (app, client):
         await _import(client, **{"chats.txt": CATS})
         assert (await client.get("/api/rag/settings")).json()["index"] == {"persistent": False}
@@ -531,7 +537,7 @@ async def test_without_a_toml_embedding_a_null_is_accepted_on_a_non_empty_base(s
 
 def _stray_vec_table(app, chunk_ids: list[int]) -> None:
     """Une table vec0 écrite un jour avec sqlite-vec, que l'index de repli ignore."""
-    from wavelocalai.rag.index import SqliteVecIndex
+    from frugal_ai_workbench.rag.index import SqliteVecIndex
 
     app.state.store.write(
         lambda conn: SqliteVecIndex().add(conn, chunk_ids, [fake_vector("x", 8)] * len(chunk_ids))
@@ -540,7 +546,7 @@ def _stray_vec_table(app, chunk_ids: list[int]) -> None:
 
 @needs_vec
 async def test_the_fallback_index_still_erases_vectors_left_in_vec0_tables(tmp_path, monkeypatch):
-    monkeypatch.setattr("wavelocalai.web.app.select_index", lambda available: NumpyIndex())
+    monkeypatch.setattr("frugal_ai_workbench.web.app.select_index", lambda available: NumpyIndex())
     async with rag_app(tmp_path) as (app, client):
         await _import(client, **{"secret.txt": SECRET, "autre.txt": SECOND})
         ids = [r["id"] for r in app.state.store.read("SELECT id FROM chunks ORDER BY id")]
@@ -572,10 +578,10 @@ def test_vectors_that_cannot_be_erased_without_sqlite_vec_refuse_the_deletion(tm
     en mémoire ni dans le fichier."""
     import sqlite3
 
-    from wavelocalai.errors import AppError
-    from wavelocalai.rag.index import SqliteVecIndex
-    from wavelocalai.rag.manage import _erase_stray_vectors
-    from wavelocalai.store.vec import load_vec
+    from frugal_ai_workbench.errors import AppError
+    from frugal_ai_workbench.rag.index import SqliteVecIndex
+    from frugal_ai_workbench.rag.manage import _erase_stray_vectors
+    from frugal_ai_workbench.store.vec import load_vec
 
     path = tmp_path / "base.db"
     with contextlib.closing(sqlite3.connect(path)) as conn:

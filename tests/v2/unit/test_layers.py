@@ -2,7 +2,7 @@
 
 Le contrôleur `check_package` lit le code source sans l'importer. Il est paramétré par la racine
 du paquet pour que ses propres tests lui soumettent des arbres pièges, écrits dans un dossier
-temporaire : aucune violation ne reste dans `src/wavelocalai/`.
+temporaire : aucune violation ne reste dans `src/frugal_ai_workbench/`.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-PACKAGE = "wavelocalai"
+PACKAGE = "frugal_ai_workbench"
 REAL_ROOT = Path(__file__).resolve().parents[3] / "src" / PACKAGE
 
 # Modules de base : ils n'importent rien du paquet, tous peuvent les importer.
@@ -79,7 +79,7 @@ def _walk_imports(tree: ast.AST):
 
     Ignore le code sous TYPE_CHECKING. Les `Call` et `Attribute` servent aux imports qui ne passent
     pas par une instruction `import` (C1 : `importlib.import_module`, `__import__`, et
-    `import wavelocalai` suivi d'un accès d'attribut).
+    `import frugal_ai_workbench` suivi d'un accès d'attribut).
     """
 
     def visit(node: ast.AST, module_level: bool):
@@ -109,13 +109,13 @@ def _imported(node: ast.Import | ast.ImportFrom, package: list[str]) -> list[lis
     else:
         base = node.module.split(".") if node.module else []
     if base == [PACKAGE]:
-        # `from wavelocalai import runs` : la cible est dans les noms importés.
+        # `from frugal_ai_workbench import runs` : la cible est dans les noms importés.
         return [[PACKAGE, alias.name] for alias in node.names]
     return [base]
 
 
 def _package_aliases(tree: ast.AST) -> set[str]:
-    """Noms qui désignent le paquet racine (`import wavelocalai [as x]`, `import wavelocalai.y`)."""
+    """Noms qui désignent le paquet racine (`import frugal_ai_workbench [as x]`, `import frugal_ai_workbench.y`)."""
     names: set[str] = set()
     for node in ast.walk(tree):
         if not isinstance(node, ast.Import):
@@ -128,7 +128,7 @@ def _package_aliases(tree: ast.AST) -> set[str]:
                 names.add(PACKAGE)
             elif len(parts) == 1:
                 names.add(alias.asname)
-    # `w = wavelocalai` (ou `w = wl`) : le nouveau nom désigne aussi le paquet.
+    # `w = frugal_ai_workbench` (ou `w = wl`) : le nouveau nom désigne aussi le paquet.
     assigns = [node for node in ast.walk(tree) if isinstance(node, ast.Assign)]
     grown = True
     while grown:
@@ -194,7 +194,7 @@ def _dynamic_target(call: ast.Call, package: list[str]) -> list[str]:
 
 
 def _getattr_target(call: ast.Call, aliases: set[str]) -> str | None:
-    """`getattr(wavelocalai, "runs")` : rend « runs » ; `""` si le nom n'est pas un littéral
+    """`getattr(frugal_ai_workbench, "runs")` : rend « runs » ; `""` si le nom n'est pas un littéral
     (non vérifiable) ; None pour un autre appel."""
     if not (isinstance(call.func, ast.Name) and call.func.id == "getattr" and len(call.args) >= 2):
         return None
@@ -207,7 +207,7 @@ def _getattr_target(call: ast.Call, aliases: set[str]) -> str | None:
 
 
 def check_package(root: Path) -> list[str]:
-    """Liste les violations d'AD-4 / AD-2 / AD-21 dans l'arbre `root` (paquet `wavelocalai`)."""
+    """Liste les violations d'AD-4 / AD-2 / AD-21 dans l'arbre `root` (paquet `frugal-ai-workbench`)."""
     violations: list[str] = []
     for path in sorted(root.rglob("*.py")):
         rel = path.relative_to(root).as_posix()
@@ -219,7 +219,7 @@ def check_package(root: Path) -> list[str]:
         for node, module_level in _walk_imports(tree):
             where = f"{rel}:{node.lineno}"
             if isinstance(node, ast.Attribute):
-                # `import wavelocalai` puis `wavelocalai.runs...` : la cible est l'attribut.
+                # `import frugal_ai_workbench` puis `frugal_ai_workbench.runs...` : la cible est l'attribut.
                 if isinstance(node.value, ast.Name) and node.value.id in aliases:
                     violations.extend(_layer_violation(where, component, node.attr))
                 continue
@@ -314,17 +314,25 @@ def _tree(tmp_path: Path, files: dict[str, str]) -> Path:
 @pytest.mark.parametrize(
     ("rel", "code", "expected"),
     [
-        ("runs/trap.py", "from wavelocalai.web import app\n", "importe web/"),
-        ("runs/trap.py", "from wavelocalai.rag import index\n", "contre le diagramme"),
-        ("store/trap.py", "import wavelocalai.runs.hub\n", "contre le diagramme"),
+        ("runs/trap.py", "from frugal_ai_workbench.web import app\n", "importe web/"),
+        ("runs/trap.py", "from frugal_ai_workbench.rag import index\n", "contre le diagramme"),
+        ("store/trap.py", "import frugal_ai_workbench.runs.hub\n", "contre le diagramme"),
         ("store/trap.py", "from .. import runs\n", "contre le diagramme"),
         ("models/trap.py", "from ..runs import hub\n", "contre le diagramme"),
-        ("hardware/trap.py", "from wavelocalai.store import db\n", "contre le diagramme"),
-        ("inference/trap.py", "from wavelocalai.agents import loop\n", "contre le diagramme"),
-        ("greenops/trap.py", "from wavelocalai.models import port\n", "contre le diagramme"),
-        ("config.py", "from wavelocalai import errors\n", "module de base"),
-        ("errors.py", "from wavelocalai.store import db\n", "module de base"),
-        ("__init__.py", "from wavelocalai import runs\n", "__init__ racine"),
+        ("hardware/trap.py", "from frugal_ai_workbench.store import db\n", "contre le diagramme"),
+        (
+            "inference/trap.py",
+            "from frugal_ai_workbench.agents import loop\n",
+            "contre le diagramme",
+        ),
+        (
+            "greenops/trap.py",
+            "from frugal_ai_workbench.models import port\n",
+            "contre le diagramme",
+        ),
+        ("config.py", "from frugal_ai_workbench import errors\n", "module de base"),
+        ("errors.py", "from frugal_ai_workbench.store import db\n", "module de base"),
+        ("__init__.py", "from frugal_ai_workbench import runs\n", "__init__ racine"),
         ("runs/trap.py", "from src.core import config\n", "src.*"),
         ("runs/trap.py", "def f():\n    import src.core\n", "src.*"),
         ("runs/trap.py", "import fastapi\n", "hors de web/"),
@@ -342,37 +350,41 @@ def _tree(tmp_path: Path, files: dict[str, str]) -> Path:
         ("models/trap.py", "import anthropic\n", "niveau du module"),
         ("models/trap.py", "import mistralai\n", "niveau du module"),
         ("greenops/trap.py", "from ecologits import tracers\n", "niveau du module"),
-        ("cli.py", "from wavelocalai.runs import hub\n", "hors du Structural Seed"),
+        ("cli.py", "from frugal_ai_workbench.runs import hub\n", "hors du Structural Seed"),
         # C1 : imports qui ne passent pas par `from ... import`.
-        ("store/trap.py", "import wavelocalai\nx = wavelocalai.runs.hub\n", "contre le diagramme"),
-        ("store/trap.py", "import wavelocalai as wl\ny = wl.runs\n", "contre le diagramme"),
+        (
+            "store/trap.py",
+            "import frugal_ai_workbench\nx = frugal_ai_workbench.runs.hub\n",
+            "contre le diagramme",
+        ),
+        ("store/trap.py", "import frugal_ai_workbench as wl\ny = wl.runs\n", "contre le diagramme"),
         (
             "runs/trap.py",
-            "import wavelocalai\ndef f():\n    return wavelocalai.web.app\n",
+            "import frugal_ai_workbench\ndef f():\n    return frugal_ai_workbench.web.app\n",
             "importe web/",
         ),
         (
             "store/trap.py",
-            "import wavelocalai\nz = getattr(wavelocalai, 'runs')\n",
+            "import frugal_ai_workbench\nz = getattr(frugal_ai_workbench, 'runs')\n",
             "contre le diagramme",
         ),
         (
             "store/trap.py",
-            "import importlib\nm = importlib.import_module('wavelocalai.runs.hub')\n",
+            "import importlib\nm = importlib.import_module('frugal_ai_workbench.runs.hub')\n",
             "contre le diagramme",
         ),
         (
             "store/trap.py",
-            "from importlib import import_module\nm = import_module('wavelocalai.runs')\n",
+            "from importlib import import_module\nm = import_module('frugal_ai_workbench.runs')\n",
             "contre le diagramme",
         ),
         (
             "store/trap.py",
-            "import importlib\nm = importlib.import_module('.runs', package='wavelocalai')\n",
+            "import importlib\nm = importlib.import_module('.runs', package='frugal_ai_workbench')\n",
             "contre le diagramme",
         ),
-        ("store/trap.py", "m = __import__('wavelocalai.runs')\n", "contre le diagramme"),
-        ("runs/trap.py", "m = __import__('wavelocalai.web')\n", "importe web/"),
+        ("store/trap.py", "m = __import__('frugal_ai_workbench.runs')\n", "contre le diagramme"),
+        ("runs/trap.py", "m = __import__('frugal_ai_workbench.web')\n", "importe web/"),
         (
             "rag/trap.py",
             "import importlib\nm = importlib.import_module('fastapi')\n",
@@ -391,22 +403,22 @@ def _tree(tmp_path: Path, files: dict[str, str]) -> Path:
         # Revue : alias du chargeur, chargeur obtenu par `getattr`, paquet réaffecté, noms calculés.
         (
             "store/trap.py",
-            "from importlib import import_module as im\nm = im('wavelocalai.runs')\n",
+            "from importlib import import_module as im\nm = im('frugal_ai_workbench.runs')\n",
             "contre le diagramme",
         ),
         (
             "store/trap.py",
-            "import importlib\nm = getattr(importlib, 'import_module')('wavelocalai.runs')\n",
+            "import importlib\nm = getattr(importlib, 'import_module')('frugal_ai_workbench.runs')\n",
             "non vérifiable",
         ),
         (
             "store/trap.py",
-            "import wavelocalai\nw = wavelocalai\nx = w.runs\n",
+            "import frugal_ai_workbench\nw = frugal_ai_workbench\nx = w.runs\n",
             "contre le diagramme",
         ),
         (
             "store/trap.py",
-            "import wavelocalai\ndef f(n):\n    return getattr(wavelocalai, n)\n",
+            "import frugal_ai_workbench\ndef f(n):\n    return getattr(frugal_ai_workbench, n)\n",
             "non vérifiable",
         ),
         (
@@ -426,11 +438,17 @@ def test_trap_module_is_detected(tmp_path, rel, code, expected):
 @pytest.mark.parametrize(
     ("rel", "code"),
     [
-        ("web/ok.py", "import fastapi\nfrom wavelocalai.rag import index\nimport uvicorn\n"),
-        ("rag/ok.py", "from wavelocalai.inference import chat\nfrom wavelocalai.store import db\n"),
+        (
+            "web/ok.py",
+            "import fastapi\nfrom frugal_ai_workbench.rag import index\nimport uvicorn\n",
+        ),
+        (
+            "rag/ok.py",
+            "from frugal_ai_workbench.inference import chat\nfrom frugal_ai_workbench.store import db\n",
+        ),
         ("agents/ok.py", "from ..inference import chat\nfrom ..config import Settings\n"),
-        ("runs/ok.py", "from wavelocalai.store import db\nfrom .hub import Hub\n"),
-        ("store/ok.py", "from wavelocalai import config, errors\n"),
+        ("runs/ok.py", "from frugal_ai_workbench.store import db\nfrom .hub import Hub\n"),
+        ("store/ok.py", "from frugal_ai_workbench import config, errors\n"),
         ("rag/ok.py", "def f():\n    import pypdf\n    from docx import Document\n"),
         ("models/ok.py", "def f():\n    from openai import OpenAI\n    import anthropic\n"),
         ("greenops/ok.py", "async def f():\n    import codecarbon\n    import ecologits\n"),
@@ -438,9 +456,15 @@ def test_trap_module_is_detected(tmp_path, rel, code, expected):
             "rag/ok.py",
             "from typing import TYPE_CHECKING\nif TYPE_CHECKING:\n    import pypdf\n",
         ),
-        ("__main__.py", "from wavelocalai.web import app\nfrom wavelocalai import config\n"),
-        ("store/ok.py", "import wavelocalai\nv = wavelocalai.config\n"),
-        ("rag/ok.py", "import importlib\nm = importlib.import_module('wavelocalai.inference')\n"),
+        (
+            "__main__.py",
+            "from frugal_ai_workbench.web import app\nfrom frugal_ai_workbench import config\n",
+        ),
+        ("store/ok.py", "import frugal_ai_workbench\nv = frugal_ai_workbench.config\n"),
+        (
+            "rag/ok.py",
+            "import importlib\nm = importlib.import_module('frugal_ai_workbench.inference')\n",
+        ),
         (
             "rag/ok.py",
             "def f():\n    import importlib\n    return importlib.import_module('pypdf')\n",

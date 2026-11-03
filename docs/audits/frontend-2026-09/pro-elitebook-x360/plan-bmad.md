@@ -31,7 +31,7 @@ BMAD n'est pas installé dans ce repo. Ce document ne remplace pas ses fichiers 
 
 ## Contraintes communes (Boundaries de l'initiative)
 
-- **v1 seulement.** La v2 (`wavelocalai-v2`) n'est pas touchée.
+- **v1 seulement.** La v2 (`frugal-ai-workbench-v2`) n'est pas touchée.
 - **La mesure des benchmarks ne change pas.** `benchmarks/` et le code de mesure de débit restent tels quels, pour ne pas invalider les résultats publiés en `b36cb8c`.
 - **Même version de Streamlit** (1.52.1). La montée de version est hors périmètre ; F-10 la prépare seulement.
 - **Données réelles protégées.** Aucun test ne touche à la collection Chroma réelle (`data/chroma`) : les tests utilisent une collection dédiée.
@@ -135,7 +135,7 @@ L'entrée 01 est la *tracer bullet* : elle transforme les KO du rapport en tests
 | ID | Exigence | Source |
 |---|---|---|
 | B-R1 | L'API `width=` remplace `use_container_width` partout ; aucun avertissement de dépréciation au démarrage | F-10 |
-| B-R2 | Un thème Wavestone (primaire `#451DC7`) est appliqué par configuration, sans CSS injecté pour les couleurs ; la barre d'outils est minimale | U-01, U-05 |
+| B-R2 | Un thème générique (primaire `#0B6B78`) est appliqué par configuration, sans CSS injecté pour les couleurs ; la barre d'outils est minimale | U-01, U-05 |
 | B-R3 | Chaque module a un seul nom et une seule icône, les mêmes dans la navigation, l'accueil et le titre | U-02, U-03 |
 | B-R4 | Le mode cloud est réglé par un seul contrôle global, et son état est visible sur toutes les pages | U-04 |
 | B-R5 | Les indicateurs de l'accueil et du Cockpit reflètent un état mesuré (Ollama joignable, modèles, chunks, accélérateur réel), et la version est lue depuis `pyproject.toml` | F-08 |

@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.greenops.history import carbon_history
-from wavelocalai.greenops.session import session_summary
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.runs.models import Co2, LeafResult
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.greenops.history import carbon_history
+from frugal_ai_workbench.greenops.session import session_summary
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.runs.models import Co2, LeafResult
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..producers import LOCAL_CO2, produce_arena, produce_chat
 

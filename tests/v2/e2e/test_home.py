@@ -100,7 +100,7 @@ def home_with_ollama(backend, fake_ollama, page):
 def test_home_shows_a_single_title_the_tagline_and_four_filled_cards(home):
     assert home.locator("h1:visible").count() == 1
     assert home.locator("h1:visible").inner_text() == "Accueil"
-    assert home.title() == "Accueil · WaveLocalAI"
+    assert home.title() == "Accueil · Frugal AI Workbench"
     assert home.locator(".lead").inner_text() == (
         "Le démonstrateur d'IA générative souveraine, frugale et sécurisée."
     )

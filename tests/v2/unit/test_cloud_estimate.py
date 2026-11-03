@@ -1,7 +1,7 @@
 """Estimation ecologits du CO2 cloud (story 2.5, AD-10, AD-11) : aucun réseau, tables du paquet.
 
 Le test de contrat fige la signature de `llm_impacts` et confirme chaque entrée de
-`wavelocalai.toml` contre la version d'ecologits installée.
+`frugal-ai-workbench.toml` contre la version d'ecologits installée.
 """
 
 from __future__ import annotations
@@ -16,11 +16,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from wavelocalai.config import DEFAULT_TOML
-from wavelocalai.greenops import cloud_estimate
-from wavelocalai.greenops.cloud_estimate import estimate_cloud_co2
+from frugal_ai_workbench.config import DEFAULT_TOML
+from frugal_ai_workbench.greenops import cloud_estimate
+from frugal_ai_workbench.greenops.cloud_estimate import estimate_cloud_co2
 
-SRC = Path(__file__).resolve().parents[3] / "src" / "wavelocalai"
+SRC = Path(__file__).resolve().parents[3] / "src" / "frugal_ai_workbench"
 GROQ_TABLE = {
     "openai/gpt-oss-120b": "openai/gpt-oss-120b",
     "openai/gpt-oss-20b": "openai/gpt-oss-20b",
@@ -196,7 +196,7 @@ def test_the_estimate_is_called_by_keyword_with_the_provider_datacenter_zone(mon
 def test_groq_without_a_table_entry_is_unmeasurable_with_its_reason():
     co2 = _estimate("groq", "llama-3.3-70b-versatile")
     assert co2.method == "unmeasurable" and co2.mg is None and co2.range_mg is None
-    assert "Groq" in co2.reason and "wavelocalai.toml" in co2.reason
+    assert "Groq" in co2.reason and "frugal-ai-workbench.toml" in co2.reason
     assert _estimate("groq", "openai/gpt-oss-120b", groq_table={}).method == "unmeasurable"
 
 
@@ -270,7 +270,7 @@ def test_a_null_or_invalid_gwp_is_never_a_zero_estimate(monkeypatch, value):
     assert co2.method == "unmeasurable" and co2.mg is None
 
 
-# --- confirmation des tables de wavelocalai.toml (A13) -----------------------------------------------
+# --- confirmation des tables de frugal-ai-workbench.toml (A13) -----------------------------------------------
 
 
 def _toml() -> dict:

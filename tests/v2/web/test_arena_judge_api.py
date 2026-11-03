@@ -10,12 +10,12 @@ import json
 
 import pytest
 
-from wavelocalai.errors import AppError, ProviderError
-from wavelocalai.evaluation.judge import DEFAULT_CRITERIA, JUDGE_SCHEMA
-from wavelocalai.models.defaults import ModelDefault
-from wavelocalai.models.fake import Sleep
-from wavelocalai.models.port import LoadState
-from wavelocalai.models.registry import ModelInfo, ModelList
+from frugal_ai_workbench.errors import AppError, ProviderError
+from frugal_ai_workbench.evaluation.judge import DEFAULT_CRITERIA, JUDGE_SCHEMA
+from frugal_ai_workbench.models.defaults import ModelDefault
+from frugal_ai_workbench.models.fake import Sleep
+from frugal_ai_workbench.models.port import LoadState
+from frugal_ai_workbench.models.registry import ModelInfo, ModelList
 
 from .test_arena_api import (
     PROMPT,

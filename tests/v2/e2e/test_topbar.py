@@ -223,10 +223,10 @@ def test_cloud_choice_survives_a_change_of_screen_and_never_a_reload(bar):
     assert "le cloud est autorisé" in bar.locator("#footer-text").inner_text().lower()
 
     bar.evaluate("location.hash = '#/arene/comparer'")
-    wait_for(bar, "() => document.title === 'Arène · WaveLocalAI'")
+    wait_for(bar, "() => document.title === 'Arène · Frugal AI Workbench'")
     assert bar.get_by_role("switch", name="Autoriser le cloud").is_checked()
     bar.evaluate("location.hash = '#/'")
-    wait_for(bar, "() => document.title === 'Accueil · WaveLocalAI'")
+    wait_for(bar, "() => document.title === 'Accueil · Frugal AI Workbench'")
     assert bar.get_by_role("switch", name="Autoriser le cloud").is_checked()
 
     # Jamais dans localStorage (ni dans sessionStorage) : la bascule vit dans le store.
@@ -512,6 +512,6 @@ def test_the_top_bar_never_leaves_127_0_0_1(bar, server, traffic):
 def test_only_one_system_stream_is_open_for_the_whole_page(bar, server, traffic):
     make_screen_available(bar)
     bar.evaluate("location.hash = '#/arene/comparer'")
-    wait_for(bar, "() => document.title === 'Arène · WaveLocalAI'")
+    wait_for(bar, "() => document.title === 'Arène · Frugal AI Workbench'")
     bar.evaluate("location.hash = '#/'")
     assert sum(1 for url in traffic.urls if url.endswith("/api/system/stream")) == 1

@@ -4,7 +4,7 @@ démarrage, aucun modèle cloud quand le cloud est désactivé, badge Local ou C
 modèle et chaque réponse, email en brouillon confirmé, vidage de la base confirmé.
 
 Ollama, les fournisseurs cloud, l'inférence et SMTP sont simulés : aucun réseau, aucun envoi.
-Référence : _bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md
+Référence : _bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md
 (Souveraineté visible, confirm-dialog) et DESIGN.md (badge-local, badge-cloud).
 Usage: python -m pytest tests/app/test_sovereignty.py -v
 """

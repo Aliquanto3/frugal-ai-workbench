@@ -7,34 +7,34 @@ baseline_commit: '1bc73e8'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-2-1.md'
 warnings: []
 deferred:
   - summary: >-
       « Télécharger » (JSON, Markdown) de UX-DR21 n'est pas livré : le serveur n'a ni `GET /api/conversations/{id}` ni export `.json`/`.md`. « Effacer la conversation » est donc locale (le fil est vidé, la suivante ouvre une nouvelle conversation) ; la conversation reste en base. À reprendre avec les routes de conversation.
     evidence: |-
-      `grep conversations src/wavelocalai/web/*.py` : aucune route ; `test_the_real_route_continues_the_same_conversation` (effacement local).
-    location: src/wavelocalai/web/static/screens/chat.js
+      `grep conversations src/frugal_ai_workbench/web/*.py` : aucune route ; `test_the_real_route_continues_the_same_conversation` (effacement local).
+    location: src/frugal_ai_workbench/web/static/screens/chat.js
     severity: medium
   - summary: >-
       Le débit provisoire estime les tokens à 1 pour 4 caractères : les événements `token` sont groupés par 50 ms et ne donnent pas un compte exact. Le chiffre est dit « provisoire » (italique) et remplacé par `metrics` (débit d'Ollama, D3).
     evidence: |-
       `test_the_footer_is_provisional_and_italic_until_the_metrics_arrive`.
-    location: src/wavelocalai/web/static/components/wl-chat-thread.js
+    location: src/frugal_ai_workbench/web/static/components/wl-chat-thread.js
     severity: low
   - summary: >-
       Les tableaux Markdown ne sont pas rendus (le texte reste affiché tel quel) ; les titres du modèle sont rendus en paragraphe gras (un seul `h1` par écran, la structure ne vient pas du modèle). Pas de reprise d'une réponse en cours après un rechargement complet de la page (seul l'aller-retour d'écran est couvert, `runs_active` du flux système le permettrait plus tard).
     evidence: |-
       `test_the_markdown_subset`.
-    location: src/wavelocalai/web/static/core/markdown.js
+    location: src/frugal_ai_workbench/web/static/core/markdown.js
     severity: low
   - summary: >-
       Le nom du modèle sur une réponse d'un run rejoint (`409 run_busy`) vient de `run_started.models` (le tag), son badge d'origine reste « Origine inconnue » jusqu'à `metrics`.
     evidence: |-
       `test_a_busy_chat_is_joined_instead_of_showing_an_error`.
-    location: src/wavelocalai/web/static/screens/chat.js
+    location: src/frugal_ai_workbench/web/static/screens/chat.js
     severity: low
 ---
 
@@ -61,7 +61,7 @@ deferred:
 
 ## Fichiers
 
-- `src/wavelocalai/web/static/screens/chat.js`, `components/wl-chat-thread.js`, `core/markdown.js`, `core/drafts.js`, `core/screen-tabs.js`, `chat.css`
+- `src/frugal_ai_workbench/web/static/screens/chat.js`, `components/wl-chat-thread.js`, `core/markdown.js`, `core/drafts.js`, `core/screen-tabs.js`, `chat.css`
 - Ajouts : `core/sse.js` (`close({keepSeq})`), `core/api.js` (`startChat`), `components/wl-run-status.js` (mode piloté), `components/wl-model-picker.js` (`selected`), `core/registry.js`, `i18n/fr.json`, `index.html`
 - Tests : `tests/v2/e2e/test_chat.py`, `tests/v2/unit/test_chat_static.py`, `tests/v2/unit/test_shell_static.py`
 

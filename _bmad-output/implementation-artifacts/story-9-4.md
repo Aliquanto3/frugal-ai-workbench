@@ -7,9 +7,9 @@ baseline_commit: '4472c5c'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
 warnings: []
 deferred: []
 ---
@@ -72,7 +72,7 @@ Modèles (AD-17).
      registre ni `fallback_model` rend `embedding_models == []` ; avec `fallback_model`, le modèle y
      figure.
    - `tests/v2/unit/test_embedder.py` : `test_testing_no_fake_embedder_simulates_a_machine_without_any_embedding`
-     (nouveau réglage `WAVELOCALAI_TESTING_NO_FAKE_EMBEDDER`, E2E seulement — voir « Fichiers »).
+     (nouveau réglage `FRUGAL_AI_TESTING_NO_FAKE_EMBEDDER`, E2E seulement — voir « Fichiers »).
    - `tests/v2/web/test_rag_manage_api.py::test_the_settings_start_from_the_toml_defaults` : réaligné
      (`embedding_models` n'est plus `[]` en mode `testing` ordinaire, le `fake` sert de dernier
      recours — voir point suivant).
@@ -80,7 +80,7 @@ Modèles (AD-17).
      installation réelle du mécanisme (faux Ollama HTTP, octets scriptés) et disparition de l'encart ;
      Ollama absent. `assert_no_axe_violations` sur le premier.
    - Aucun test existant de `test_documents.py`/`test_rag_*` n'était à réaligner pour un « embedding
-     déjà présent » : ils tournent tous avec `WAVELOCALAI_TESTING=1` sans Ollama (port fermé), où le
+     déjà présent » : ils tournent tous avec `FRUGAL_AI_TESTING=1` sans Ollama (port fermé), où le
      `fake-embed:16` servait déjà de dernier recours à l'ingestion (`IngestService.fallback_model`,
      story 4.2) **mais n'apparaissait pas** dans `GET /api/rag/settings.embedding_models` (il n'est
      pas dans `registry.list_models()`, qui ne connaît qu'Ollama). Avec le nouvel encart, ce décalage
@@ -89,7 +89,7 @@ Modèles (AD-17).
      prolongeant le même mécanisme de dernier recours jusqu'à la vue des réglages
      (`RagBaseService.fallback_model`, point 8) : le `fake` y figure désormais aussi, comme à
      l'ingestion — aucun test de `test_documents.py` n'a donc eu besoin d'être changé. Le nouveau
-     réglage `WAVELOCALAI_TESTING_NO_FAKE_EMBEDDER` (E2E seulement, jamais en `testing` ordinaire)
+     réglage `FRUGAL_AI_TESTING_NO_FAKE_EMBEDDER` (E2E seulement, jamais en `testing` ordinaire)
      retire ce filet pour les 3 tests qui prouvent justement l'état « aucun embedding ».
 8. **Pas d'autre comportement changé** : `RagBaseService` et `offline_settings_view` gagnent un
    paramètre optionnel `fallback_model` (le `fake` des tests, comme `IngestService` le fait déjà
@@ -110,11 +110,11 @@ Modèles (AD-17).
 
 ## Fichiers
 
-- Code : `src/wavelocalai/errors.py` (`no_embedding_model`), `src/wavelocalai/config.py`
-  (`testing_no_fake_embedder`, E2E seulement), `src/wavelocalai/models/fake.py` (`fake_embedders`),
-  `src/wavelocalai/rag/manage.py` (`RagBaseService.fallback_model`, `_settings_view`,
-  `offline_settings_view`), `src/wavelocalai/web/app.py`, `src/wavelocalai/web/routes_rag_base.py`.
-- Front : `src/wavelocalai/web/static/screens/documents-embedding-alert.js` (nouveau),
+- Code : `src/frugal_ai_workbench/errors.py` (`no_embedding_model`), `src/frugal_ai_workbench/config.py`
+  (`testing_no_fake_embedder`, E2E seulement), `src/frugal_ai_workbench/models/fake.py` (`fake_embedders`),
+  `src/frugal_ai_workbench/rag/manage.py` (`RagBaseService.fallback_model`, `_settings_view`,
+  `offline_settings_view`), `src/frugal_ai_workbench/web/app.py`, `src/frugal_ai_workbench/web/routes_rag_base.py`.
+- Front : `src/frugal_ai_workbench/web/static/screens/documents-embedding-alert.js` (nouveau),
   `documents-base.js`, `documents.css`, `i18n/fr/docs.json`.
 - Tests : `tests/v2/unit/test_rag_manage_settings_view.py` (nouveau), `tests/v2/unit/test_embedder.py`,
   `tests/v2/unit/test_documents_static.py`, `tests/v2/web/test_rag_manage_api.py`,

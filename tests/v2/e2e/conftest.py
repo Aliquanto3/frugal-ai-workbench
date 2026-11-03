@@ -3,7 +3,7 @@
 - Le serveur écoute sur un port libre de 127.0.0.1, avec un dossier de données temporaire (jamais
   `data/`), Ollama pointé sur un port fermé (aucun vrai réseau) et aucune clé cloud.
 - Aucun navigateur n'est téléchargé : Chromium déjà installé pour Playwright, ou l'exécutable de
-  `WAVELOCALAI_E2E_CHROMIUM` (Edge convient), comme pour la v1 (`tests/e2e/conftest.py`).
+  `FRUGAL_AI_E2E_CHROMIUM` (Edge convient), comme pour la v1 (`tests/e2e/conftest.py`).
 - Toute requête hors de 127.0.0.1 est bloquée et relevée ; le test qui la provoque échoue, et la
   suite entière aussi : `no_request_left_the_machine` (à l'échelle de la session) échoue en fin de
   suite si une seule requête a quitté la machine, quel que soit le test qui l'a faite.
@@ -28,11 +28,11 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.web.routes_static import STATIC_HEADERS
+from frugal_ai_workbench.web.routes_static import STATIC_HEADERS
 
 from ..conftest import closed_port
 
-CHROMIUM_ENV = "WAVELOCALAI_E2E_CHROMIUM"
+CHROMIUM_ENV = "FRUGAL_AI_E2E_CHROMIUM"
 # Services de fond de Chromium (mises à jour de composants, synchronisation) : coupés, pour
 # qu'aucune requête ne quitte la machine, même hors des pages.
 CHROMIUM_ARGS = [
@@ -89,9 +89,9 @@ def _wait_healthy(
 
 
 class Backend:
-    """`python -m wavelocalai` sur un port fixe, qu'un test peut arrêter puis relancer.
+    """`python -m frugal_ai_workbench` sur un port fixe, qu'un test peut arrêter puis relancer.
 
-    Données en dossier temporaire, route de test et modèle `fake` actifs (`WAVELOCALAI_TESTING`),
+    Données en dossier temporaire, route de test et modèle `fake` actifs (`FRUGAL_AI_TESTING`),
     aucune clé cloud. `ollama_port` : où le serveur cherche Ollama (par défaut un port fermé).
     `config` : un `.toml` de réglages (`--config`), par exemple une table de prix cloud de test.
     `env` : variables d'environnement en plus (le faux SMTP des tests de l'agent, story 6.4). Sans
@@ -117,8 +117,8 @@ class Backend:
     def start(self) -> Server:
         env = {
             **os.environ,
-            "WAVELOCALAI_OLLAMA_HOST": f"http://127.0.0.1:{self.ollama_port}",
-            "WAVELOCALAI_TESTING": "1",
+            "FRUGAL_AI_OLLAMA_HOST": f"http://127.0.0.1:{self.ollama_port}",
+            "FRUGAL_AI_TESTING": "1",
             **dict.fromkeys(CLOUD_KEY_VARS, ""),
             "SMTP_USER": "",
             "SMTP_PASSWORD": "",
@@ -131,7 +131,7 @@ class Backend:
             [
                 sys.executable,
                 "-m",
-                "wavelocalai",
+                "frugal_ai_workbench",
                 "--port",
                 str(self.port),
                 "--data-dir",
@@ -254,7 +254,7 @@ def fake_ollama() -> Iterator[FakeOllama]:
 
 @pytest.fixture(scope="session")
 def browser():
-    """Chromium de Playwright, ou l'exécutable de WAVELOCALAI_E2E_CHROMIUM. Rien n'est téléchargé."""
+    """Chromium de Playwright, ou l'exécutable de FRUGAL_AI_E2E_CHROMIUM. Rien n'est téléchargé."""
     from playwright.sync_api import sync_playwright
 
     executable = os.environ.get(CHROMIUM_ENV) or None

@@ -62,7 +62,7 @@ config_local.py
 .idea/tasks.xml
 
 # ==========================================
-# 4. WAVELOCALAI - SPÉCIFIQUE PROJET
+# 4. FRUGAL AI WORKBENCH - SPÉCIFIQUE PROJET
 # ==========================================
 data/
 chroma/
@@ -72,7 +72,7 @@ logs/
 emissions.csv
 models/
 # Paquet models de la v2 (code, pas des poids de modèles)
-!src/wavelocalai/models/
+!src/frugal_ai_workbench/models/
 *.gguf
 *.bin
 *.pt

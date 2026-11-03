@@ -8,7 +8,7 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-3-2.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-3-3.md'
 warnings: []
@@ -17,37 +17,37 @@ deferred:
       Écart §7(d) n° 6, non tranché : l'étiquette « le plus petit des trois » (Flow 1) n'est pas livrée. Aucune story ne la demande, la maquette la dérive des paramètres actifs du modèle (absents de l'événement `metrics` et de `lane_status`), et le front ne calcule rien (AD-20). Variante la plus conservatrice : aucune étiquette ; le classement dit le rang, la note, le débit et le CO₂, et la salle lit elle-même que le premier est le plus petit. À reprendre quand l'écart sera tranché (donnée du serveur, ou fiche du modèle lue par le sélecteur).
     evidence: |-
       `docs/maquette-v2/js/screens/arene.js` (`smallestLabel`), `sprint-change-proposal-2026-10-19.md` §7(d) n° 6.
-    location: src/wavelocalai/web/static/screens/arena-results.js
+    location: src/frugal_ai_workbench/web/static/screens/arena-results.js
     severity: low
   - summary: >-
       Le CO₂ d'une lane annulée ou interrompue après un calcul partiel reste « non mesuré » à l'écran : le serveur peut l'avoir complété en base (`amend_cancelled_leaf`), mais aucun événement ne le publie, et le front ne lit pas l'instantané `GET /api/runs/{id}` (les mesures des feuilles y figurent). À reprendre avec la réouverture de la story 3.6, qui lit l'instantané.
     evidence: |-
-      `src/wavelocalai/inference/streaming.py` (`amend_cancelled_leaf`), `contrat-api.md` (instantané).
-    location: src/wavelocalai/web/static/screens/arena-results-data.js
+      `src/frugal_ai_workbench/inference/streaming.py` (`amend_cancelled_leaf`), `contrat-api.md` (instantané).
+    location: src/frugal_ai_workbench/web/static/screens/arena-results-data.js
     severity: low
   - summary: >-
       `co2.range_mg` (fourchette d'une estimation cloud) n'est pas affichée : le classement, le tableau et la légende donnent la valeur centrale suivie de « (estimé) », comme le pied de réponse d'un fil. Une fourchette dans la matrice demande une barre d'erreur (UX à décider).
     evidence: |-
       `test_an_estimated_and_an_unmeasurable_co2_are_said_in_text`.
-    location: src/wavelocalai/web/static/screens/arena-results-data.js
+    location: src/frugal_ai_workbench/web/static/screens/arena-results-data.js
     severity: low
   - summary: >-
       « note peu fiable » et « un seul juge » (3.3) restent sur les colonnes et dans le bloc du juge ; le classement ne les répète pas. Une salle qui ne lit que le classement ne voit pas l'avertissement d'un juge faible.
     evidence: |-
       `screens/arena-judge.js` (`judgeInfo`), `components/wl-arena-lane.js` (`setJudge`).
-    location: src/wavelocalai/web/static/screens/arena-results.js
+    location: src/frugal_ai_workbench/web/static/screens/arena-results.js
     severity: low
   - summary: >-
       Les tests de notes, de débits et de CO₂ différents d'une lane à l'autre réécrivent le flux d'une comparaison terminée (`replayed`) : la route de test `POST /api/test/arena` rejoue le même script de juge pour toutes les lanes, ne mesure pas le CO₂ d'une lane locale, et un juge dont le tag est celui d'une lane remplace son script. Si d'autres stories en ont besoin, ajouter un script de juge par lane et un `co2` par lane à cette route.
     evidence: |-
       `tests/v2/e2e/test_arena_results.py` (`replayed`, `tuned`).
-    location: src/wavelocalai/web/routes_test.py
+    location: src/frugal_ai_workbench/web/routes_test.py
     severity: low
   - summary: >-
       Échelle du débit : linéaire de 0 au plus grand débit. Un modèle cloud (centaines de tokens/s) écrase les modèles locaux (dizaines) dans le coin gauche de la matrice ; leurs étiquettes se décalent mais les points se chevauchent. Une échelle logarithmique (la maquette la prévoit en option) demande un choix de lecture pour la salle.
     evidence: |-
       `core/chart-scale.js` (`linearAxis`), `docs/maquette-v2/js/components/charts.js`.
-    location: src/wavelocalai/web/static/core/chart-scale.js
+    location: src/frugal_ai_workbench/web/static/core/chart-scale.js
     severity: low
 ---
 
@@ -71,10 +71,10 @@ Preuves : `tests/v2/e2e/test_arena_results.py` (Edge, 25 parcours, axe-core clai
 
 ## Fichiers
 
-- `src/wavelocalai/web/static/screens/arena-results.js` (nouveau) : classement, segments, matrice et tableau ; `screens/arena-results-data.js` (nouveau) : rangs, raisons, unité commune, textes de mesure (sans DOM) ; `screens/arena-tabs.js` (nouveau) : touches des onglets, sorties de `arena.js` pour rester sous 600 lignes
-- `src/wavelocalai/web/static/components/wl-chart-svg.js` (nouveau) ; `components/segments.js` (nouveau) ; `core/chart-scale.js` (nouveau, fonctions pures : axe, rayon, légende, étiquettes)
-- `src/wavelocalai/web/static/components/wl-arena-lane.js` : `name`, `origin`, `result` et l'événement `wl-lane-change` ; `screens/arena.js` : une vue de résultats, `reset` et `end` ; `components/index.js`
-- `src/wavelocalai/web/static/arena-results.css` (nouveau, lié dans `index.html`), `components.css` (segments, `wl-chart-svg`), `i18n/fr.json` (`arena.results`, `arena.chart`)
+- `src/frugal_ai_workbench/web/static/screens/arena-results.js` (nouveau) : classement, segments, matrice et tableau ; `screens/arena-results-data.js` (nouveau) : rangs, raisons, unité commune, textes de mesure (sans DOM) ; `screens/arena-tabs.js` (nouveau) : touches des onglets, sorties de `arena.js` pour rester sous 600 lignes
+- `src/frugal_ai_workbench/web/static/components/wl-chart-svg.js` (nouveau) ; `components/segments.js` (nouveau) ; `core/chart-scale.js` (nouveau, fonctions pures : axe, rayon, légende, étiquettes)
+- `src/frugal_ai_workbench/web/static/components/wl-arena-lane.js` : `name`, `origin`, `result` et l'événement `wl-lane-change` ; `screens/arena.js` : une vue de résultats, `reset` et `end` ; `components/index.js`
+- `src/frugal_ai_workbench/web/static/arena-results.css` (nouveau, lié dans `index.html`), `components.css` (segments, `wl-chart-svg`), `i18n/fr.json` (`arena.results`, `arena.chart`)
 - Tests : `tests/v2/e2e/test_arena_results.py`, `tests/v2/unit/test_arena_results_static.py` ; `unit/test_arena_static.py` (les trois scripts de l'écran ajoutés à `NEW_SCRIPTS`)
 
 ## Écarts

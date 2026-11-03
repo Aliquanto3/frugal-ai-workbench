@@ -104,7 +104,7 @@ def sobriety_with_ollama(backend, fake_ollama, page):
 def test_the_screen_has_one_title_and_the_sections_in_order(sobriety):
     page, _ = sobriety
     assert page.locator("h1:visible").inner_text() == "Sobriété et matériel"
-    assert page.title() == "Sobriété et matériel · WaveLocalAI"
+    assert page.title() == "Sobriété et matériel · Frugal AI Workbench"
     # `all_text_contents()` (story 9.9) : `.section-label` les met en majuscules par CSS.
     headings = page.locator('[data-screen="sobriety"] h2').all_text_contents()
     assert headings == ["Santé du système", "Empreinte carbone de cette session", "Historique"]
@@ -306,7 +306,7 @@ def test_the_identity_card_is_folded_and_reads_the_machine_when_opened(
     for label in ("Processeur", "Mémoire", "Accélérateur", "Système", "Version d'Ollama"):
         assert label in text
     assert f"Version d'Ollama {fake.VERSION}" in text  # lue dans l'état en cache de la sonde
-    assert "Version de WaveLocalAI" in text
+    assert "Version de Frugal AI Workbench" in text
     assert re.search(rf"\d+(,\d+)?{NBSP}Go de mémoire vive", text)
 
 

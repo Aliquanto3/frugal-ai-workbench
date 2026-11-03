@@ -11,8 +11,8 @@ from typing import Any
 
 import pytest
 
-from wavelocalai.config import Settings, load_settings
-from wavelocalai.telemetry import TELEMETRY_OPT_OUTS
+from frugal_ai_workbench.config import Settings, load_settings
+from frugal_ai_workbench.telemetry import TELEMETRY_OPT_OUTS
 
 TEST_PORT = 8502
 
@@ -21,7 +21,7 @@ TEST_PORT = 8502
 def vec_loadable() -> bool:
     """`sqlite-vec` se charge-t-il ici ? Faux avec un CPython sans `enable_load_extension`
     (Python de `setup-python` sur macOS) : l'application bascule alors sur `NumpyIndex`."""
-    from wavelocalai.store.vec import load_vec
+    from frugal_ai_workbench.store.vec import load_vec
 
     conn = sqlite3.connect(":memory:")
     try:
@@ -85,7 +85,7 @@ def _stub_codecarbon(monkeypatch):
     """Les tests ne lancent jamais le vrai CodeCarbon (plusieurs secondes de détection du matériel) :
     le compteur par défaut de l'app prend un double. Les tests de la vraie mesure construisent leur
     `LocalMeter` avec `real_loader` (importé avant ce remplacement)."""
-    from wavelocalai.greenops import local_meter
+    from frugal_ai_workbench.greenops import local_meter
 
     from .carbon_stub import Probe
 

@@ -13,9 +13,9 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from wavelocalai.config import load_settings
-from wavelocalai.models.classify import base_tag
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import load_settings
+from frugal_ai_workbench.models.classify import base_tag
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT
 

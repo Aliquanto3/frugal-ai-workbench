@@ -14,17 +14,23 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.greenops.local_meter import Footprint, LocalMeter, combine
-from wavelocalai.greenops.local_meter import load_tracker_class as real_loader  # avant le double
-from wavelocalai.greenops.session import announce_carbon_updated
-from wavelocalai.inference.local_slot import LocalSlot
-from wavelocalai.inference.streaming import stream_into_run
-from wavelocalai.models.fake import FAKE_REF, FakeChatModel, Sleep
-from wavelocalai.models.port import ChatMessage, ChatRequest, ModelRef, TextDelta
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.runs.system_bus import SystemFeed
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.greenops.local_meter import (
+    Footprint,
+    LocalMeter,
+    combine,
+)
+from frugal_ai_workbench.greenops.local_meter import (
+    load_tracker_class as real_loader,  # avant le double
+)
+from frugal_ai_workbench.greenops.session import announce_carbon_updated
+from frugal_ai_workbench.inference.local_slot import LocalSlot
+from frugal_ai_workbench.inference.streaming import stream_into_run
+from frugal_ai_workbench.models.fake import FAKE_REF, FakeChatModel, Sleep
+from frugal_ai_workbench.models.port import ChatMessage, ChatRequest, ModelRef, TextDelta
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.runs.system_bus import SystemFeed
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..carbon_stub import Probe
 

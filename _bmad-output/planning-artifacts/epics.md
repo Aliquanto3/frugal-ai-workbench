@@ -1,24 +1,24 @@
 ---
 stepsCompleted: [1, 2, 3, 4]
 inputDocuments:
-  - _bmad-output/specs/spec-wavelocalai-v2/SPEC.md
-  - _bmad-output/specs/spec-wavelocalai-v2/etapes-et-criteres.md
-  - _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
-  - _bmad-output/specs/spec-wavelocalai-v2/pile-technique.md
-  - _bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md
+  - _bmad-output/specs/spec-frugal-ai-workbench-v2/SPEC.md
+  - _bmad-output/specs/spec-frugal-ai-workbench-v2/etapes-et-criteres.md
+  - _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
+  - _bmad-output/specs/spec-frugal-ai-workbench-v2/pile-technique.md
+  - _bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md
   - docs/audits/refonte-2026-10/03-ux-front.md (§3 seul contractuel)
-  - _bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md
-  - _bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md
+  - _bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md
   - docs/maquette-v2/README.md (maquette validée, décisions D-1 à D-43 du 2026-10-18, reportées par sprint-change-proposal-2026-10-19.md)
 scope: 'MVP (étapes 1 à 4, CAP-1 à CAP-9) et après le MVP (étapes 5 à 8, CAP-10 à CAP-14) détaillés ; reports du MVP intégrés depuis reports-v2-inventaire.md'
 updated: '2026-10-19'
 ---
 
-# wavelocalai v2 - Découpage en epics et stories
+# Frugal AI Workbench v2 - Découpage en epics et stories
 
 ## Overview
 
-Ce document découpe la spec `spec-wavelocalai-v2` (qui tient lieu de PRD), la spine d'architecture (AD-1 à AD-23) et le contrat UX (`03-ux-front.md` §3, `DESIGN.md`, `EXPERIENCE.md`) en epics et stories. Une story = un lot livrable en une PR fusionnée sur `master` en un à deux jours. Priorités : AD > `pile-technique.md` et `contrat-api.md` > `03-ux-front.md` §3 > `EXPERIENCE.md` pour l'architecture d'information ; `DESIGN.md` reste la source des jetons.
+Ce document découpe la spec `spec-frugal-ai-workbench-v2` (qui tient lieu de PRD), la spine d'architecture (AD-1 à AD-23) et le contrat UX (`03-ux-front.md` §3, `DESIGN.md`, `EXPERIENCE.md`) en epics et stories. Une story = un lot livrable en une PR fusionnée sur `master` en un à deux jours. Priorités : AD > `pile-technique.md` et `contrat-api.md` > `03-ux-front.md` §3 > `EXPERIENCE.md` pour l'architecture d'information ; `DESIGN.md` reste la source des jetons.
 
 ## Requirements Inventory
 
@@ -59,7 +59,7 @@ Ce document découpe la spec `spec-wavelocalai-v2` (qui tient lieu de PRD), la s
 - FR25 : Statuts de lane (`waiting`, `loading`, `generating`, `judging`, `done`, `timeout`, `failed`, `cancelled`) avec texte et icône ; un délai dépassé ou un échec n'arrête pas les autres lanes.
 - FR26 : Un juge note chaque réponse (/100) avec raison ; « non évalué » (avec raison) jamais 0 ; défaut juge = plus gros modèle local qui tient, alerte « note peu fiable » sous ~4B actifs.
 - FR27 : Classement construit au fil des résultats, matrice qualité/CO₂ (SVG, légende de taille) affichée d'abord et vue tableau derrière « Voir le tableau » (D-14).
-- FR28 : Verdict local/cloud chiffré : écart de note, coût pour 1 000 requêtes (table de prix datée de `wavelocalai.toml`), CO₂, données restées sur le poste.
+- FR28 : Verdict local/cloud chiffré : écart de note, coût pour 1 000 requêtes (table de prix datée de `frugal-ai-workbench.toml`), CO₂, données restées sur le poste.
 - FR29 : Résultat conservé côté serveur, rouvrable par URL `#/arene/comparer/<run_id>`, liste `GET /api/arena/runs`, export CSV et Markdown avec preuve (fiche machine, version d'Ollama, digests, méthode CO₂, juge).
 - FR30 : Scénarios prédéfinis de question (Vulgarisation, Extraction JSON, Résumé, Traduction) et critères de notation repliés.
 
@@ -94,10 +94,10 @@ Ce document découpe la spec `spec-wavelocalai-v2` (qui tient lieu de PRD), la s
 - NFR3 : Aucun appel réseau ni import lourd dans le chemin de rendu ni au démarrage (`codecarbon`, `fastembed`, `pypdf`, `docx`, `ecologits`, SDK cloud importés dans la fonction).
 - NFR4 : Tout local : écoute `127.0.0.1:8502`, aucune requête navigateur hors de `127.0.0.1` (E2E), aucun CDN, installation par `uv sync` seul, ni Node ni téléchargement à l'exécution.
 - NFR5 : Sécurité de l'API locale : `Host` contrôlé, `Origin` étrangère refusée en écriture, aucun CORS, télémétrie FastAPI coupée.
-- NFR6 : Python `>=3.11,<3.13` pour tout le dépôt dès le premier lot ; lint `py311` pour `src/wavelocalai/` et `tests/v2/`.
+- NFR6 : Python `>=3.11,<3.13` pour tout le dépôt dès le premier lot ; lint `py311` pour `src/frugal_ai_workbench/` et `tests/v2/`.
 - NFR7 : Fichiers de 600 lignes au plus ; pas d'abstraction sans second cas.
 - NFR8 : Accessibilité RGAA 4.1 / WCAG 2.2 AA : axe-core sans violation ni exclusion, clair et sombre, sur chaque écran livré.
-- NFR9 : Charte Wavestone (primaire `#451DC7`, icônes Material, aucun emoji dans `static/`), Aptos puis Inter servie localement.
+- NFR9 : Charte générique (primaire `#0B6B78`, icônes Material, aucun emoji dans `static/`), Inter servie localement.
 - NFR10 : Textes en français par clés i18n (`static/i18n/fr.json`) ; formats `fr-FR` (Intl).
 - NFR11 : Confidentialité : `data/` jamais commitée ; « Effacer » efface réellement (`secure_delete`, `VACUUM`, test d'octets sur `.db` et `-wal`) ; journaux sans texte de prompt, réponse ou document au niveau INFO ; clés d'API masquées.
 - NFR12 : Fiabilité des mesures : débit D3 issu d'Ollama seulement ; CO₂ jamais 0 pour un inconnu ; aucune mesure n'interrompt un run ; aucun appel réseau de mesure.
@@ -107,9 +107,9 @@ Ce document découpe la spec `spec-wavelocalai-v2` (qui tient lieu de PRD), la s
 
 ### Additional Requirements
 
-Issus de la spine d'architecture (AD-n) et de la pile technique. **Pas de starter template** : greenfield dans `src/wavelocalai/` selon le Structural Seed, à côté de la v1.
+Issus de la spine d'architecture (AD-n) et de la pile technique. **Pas de starter template** : greenfield dans `src/frugal_ai_workbench/` selon le Structural Seed, à côté de la v1.
 
-- AR1 (AD-1, AD-2, AD-3) : premier lot = squelette du paquet `src/wavelocalai/`, `requires-python = ">=3.11,<3.13"`, `dev-mode-dirs = [".", "src"]`, installation éditable, lanceur `wavelocalai-v2` (`wavelocalai.__main__:main`) sur 8502, dépendances v2 dans `dependencies`, fastembed dans l'extra `rerank` ; `version = "2.0.0.dev0"` dès ce lot, puis une préversion par epic du MVP : `2.0.0a1` (Epic 1), `a2` (Epic 2), `a3` (Epic 3), `a4` (Epic 4), chacune avec tag `v2.0.0-alpha.N` et release (AD-3).
+- AR1 (AD-1, AD-2, AD-3) : premier lot = squelette du paquet `src/frugal_ai_workbench/`, `requires-python = ">=3.11,<3.13"`, `dev-mode-dirs = [".", "src"]`, installation éditable, lanceur `frugal-ai-workbench-v2` (`frugal_ai_workbench.__main__:main`) sur 8502, dépendances v2 dans `dependencies`, fastembed dans l'extra `rerank` ; `version = "2.0.0.dev0"` dès ce lot, puis une préversion par epic du MVP : `2.0.0a1` (Epic 1), `a2` (Epic 2), `a3` (Epic 3), `a4` (Epic 4), chacune avec tag `v2.0.0-alpha.N` et release (AD-3).
 - AR2 (ratification) : au premier lot, `AGENTS.md` (Python 3.11+, v1 en correctifs seulement, v2 décrite), `requirements.txt` et `constraints.txt` régénérés pour 3.11, Codecov 3.10 → 3.11, CI : job v2 (`setup-uv`, `uv sync --locked`, `pytest tests/v2`, 3.11 et 3.12, trois OS), job v1 sans 3.10.
 - AR3 (AD-4) : test AST `tests/v2/unit/test_layers.py` : sens des imports du diagramme, aucun `src.*`, seul `web/` importe fastapi/starlette/uvicorn, imports lourds paresseux.
 - AR4 (AD-5) : hub `runs/` seul à attribuer `seq`, publier, persister, annuler, fixer le statut, créer la conversation et écrire `messages` ; runs composites (`parent_run_id`), métriques et CO₂ sur les feuilles seulement ; `hub.finish_leaf(result, co2)`.
@@ -117,29 +117,29 @@ Issus de la spine d'architecture (AD-n) et de la pile technique. **Pas de starte
 - AR6 (AD-7) : événements en mémoire pour un run actif, écrits par lots ≤ 1 s, dernier lot + statut + message assistant dans une transaction ; `sources` persisté sans `text`, réhydraté au rejeu ; `runs.params` sans texte saisi.
 - AR7 (AD-8) : ports `ChatModel` / `Embedder` (`ChatRequest`, `ChatChunk`, `ChatResult` figés), annulation par tâche asyncio avec `finally`, `ProviderError(code)`, adaptateur Ollama natif `/api/chat` seul `ollama_eval`, embeddings locaux `/api/embed`, adaptateur `fake` seulement si `Settings.testing`.
 - AR8 (AD-9) : `registry.resolve(tag, allow_cloud)` et `registry.resolve_embedder(tag)` seuls accès aux modèles ; approbations du hub (étape 6).
-- AR9 (AD-10, AD-11) : champ `co2` unique ; `OfflineEmissionsTracker` par feuille locale sous le sémaphore, un seul à la fois, `start`/`stop` dans le pool de threads, test sans socket ; ecologits `llm_impacts(...)` par arguments nommés, jamais `EcoLogits.init()`, correspondance Groq dans `wavelocalai.toml`, test de contrat de signature ; `app_session` par démarrage et remise à zéro ; `carbon_updated` sur `SystemBus`.
+- AR9 (AD-10, AD-11) : champ `co2` unique ; `OfflineEmissionsTracker` par feuille locale sous le sémaphore, un seul à la fois, `start`/`stop` dans le pool de threads, test sans socket ; ecologits `llm_impacts(...)` par arguments nommés, jamais `EcoLogits.init()`, correspondance Groq dans `frugal-ai-workbench.toml`, test de contrat de signature ; `app_session` par démarrage et remise à zéro ; `carbon_updated` sur `SystemBus`.
 - AR4 bis (AD-5) : `kind` de feuille en liste close, figée par la migration du hub : `generation`, `judge`, `embedding` ; une feuille `embedding` est mesurée comme toute feuille locale ; le verdict d'Arène vit dans l'instantané `GET /api/runs/{id}`.
-- AR10 (AD-12) : SQLite unique `data/wavelocalai.db`, WAL, `foreign_keys`, `secure_delete`, écrivain unique sur un fil, migrations `NNNN_*.sql` avant seulement avec `.bak-<user_version>`, base plus récente = refus de démarrer, test de schéma par instantané ; **la migration de la story du hub crée `runs`, `run_events`, `conversations`, `messages` et `app_sessions` en entier** ; exception : `store.ensure_vec_table(dim)`.
+- AR10 (AD-12) : SQLite unique `data/frugal-ai-workbench.db`, WAL, `foreign_keys`, `secure_delete`, écrivain unique sur un fil, migrations `NNNN_*.sql` avant seulement avec `.bak-<user_version>`, base plus récente = refus de démarrer, test de schéma par instantané ; **la migration de la story du hub crée `runs`, `run_events`, `conversations`, `messages` et `app_sessions` en entier** ; exception : `store.ensure_vec_table(dim)`.
 - AR11 (AD-13) : effacer une conversation/un run supprime `messages`, `run_events`, `evaluations` et garde `runs` sans texte (`conversation_id` NULL) ; document → `chunks` + lignes vec0 par `rowid` dans la même transaction ; « Vider » recrée la table vec0 ; séquence `DELETE`, `wal_checkpoint(TRUNCATE)`, `VACUUM`, `wal_checkpoint(TRUNCATE)` ; `409` si run actif.
 - AR12 (AD-14) : client Ollama async partagé, sémaphore local à 1 pris par appel ; un run racine actif par `kind` ; délai de lane depuis l'acquisition du sémaphore (local) ou le départ (cloud) ; travail CPU dans le pool de threads.
-- AR13 (AD-15) : `Settings` pydantic chargé une fois depuis `wavelocalai.toml` (`tomllib`) puis `.env`, aucun `os.getenv` hors `config.py` ; table `preferences` pour les réglages d'UI ; l'app n'écrit jamais le `.toml` ; cache de modèles rafraîchi en tâche de fond.
+- AR13 (AD-15) : `Settings` pydantic chargé une fois depuis `frugal-ai-workbench.toml` (`tomllib`) puis `.env`, aucun `os.getenv` hors `config.py` ; table `preferences` pour les réglages d'UI ; l'app n'écrit jamais le `.toml` ; cache de modèles rafraîchi en tâche de fond.
 - AR14 (AD-16) : une base = un modèle d'embedding ; `chunks_vec_<dim>` (vec0, `rowid = chunks.id`) ; seuls les documents `ready` interrogés ; `VectorIndex` sqlite-vec + repli numpy ; 409 si `ingest`/`rag` actif au changement d'embedding ou au « Vider ».
 - AR15 (AD-17) : aucun téléchargement implicite ; reranker fastembed `local_files_only=True` depuis le `cache_dir` des données.
 - AR16 (AD-18) : `errors.py` liste fermée ; chaque story ajoute ses codes ; `detail` est un objet (`technical` replié, plus les clés machine déclarées avec le code) dont les valeurs texte passent par le masquage de clé.
-- AR17 (AD-19, AD-21) : `wavelocalai/telemetry.py` copie adaptée, `FASTAPI_OTEL_AUTO_CONFIGURE=false`, `disable_telemetry()` avant fastembed et huggingface_hub, test AST.
+- AR17 (AD-19, AD-21) : `frugal_ai_workbench/telemetry.py` copie adaptée, `FASTAPI_OTEL_AUTO_CONFIGURE=false`, `disable_telemetry()` avant fastembed et huggingface_hub, test AST.
 - AR18 (AD-20) : front : Custom Elements `wl-` sans Shadow DOM, écrans `mount(host, params)` → `unmount` chargés par `import()`, un seul `core/sse.js` et un seul `core/store.js` (état et dernier `seq` des runs actifs), bascule cloud dans le store seulement, `localStorage` pour thème, projection, volets et brouillons ; aucune mesure calculée côté front hors chronomètre et débit provisoire ; aucune dépendance JS tierce hors `static/vendor/` avec licence.
 - AR19 (AD-22) : lecture de `benchmarks/slm-quality/slm-quality-results.json` seulement, schéma `qb.results/1` (étape 5 et CAP-13).
 - AR20 (AD-23) : verrou du dossier de données, message de port occupé, arrêt propre, journaux en rotation, CSV v1 non importé.
-- AR21 (réutilisation) : copier puis adapter (jamais importer) `model_defaults.py`, `metrics.py`, `_validate_path`, `accelerator.py`, `HardwareMonitor`, `telemetry.py`, streaming des providers cloud, `retry_interrupted`, règle `answer_carbon`, fichiers du harnais (`openai_chat.py`, `anthropic_messages.py`, `greenops.py`, front `wavestack/web`), `hardware.py`/`nvml.py`/`machine_state.py` de l'archive.
+- AR21 (réutilisation) : copier puis adapter (jamais importer) `model_defaults.py`, `metrics.py`, `_validate_path`, `accelerator.py`, `HardwareMonitor`, `telemetry.py`, streaming des providers cloud, `retry_interrupted`, règle `answer_carbon`, fichiers du harnais (`openai_chat.py`, `anthropic_messages.py`, `greenops.py`, front `harness_lab/web`), `hardware.py`/`nvml.py`/`machine_state.py` de l'archive.
 - AR22 (versions) : versions de la spine §Stack (FastAPI 0.143.5, uvicorn 0.54.0, pydantic 2.12.x jusqu'à la bascule, ollama 0.6.3, sqlite-vec 0.1.9, ecologits `>=0.11.3,<0.12`, fastembed 0.9.0) ; SDK `openai`, `anthropic`, `mistralai`, `codecarbon`, `pypdf`, `python-docx` revérifiés à la story qui les utilise.
 - AR23 (périmètre) : ne modifier ni `scripts/benchmark_slm.py` ni le `src/core/` de la v1 ; rien ne s'ajoute au MVP avant sa livraison.
 
 ### UX Design Requirements
 
-- UX-DR1 : `static/tokens.css` miroir des jetons de `DESIGN.md` (couleurs clair/sombre dont `primary #451DC7` / `#7E65E9`, `surface`, `surface-alt`, `ink`, `ink-secondary`, `line`, `link`, `accent-green`, `risk`, `chart-1…4`, rayon 12 px, typographie `metric-value`, `heading`, `caption`, `body`) et un test de dérive qui les compare.
-- UX-DR2 : `base.css` : reset, pile Aptos (par `local()`) → Inter servie depuis `static/fonts/` avec licence → `sans-serif`, `:focus-visible` à 3:1, `prefers-reduced-motion`, mode projection (rampe typographique ×9/7, métriques agrandies, pied masqué) ; thème « Clair » par défaut, « Sombre » et « Système » (suit `prefers-color-scheme`) (D-7) ; mode projection en interrupteur (D-6).
+- UX-DR1 : `static/tokens.css` miroir des jetons de `DESIGN.md` (couleurs clair/sombre dont `primary #0B6B78` / `#7E65E9`, `surface`, `surface-alt`, `ink`, `ink-secondary`, `line`, `link`, `accent-green`, `risk`, `chart-1…4`, rayon 12 px, typographie `metric-value`, `heading`, `caption`, `body`) et un test de dérive qui les compare.
+- UX-DR2 : `base.css` : reset, pile Inter servie depuis `static/fonts/` avec licence → `sans-serif`, `:focus-visible` à 3:1, `prefers-reduced-motion`, mode projection (rampe typographique ×9/7, métriques agrandies, pied masqué) ; thème « Clair » par défaut, « Sombre » et « Système » (suit `prefers-color-scheme`) (D-7) ; mode projection en interrupteur (D-6).
 - UX-DR3 : sprite `icons.svg` (sous-ensemble des Material Symbols Rounded officiels, avec licence, D-2), icône propre à chaque module, aucun emoji (test sur `static/`).
-- UX-DR4 : coquille `index.html` : `lang="fr"`, repères `header`/`nav`/`main`, lien d'évitement « Aller au contenu », routeur par `hash` (`#/`, `#/arene/chat`, `#/arene/comparer[/<run_id>]`, `#/arene/banc[/<run_id>]`, `#/arene/references`, `#/documents`, `#/documents/base`, `#/documents/evaluation[/<run_id>]`, `#/agents/seul`, `#/agents/equipe[/<run_id>]`, `#/sobriete`, `#/modeles[/<tag>]` ; D-8), écran gardé en mémoire après la première visite, `document.title` « <Écran> · WaveLocalAI », focus sur le `h1` et annonce polie à chaque route, un `h1` par écran.
+- UX-DR4 : coquille `index.html` : `lang="fr"`, repères `header`/`nav`/`main`, lien d'évitement « Aller au contenu », routeur par `hash` (`#/`, `#/arene/chat`, `#/arene/comparer[/<run_id>]`, `#/arene/banc[/<run_id>]`, `#/arene/references`, `#/documents`, `#/documents/base`, `#/documents/evaluation[/<run_id>]`, `#/agents/seul`, `#/agents/equipe[/<run_id>]`, `#/sobriete`, `#/modeles[/<tag>]` ; D-8), écran gardé en mémoire après la première visite, `document.title` « <Écran> · Frugal AI Workbench », focus sur le `h1` et annonce polie à chaque route, un `h1` par écran.
 - UX-DR5 : barre haute (FR2) : menu des modules, pastille Ollama avec libellé et panneau, interrupteur « Autoriser le cloud » avec son aide (« Désactivé à chaque ouverture de la page. Activé, les données envoyées aux modèles cloud quittent la machine. »), CO₂ session et son panneau (total, Local/Cloud, non mesurables, lien Sobriété), menu Affichage (thème, projection) ; menu repliable sous 1 024 px ; bandeau « Connexion au serveur perdue, nouvelle tentative… » après 3 essais.
 - UX-DR6 : `wl-badge` : Local (vert, `computer`), Cloud (orange, `cloud`), Origine inconnue (gris, `help`), toujours un texte ; étiquettes « indicatif », « un seul juge », « estimé », « non mesurable ».
 - UX-DR7 : `wl-metric` : libellé, valeur avec unité en `metric-value`, aide par `<button aria-describedby>`, état « provisoire » en italique.
@@ -238,7 +238,7 @@ L'utilisateur ouvre l'app, même Ollama arrêté, voit l'état du poste et le CO
 ### Story 1.1 : Le dépôt accueille la v2 (squelette, Python 3.11, CI, ratification)
 
 As a mainteneur du dépôt,
-I want un paquet `src/wavelocalai/` installable à côté de la v1, testé en CI et décrit dans `AGENTS.md`,
+I want un paquet `src/frugal_ai_workbench/` installable à côté de la v1, testé en CI et décrit dans `AGENTS.md`,
 So that chaque lot suivant de la v2 se livre en une PR courte sans casser la v1.
 
 **Gouverné par :** AD-1, AD-2, AD-3, AD-4 ; AR1, AR2, AR3, AR22, AR23.
@@ -247,7 +247,7 @@ So that chaque lot suivant de la v2 se livre en une PR courte sans casser la v1.
 
 **Given** le dépôt à jour de `master`
 **When** on lance `uv sync`
-**Then** `requires-python = ">=3.11,<3.13"`, `[tool.hatch.build] dev-mode-dirs = [".", "src"]` et le script `wavelocalai-v2 = "wavelocalai.__main__:main"` sont dans le `pyproject.toml` unique, `uv.lock` est régénéré, et `import wavelocalai`, `import src.core` et le lanceur v1 `wavelocalai` résolvent tous trois
+**Then** `requires-python = ">=3.11,<3.13"`, `[tool.hatch.build] dev-mode-dirs = [".", "src"]` et le script `frugal-ai-workbench-v2 = "frugal_ai_workbench.__main__:main"` sont dans le `pyproject.toml` unique, `uv.lock` est régénéré, et `import frugal_ai_workbench`, `import src.core` et le lanceur v1 `frugal-ai-workbench` résolvent tous trois
 **And** les versions de FastAPI, uvicorn, pydantic et ollama sont celles de la spine §Stack, vérifiées par installation réelle
 **And** `version = "2.0.0.dev0"` dans `pyproject.toml` et `uv.lock` (sans tag), pour que `master` n'annonce plus 1.3.x dès qu'il contient la v2 (AD-3)
 
@@ -258,27 +258,27 @@ So that chaque lot suivant de la v2 se livre en une PR courte sans casser la v1.
 **Given** une PR vers `master`
 **When** la CI tourne
 **Then** un job v2 (`setup-uv`, `uv sync --locked`, `pytest tests/v2`, Python 3.11 et 3.12, trois OS) passe, le job v1 tourne sans 3.10, la condition Codecov vise 3.11
-**And** ruff cible `py311` pour `src/wavelocalai/` et `tests/v2/` seulement ; les réglages globaux et `scripts/benchmark_slm.py` ne changent pas
+**And** ruff cible `py311` pour `src/frugal_ai_workbench/` et `tests/v2/` seulement ; les réglages globaux et `scripts/benchmark_slm.py` ne changent pas
 
 **Given** la PR de la story
 **When** on la relit
-**Then** `AGENTS.md` dit Python 3.11+, v1 en correctifs seulement, et décrit la v2 (lanceur `wavelocalai-v2`, port 8502, `tests/v2/{unit,web,e2e}`) ; `requirements.txt` et `constraints.txt` sont régénérés pour 3.11
+**Then** `AGENTS.md` dit Python 3.11+, v1 en correctifs seulement, et décrit la v2 (lanceur `frugal-ai-workbench-v2`, port 8502, `tests/v2/{unit,web,e2e}`) ; `requirements.txt` et `constraints.txt` sont régénérés pour 3.11
 **And** `python -m pytest tests/unit tests/app` (v1) reste vert
 
 ### Story 1.2 : Le serveur v2 démarre en local, protégé, et dit son état
 
 As a consultant qui prépare une démo,
-I want lancer `wavelocalai-v2` et obtenir un serveur local qui refuse les pages étrangères et dit en moins d'une seconde si Ollama répond,
+I want lancer `frugal-ai-workbench-v2` et obtenir un serveur local qui refuse les pages étrangères et dit en moins d'une seconde si Ollama répond,
 So that je sais avant la démo si elle peut partir, sans risque qu'un site visité pilote mon poste.
 
 **Gouverné par :** AD-15, AD-18, AD-19, AD-21, AD-23 ; AR13, AR16, AR17, AR20, AR21.
 
 **Acceptance Criteria:**
 
-**Given** `wavelocalai.toml` versionné (hôte Ollama, port, pays et PUE, délais) et un `.env` facultatif
+**Given** `frugal-ai-workbench.toml` versionné (hôte Ollama, port, pays et PUE, délais) et un `.env` facultatif
 **When** le serveur démarre
 **Then** `Settings` (pydantic) est chargé une fois par `tomllib` puis `.env`, et un test AST vérifie qu'aucun `os.getenv` n'existe hors de `config.py`
-**And** `wavelocalai/telemetry.py` (copie adaptée de la v1, avec `FASTAPI_OTEL_AUTO_CONFIGURE=false`) est appliqué avant la création de l'app, créée avec `tracing`, `metrics`, `logs`, `operation_spans` et `auto_configure` à `False`
+**And** `frugal_ai_workbench/telemetry.py` (copie adaptée de la v1, avec `FASTAPI_OTEL_AUTO_CONFIGURE=false`) est appliqué avant la création de l'app, créée avec `tracing`, `metrics`, `logs`, `operation_spans` et `auto_configure` à `False`
 
 **Given** le serveur lancé
 **When** une requête arrive avec un `Host` autre que `127.0.0.1:<port>` ou `localhost:<port>`, ou une écriture avec une `Origin` étrangère
@@ -298,7 +298,7 @@ So that je sais avant la démo si elle peut partir, sans risque qu'un site visit
 **And** la sonde Ollama a un délai de 1 s au plus et son état reste en cache 5 s
 
 **Given** un serveur déjà lancé sur le même dossier de données, ou le port occupé
-**When** on relance `wavelocalai-v2`
+**When** on relance `frugal-ai-workbench-v2`
 **Then** le second refuse de démarrer avec un message clair (verrou dans le dossier de données ; « port 8502 occupé »)
 **And** les journaux vont en rotation 5 × 1 Mo dans `data/logs/` ; une alerte est journalisée si le dossier de données est sous OneDrive ; les tests utilisent un dossier temporaire, jamais `data/`
 
@@ -314,7 +314,7 @@ So that aucun résultat ne se perd et qu'un serveur relancé dit honnêtement ce
 
 **Given** une base absente
 **When** le serveur démarre
-**Then** `store/db.py` ouvre `data/wavelocalai.db` (dossier configurable) en `journal_mode=WAL`, `foreign_keys=ON`, `secure_delete=ON`, avec **un seul écrivain** qui sérialise les écritures sur un fil, et les lectures sur connexions courtes
+**Then** `store/db.py` ouvre `data/frugal-ai-workbench.db` (dossier configurable) en `journal_mode=WAL`, `foreign_keys=ON`, `secure_delete=ON`, avec **un seul écrivain** qui sérialise les écritures sur un fil, et les lectures sur connexions courtes
 **And** la migration `store/migrations/0001_hub.sql` crée **en entier** `runs`, `run_events`, `conversations`, `messages` et `app_sessions`, `PRAGMA user_version` vaut 1
 
 **Given** la migration `0001_hub.sql`
@@ -324,7 +324,7 @@ So that aucun résultat ne se perd et qu'un serveur relancé dit honnêtement ce
 
 **Given** une base existante à `user_version` N et une migration N+1
 **When** le serveur démarre
-**Then** une copie `wavelocalai.db.bak-N` est faite avant la migration, appliquée dans une transaction
+**Then** une copie `frugal-ai-workbench.db.bak-N` est faite avant la migration, appliquée dans une transaction
 **And** une base dont `user_version` dépasse celle du code fait refuser le démarrage avec un message
 
 **Given** le hub `runs/`
@@ -424,7 +424,7 @@ So that la démo part sans configuration et que je peux expliquer le choix.
 
 **Given** une préférence de défaut choisie par l'UI
 **When** elle existe dans la table `preferences` (migration `0003_preferences.sql`)
-**Then** elle prime sur la règle pour ce seul usage ; l'app n'écrit jamais `wavelocalai.toml`
+**Then** elle prime sur la règle pour ce seul usage ; l'app n'écrit jamais `frugal-ai-workbench.toml`
 
 ### Story 1.7 : Le système publie son état en direct et la session carbone existe
 
@@ -450,7 +450,7 @@ So that je sais à tout moment si le poste est prêt, sans cliquer.
 **Then** la réponse rend la somme des `co2.mg` des runs feuilles de la session courante, par module, Local et Cloud, et le nombre de non-mesurables à part ; sans aucun run, total 0 mg et 0 non-mesurable
 **And** les runs parents ne sont jamais comptés (test avec un run composite)
 
-### Story 1.8 : La coquille s'affiche tout de suite, aux couleurs de Wavestone
+### Story 1.8 : La coquille s'affiche tout de suite, aux couleurs de la charte générique
 
 As a consultant qui ouvre l'app devant un client,
 I want une coquille qui s'affiche en moins de 300 ms, avec la navigation des modules, même si Ollama est arrêté,
@@ -468,7 +468,7 @@ So that la première impression est celle d'un outil fini et rapide.
 **Given** le registre d'écrans du routeur, chaque écran `available` ou `planned`
 **When** la barre haute s'affiche
 **Then** les six modules (Accueil, Arène, Documents, Agents, Sobriété, Modèles) sont visibles ; ceux en `planned` sont un `<a>` sans `href`, `aria-disabled="true"`, focalisable, avec le texte visible « Pas encore disponible dans cette préversion » (clé i18n) ; une route `planned` tapée à la main renvoie à l'Accueil
-**And** à chaque route, `document.title` vaut « <Écran> · WaveLocalAI », le focus va sur le `h1` et un changement d'écran prend moins de 150 ms ; sous 1 024 px, les liens passent dans un menu repliable
+**And** à chaque route, `document.title` vaut « <Écran> · Frugal AI Workbench », le focus va sur le `h1` et un changement d'écran prend moins de 150 ms ; sous 1 024 px, les liens passent dans un menu repliable
 
 **Given** `tokens.css` et les jetons de `DESIGN.md`
 **When** le test de dérive s'exécute
@@ -477,7 +477,7 @@ So that la première impression est celle d'un outil fini et rapide.
 
 **Given** le menu Affichage
 **When** on choisit le thème sombre ou le mode projection
-**Then** le choix s'applique sans rechargement, est mémorisé dans `localStorage` (seul usage avec volets et brouillons), et la police suit la pile Aptos (`local()`) → Inter locale → `sans-serif`
+**Then** le choix s'applique sans rechargement, est mémorisé dans `localStorage` (seul usage avec volets et brouillons), et la police suit la pile Inter (`local()`) → Inter locale → `sans-serif`
 **And** axe-core ne relève aucune violation sur la coquille, en clair et en sombre, sans exclusion ; la coquille reste lisible à 320 px CSS sans défilement horizontal
 
 ### Story 1.9 : La barre haute dit l'état d'Ollama, du cloud et du CO₂, en direct
@@ -677,7 +677,7 @@ So that je montre une sobriété chiffrée et non une constante.
 
 **Acceptance Criteria:**
 
-**Given** le service `greenops/` (modèle de `wavestack/greenops.py`, `codecarbon` importé dans la fonction, version revérifiée)
+**Given** le service `greenops/` (modèle de `harness_lab/greenops.py`, `codecarbon` importé dans la fonction, version revérifiée)
 **When** une feuille locale s'exécute
 **Then** un `OfflineEmissionsTracker` (pays et PUE de `Settings`) est démarré et arrêté sous le sémaphore Ollama, un seul à la fois, `start`/`stop` dans le pool de threads, et la feuille se termine par `hub.finish_leaf(result, co2)` avec `co2 = {mg, method: "codecarbon", estimated: false, range_mg: null, allocation: "direct", reason: null}` et `energy_wh`
 **And** un test sans socket (réseau coupé) vérifie qu'aucun appel réseau n'est fait
@@ -737,7 +737,7 @@ So that je ne présente jamais un chiffre inventé ni un zéro trompeur.
 **And** un test de contrat fige la signature de `llm_impacts`
 
 **Given** un modèle Groq
-**When** il a une entrée dans la table de correspondance de `wavelocalai.toml` (vers l'entrée `huggingface_hub` du modèle ouvert, ex. `openai/gpt-oss-120b`)
+**When** il a une entrée dans la table de correspondance de `frugal-ai-workbench.toml` (vers l'entrée `huggingface_hub` du modèle ouvert, ex. `openai/gpt-oss-120b`)
 **Then** l'estimation est faite sur cette entrée ; sans entrée, `co2 = {mg: null, method: "unmeasurable", reason: "<raison>"}`
 
 **Given** un résultat ecologits avec `errors` non vide ou une exception
@@ -792,7 +792,7 @@ So that chaque modèle répond dans ses conditions prévues et que l'export rest
 **Given** `GET /api/models`
 **When** on l'appelle
 **Then** chaque modèle de conversation porte `default_temperature` (`float | null`) : la valeur des paramètres publiés par Ollama pour ce modèle (lus avec les faits du modèle, en cache `model_facts`) ou celle du catalogue, sinon `null` ; la route reste servie depuis le cache, sous le budget de 300 ms Ollama arrêté (test)
-**And** `contrat-api.md` (Modèles) le décrit déjà (correct course) ; le fichier `wavelocalai.toml` est inchangé après le choix d'un modèle (test : empreinte avant et après)
+**And** `contrat-api.md` (Modèles) le décrit déjà (correct course) ; le fichier `frugal-ai-workbench.toml` est inchangé après le choix d'un modèle (test : empreinte avant et après)
 
 **Given** l'écran Chat libre
 **When** on choisit un modèle
@@ -952,7 +952,7 @@ So that la conclusion repose sur des chiffres et pas sur une impression.
 
 **Acceptance Criteria:**
 
-**Given** une table de prix cloud datée dans `wavelocalai.toml` (prix par million de tokens d'entrée et de sortie, date de relevé)
+**Given** une table de prix cloud datée dans `frugal-ai-workbench.toml` (prix par million de tokens d'entrée et de sortie, date de relevé)
 **When** une Arène comprend au moins un modèle local et un modèle cloud, tous deux notés
 **Then** le serveur calcule le verdict à la fin du run et le rend dans l'instantané `GET /api/runs/{id}` (champ `verdict`, AD-5) : écart de note entre le meilleur local et le meilleur cloud, coût pour 1 000 requêtes de même taille (0 € pour le local, prix daté pour le cloud), CO₂ de chacun, et « données restées sur le poste » pour le local
 **And** le front lit cet instantané à `run_ended` et à la réouverture, et n'en calcule rien ; aucun nouveau type d'événement n'est créé
@@ -1096,7 +1096,7 @@ So that je maîtrise ce que contient ma base et qu'une erreur de clic ne détrui
 
 **Given** `GET` et `PUT /api/rag/settings` (modèle de représentation, découpe, nombre d'extraits, stratégie par défaut) stockés dans `preferences`
 **When** on change de modèle d'embedding alors que la base n'est pas vide
-**Then** la réponse impose « Vider » d'abord ; l'app n'écrit jamais `wavelocalai.toml`
+**Then** la réponse impose « Vider » d'abord ; l'app n'écrit jamais `frugal-ai-workbench.toml`
 
 **Given** un run `ingest` ou `rag` actif
 **When** on demande de supprimer un document visé, de vider ou de changer d'embedding
@@ -1317,7 +1317,7 @@ So that je relie la charge du poste aux réponses qui l'ont produite, sans cliqu
 
 **Given** le panneau « Comment ces chiffres sont calculés » (D-38, correct course)
 **When** on l'ouvre
-**Then** il donne l'équivalence parlante du CO₂ de la session en distance parcourue en voiture, avec le facteur (g de CO₂ par km), sa source publique et sa date ; facteur et valeur viennent du serveur (réglage daté de `wavelocalai.toml`, source vérifiée et citée par la story), jamais d'une constante du front
+**Then** il donne l'équivalence parlante du CO₂ de la session en distance parcourue en voiture, avec le facteur (g de CO₂ par km), sa source publique et sa date ; facteur et valeur viennent du serveur (réglage daté de `frugal-ai-workbench.toml`, source vérifiée et citée par la story), jamais d'une constante du front
 **And** l'équivalence n'apparaît nulle part ailleurs (ni section session, ni barre haute, ni Accueil)
 
 ### Story 5.2 : Retrouver l'historique carbone et ouvrir une nouvelle session
@@ -1395,7 +1395,7 @@ So that je libère la mémoire avant une démo et retrouve mes choix d'une séan
 
 **Given** le bouton « Définir par défaut » sur l'écran Modèles (décision Q2 : choix explicite, jamais retenu sans geste)
 **When** on choisit un modèle comme défaut d'un usage (`chat`, `arena`, `judge`, `agent`, `rag`) par `PUT /api/models/defaults/{purpose}` (écriture, `Origin` contrôlée)
-**Then** le choix est écrit dans `preferences` (jamais dans `wavelocalai.toml`), `GET /api/models/defaults` le rend avec la raison « Choisi par vous », un modèle cloud n'est gardé qu'avec `allow_cloud`, et « Revenir au choix automatique » efface la préférence
+**Then** le choix est écrit dans `preferences` (jamais dans `frugal-ai-workbench.toml`), `GET /api/models/defaults` le rend avec la raison « Choisi par vous », un modèle cloud n'est gardé qu'avec `allow_cloud`, et « Revenir au choix automatique » efface la préférence
 **And** un défaut choisi puis supprimé du poste retombe sur la règle avec sa raison (test)
 **And** « Changer » ouvre `wl-model-picker` filtré sur les modèles éligibles à l'usage : un modèle inéligible n'est pas proposé, plutôt que refusé à « Enregistrer » (décision du 2026-10-19)
 
@@ -1538,7 +1538,7 @@ So that l'écran montre ce que fait l'agent, étape par étape, quel que soit le
 ### Story 6.2 : L'agent dispose des outils de la v1, sans chemin libre
 
 As a consultant,
-I want retrouver les outils de la v1 (Heure, Calculatrice, Recherche interne Wavestone, Analyse de données, Génération de document, Génération de graphique, Rapport Markdown, Moniteur système, Envoi d'email) avec ce qui les rend disponibles,
+I want retrouver les outils de la v1 (Heure, Calculatrice, Recherche interne (simulée), Analyse de données, Génération de document, Génération de graphique, Rapport Markdown, Moniteur système, Envoi d'email) avec ce qui les rend disponibles,
 So that je refais les démos d'agent de la v1 sans risque pour le poste.
 
 **Gouverné par :** AD-2, AD-4, AD-9, AD-18 ; AR21.
@@ -1801,7 +1801,7 @@ So that les tests qui protègent la v2 ne laissent rien passer avant la bascule.
 **Acceptance Criteria:**
 
 **Given** `tests/v2/unit/test_layers.py`
-**When** un module importe un composant par `import wavelocalai` puis accès d'attribut, par `importlib.import_module` ou par `__import__`
+**When** un module importe un composant par `import frugal_ai_workbench` puis accès d'attribut, par `importlib.import_module` ou par `__import__`
 **Then** le test relève la violation (modules pièges ajoutés) (C1)
 
 **Given** le test de budget de lecture
@@ -1895,7 +1895,7 @@ So that l'archivage de la v1 ne perd aucune fonction sans le dire.
 **Given** la suite `tests/v2/e2e`
 **When** on la lance
 **Then** elle joue Flow 1, Flow 2, Sobriété et Modèles, Agents et Évaluation et Banc d'essai sans recharger la page, et vérifie qu'aucune requête ne sort de `127.0.0.1`
-**And** elle tourne dans un job CI Linux nocturne (Chromium de Playwright installé par la CI) et en local sur Edge par `WAVELOCALAI_E2E_CHROMIUM`, mode d'emploi dans `AGENTS.md` ; les PR n'attendent pas ce job (décision Q6)
+**And** elle tourne dans un job CI Linux nocturne (Chromium de Playwright installé par la CI) et en local sur Edge par `FRUGAL_AI_E2E_CHROMIUM`, mode d'emploi dans `AGENTS.md` ; les PR n'attendent pas ce job (décision Q6)
 
 **Given** le README
 **When** la story se termine
@@ -1903,8 +1903,8 @@ So that l'archivage de la v1 ne perd aucune fonction sans le dire.
 
 ### Story 8.4 : La v2 remplace la v1 (2.0.0)
 
-As a utilisateur de wavelocalai,
-I want lancer `wavelocalai` et obtenir la v2,
+As a utilisateur de frugal-ai-workbench,
+I want lancer `frugal-ai-workbench` et obtenir la v2,
 So that il n'existe plus qu'une application à installer et à maintenir.
 
 **Gouverné par :** AD-1, AD-2, AD-3 ; AR1, AR22, AR23 ; décision Q5. **Reports :** B17, B18.
@@ -1913,7 +1913,7 @@ So that il n'existe plus qu'une application à installer et à maintenir.
 
 **Given** la décision Q5 : `src/app`, `src/core`, les tests v1 (`tests/unit`, `tests/app`, `tests/integration`) et les scripts qui importent `src.core` retirés de `master`, la v1 conservée par son dernier tag `v1.3.x` cité dans le README
 **When** on bascule
-**Then** le script `wavelocalai` lance la v2 (`wavelocalai.__main__:main`), `wavelocalai-v2` disparaît, `packages` passe à `src/wavelocalai`, `dev-mode-dirs` est retiré, et une installation non éditable (`uv build` puis installation de la roue dans un venv propre) lance le serveur
+**Then** le script `frugal-ai-workbench` lance la v2 (`frugal_ai_workbench.__main__:main`), `frugal-ai-workbench-v2` disparaît, `packages` passe à `src/frugal_ai_workbench`, `dev-mode-dirs` est retiré, et une installation non éditable (`uv build` puis installation de la roue dans un venv propre) lance le serveur
 **And** les dépendances de la v1 (Streamlit, LangChain, LangGraph, CrewAI, Ragas, Chroma, torch…) sortent du `pyproject.toml`, `uv.lock` est régénéré, et la taille du `.venv` est mesurée et consignée
 
 **Given** pydantic contraint sous 2.13 par crewai
@@ -1987,7 +1987,7 @@ So that je n'aie pas à taper l'URL locale.
 
 **Acceptance Criteria:**
 
-**Given** `uv run wavelocalai-v2` (le nom passe à `wavelocalai` à la story 8.4)
+**Given** `uv run frugal-ai-workbench-v2` (le nom passe à `frugal-ai-workbench` à la story 8.4)
 **When** le serveur écoute
 **Then** le navigateur par défaut s'ouvre une seule fois sur `http://127.0.0.1:<port>/`, après que le port répond, jamais avant
 **And** `--no-browser` et le réglage `[server] open_browser = false` l'empêchent ; les tests, la CI et les E2E lancent le serveur sans navigateur
@@ -2008,7 +2008,7 @@ So that les autres modèles soient notés sans attendre le délai de 300 s.
 
 **Given** une comparaison
 **When** une colonne génère
-**Then** la requête porte un plafond `arena.max_tokens` (réglable dans `wavelocalai.toml`) ; une colonne qui l'atteint finit avec `stopped_reason: "max_tokens"`, sa réponse partielle gardée et **notée**
+**Then** la requête porte un plafond `arena.max_tokens` (réglable dans `frugal-ai-workbench.toml`) ; une colonne qui l'atteint finit avec `stopped_reason: "max_tokens"`, sa réponse partielle gardée et **notée**
 
 **Given** une sortie qui se répète (même fragment final répété au-delà d'un seuil, par exemple 4 fois au moins sur une fenêtre de 200 caractères ou plus ; seuil et fenêtre réglables)
 **When** le détecteur la voit
@@ -2106,7 +2106,7 @@ So that la refonte de tous les écrans parte d'une direction acceptée.
 **And** elle porte une grille à deux colonnes au-delà de 1 400 px environ (saisie et choix du modèle à gauche ; réglages repliés, aperçu et résultats à droite)
 **And** le prompt (police normale, grand champ), le ou les modèles (cartes de choix) et le bouton principal sont mis en avant, visibles sans défilement en 1920 px
 **And** les réglages secondaires sont discrets, leurs intertitres plus petits que les champs qu'ils regroupent
-**And** la couleur guide l'œil : icônes Material colorées par module, aplats légers de la palette Wavestone sur les zones d'action, aucun emoji ; contrastes conformes à la story 8.2
+**And** la couleur guide l'œil : icônes Material colorées par module, aplats légers de la palette générique sur les zones d'action, aucun emoji ; contrastes conformes à la story 8.2
 
 **Given** la maquette
 **When** Anaël la valide
@@ -2177,7 +2177,7 @@ Critères proposés pour les stories 2.x à 4.x, tirés des reports (a) de `repo
 | 2.4 | **Given** chaque identifiant de `[cloud.models]` **When** la recette fait un premier appel réel **Then** il est accepté par le fournisseur ; un identifiant refusé donne un code de la liste fermée, jamais `internal` | A14 |
 | 2.5 | **Given** `[cloud.groq_ecologits]` **When** le test de contrat d'ecologits tourne **Then** chaque entrée est confirmée ou corrigée contre la version installée | A13 |
 | 2.6 | **Given** « Télécharger (JSON, Markdown) » **When** on clique **Then** le navigateur suit la route d'export (`Content-Disposition: attachment`), sans `blob:` ni élargissement de la politique de contenu | A20 |
-| 3.1 | **Given** `lane_timeout_s` de `wavelocalai.toml` **When** une lane dépasse le délai **Then** la valeur est lue dans `Settings` et confirmée ou corrigée par la story (300 s provisoires) | A4 |
+| 3.1 | **Given** `lane_timeout_s` de `frugal-ai-workbench.toml` **When** une lane dépasse le délai **Then** la valeur est lue dans `Settings` et confirmée ou corrigée par la story (300 s provisoires) | A4 |
 | 3.6 | **Given** l'export de preuve **When** Ollama est joignable **Then** la version d'Ollama vient de l'état en cache de la sonde et n'est jamais `null` | A18 |
 | 3.6 | **Given** `#/arene/comparer/<a>` puis `<b>` pendant un `mount` asynchrone **When** les deux `mount` se chevauchent **Then** seul `<b>` est monté (E2E) | A21 |
 | 3.6 | **Given** Ollama démarré sans aucun modèle de conversation **When** l'Accueil s'affiche **Then** la carte « Démo recommandée » dit « Aucun modèle local disponible » et mène à l'installation | A26 |

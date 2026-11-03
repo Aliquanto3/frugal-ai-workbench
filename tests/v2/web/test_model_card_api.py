@@ -15,11 +15,11 @@ import httpx
 import pytest
 from fastapi.testclient import TestClient
 
-from wavelocalai.hardware.memory import MemoryAdvisor, MemoryReading
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.ollama_probe import OllamaStatus
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor, MemoryReading
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.ollama_probe import OllamaStatus
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, closed_port, make_settings
 from ..fake_ollama import FakeOllama
@@ -69,7 +69,7 @@ async def card_app(
     config = make_settings(
         tmp_path,
         environ={
-            "WAVELOCALAI_TESTING": "1",
+            "FRUGAL_AI_TESTING": "1",
             "GROQ_API_KEY": "gsk_test_0123456789",  # pragma: allowlist secret
         },
         cloud={"models": {"groq": ["openai/gpt-oss-120b"]}},
@@ -316,7 +316,7 @@ async def test_a_catalog_card_reads_the_sampled_loaded_models_and_never_calls_ol
     """Revue : la fiche d'un modèle du catalogue compte comme libre la mémoire des modèles chargés du
     dernier échantillon du flux système, sans lire `/api/ps` (AD-15) ; le catalogue, qui la lit,
     donne alors la même estimation."""
-    from wavelocalai.web import routes_models
+    from frugal_ai_workbench.web import routes_models
 
     calls: list[str] = []
     original = routes_models.loaded_models

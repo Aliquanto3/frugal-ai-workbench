@@ -8,9 +8,9 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-7-1.md'
 warnings: []
 deferred: []

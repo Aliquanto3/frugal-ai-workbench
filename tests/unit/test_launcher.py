@@ -1,4 +1,4 @@
-"""Lanceur `uv run wavelocalai` : création de data/models.json et garde de la racine."""
+"""Lanceur `uv run frugal-ai-workbench` : création de data/models.json et garde de la racine."""
 
 import json
 
@@ -56,7 +56,7 @@ def test_main_lance_streamlit_depuis_la_racine(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(launcher, "ensure_models_json", lambda root: False)
     monkeypatch.setattr(stcli, "main", lambda: seen.update(argv=list(launcher.sys.argv)))
-    monkeypatch.setattr(launcher.sys, "argv", ["wavelocalai"])
+    monkeypatch.setattr(launcher.sys, "argv", ["frugal-ai-workbench"])
 
     assert launcher.main(["--server.port", "8600"]) == 0
     assert seen["argv"][:2] == ["streamlit", "run"]

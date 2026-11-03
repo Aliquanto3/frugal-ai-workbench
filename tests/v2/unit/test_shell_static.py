@@ -19,8 +19,10 @@ from .static_files import (
 from .static_files import registry_text as merged_registry
 
 ROOT = Path(__file__).resolve().parents[3]
-STATIC = ROOT / "src" / "wavelocalai" / "web" / "static"
-DESIGN = ROOT / "_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md"
+STATIC = ROOT / "src" / "frugal_ai_workbench" / "web" / "static"
+DESIGN = (
+    ROOT / "_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md"
+)
 TEXT_SUFFIXES = {".html", ".css", ".js", ".json", ".svg"}
 
 # Pictogrammes emoji (même périmètre que tests/e2e/helpers.py) : plans pictographiques, symboles
@@ -89,10 +91,14 @@ def test_tokens_css_mirrors_design_md():
 @pytest.mark.parametrize(
     ("old", "new", "fragment"),
     [
-        ("--color-primary: #451DC7", "--color-primary: #451DC8", "--color-primary"),
-        ("--color-surface-alt: #16162A", "--color-surface-alt: #16162B", "--color-surface-alt"),
+        ("--color-primary: #0B6B78", "--color-primary: #0B6B79", "--color-primary"),
+        ("--color-surface-alt: #161D21", "--color-surface-alt: #161D22", "--color-surface-alt"),
         ("--radius: 12px", "--radius: 10px", "rayon DEFAULT"),
-        ("--font-body: Aptos, Inter, sans-serif", "--font-body: Inter, sans-serif", "police body"),
+        (
+            "--font-body: Inter, system-ui, sans-serif",
+            "--font-body: Inter, sans-serif",
+            "police body",
+        ),
     ],
 )
 def test_the_drift_test_fails_when_a_value_differs(old, new, fragment):
@@ -106,7 +112,7 @@ def test_the_drift_test_fails_when_a_value_differs(old, new, fragment):
 def test_the_drift_test_fails_when_a_token_is_missing():
     css = (STATIC / "tokens.css").read_text(encoding="utf-8")
     design = design_tokens(DESIGN.read_text(encoding="utf-8"))
-    drift = token_drift(css.replace("--color-risk: #FF2A49;", "", 1), design)
+    drift = token_drift(css.replace("--color-risk: #B42318;", "", 1), design)
     assert any("--color-risk" in line and "absent" in line for line in drift)
 
 

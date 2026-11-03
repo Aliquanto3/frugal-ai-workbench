@@ -7,7 +7,7 @@ baseline_commit: '8d70302'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/run-autonome-mvp.md'
 ---
 
@@ -24,7 +24,7 @@ Story technique décidée par Anaël le 2026-10-19 (`run-autonome-mvp.md`, « P�
 5. **`components/wl-model-picker.js` sous 600 lignes** (666 aujourd'hui) : sortir un module voisin cohérent (filtrage, rendu des lignes ou clavier), sans changement de comportement. Aucun fichier JS du front au-delà de 600 lignes (contrat partagé) ; si un test garde déjà cette limite, il couvre les nouveaux dossiers, sinon en ajouter un.
 6. **Job E2E dans la CI.** `.github/workflows/tests.yml` gagne un job qui joue `pytest tests/v2 -m e2e` sur `ubuntu-latest` (une version de Python, 3.12), avec `uv sync --locked` et l'installation du navigateur de Playwright par la version déjà verrouillée dans `uv.lock` (aucune nouvelle dépendance ; ne rien figer de mémoire). Si la durée dépasse ~15 min, le partager en 2 ou 3 morceaux par fichiers (matrice), sans ajouter de dépendance (pas de pytest-xdist s'il n'est pas déjà verrouillé). Le job doit être bloquant comme les autres jobs de tests (pas `continue-on-error`). Les E2E qui demandent Ollama ou un vrai modèle restent `integration` et ne tournent pas en CI. Vérifier le job sur la PR (on ne peut pas le jouer en local : le décrire dans le rapport ; l'orchestrateur suit la CI).
 7. **Couches.** `tests/v2/unit/test_layers.py` et les tests statiques passent ; aucun import de `src.*`.
-8. **Non-régression.** Contrôle rapide vert ; `pytest tests/v2` vert ; suite E2E **complète** verte en local (`$env:WAVELOCALAI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"`, `$env:PYTHONUTF8 = "1"`) : toutes les pages s'affichent avec les mêmes textes et styles, axe-core sans violation en clair et en sombre.
+8. **Non-régression.** Contrôle rapide vert ; `pytest tests/v2` vert ; suite E2E **complète** verte en local (`$env:FRUGAL_AI_E2E_CHROMIUM = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"`, `$env:PYTHONUTF8 = "1"`) : toutes les pages s'affichent avec les mêmes textes et styles, axe-core sans violation en clair et en sombre.
 9. **Mode d'emploi.** Une note courte (en tête de `core/registry.js`, `core/i18n.js`, `core/api.js` et dans le fichier d'entrée CSS, au style des commentaires existants) dit où une story ajoute ses textes, son CSS, ses appels et sa route.
 
 ## Hors périmètre
@@ -41,7 +41,7 @@ Story technique décidée par Anaël le 2026-10-19 (`run-autonome-mvp.md`, « P�
 
 ## Rapport de dev
 
-**Fichiers créés ou déplacés** (tous sous `src/wavelocalai/web/static/`, sauf mention)
+**Fichiers créés ou déplacés** (tous sous `src/frugal_ai_workbench/web/static/`, sauf mention)
 
 - Textes : `i18n/fr/{shell,home,components,chat,discussion,docs,arena}.json` (`shell` porte `app`, `shell`, `modules`, `screens`, `router`, `format`, `errors`, `tabs`, `topbar`) ; `i18n/fr.json` supprimé. `core/i18n.js` déclare `TEXT_FILES` (la seule liste), charge en parallèle (`Promise.all`) et lève une erreur sur une clé de premier niveau en double.
 - CSS : `css/components/{accessibility,button,topbar,status-pill,switch,banner,badge,metric,error,layout,model-picker,run-status,export-menu,data-table,notice,segments,chart,confirm-dialog,source-panel}.css`, liés un à un par `index.html` (et par les deux fixtures E2E) ; `components.css` supprimé. Les CSS d'écran restent à la racine.

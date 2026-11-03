@@ -11,11 +11,11 @@ from pathlib import Path
 import httpx
 import pytest
 
-from wavelocalai.hardware.memory import MemoryAdvisor, MemoryReading
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.runs.models import LeafResult
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor, MemoryReading
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.runs.models import LeafResult
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..fake_ollama import FakeOllama
@@ -52,7 +52,7 @@ async def manage_app(tmp_path: Path, server: FakeOllama, *, available_gb: float 
     catalog.write_text(json.dumps(CATALOG), encoding="utf-8")
     config = make_settings(
         tmp_path,
-        environ={"WAVELOCALAI_TESTING": "1", "GROQ_API_KEY": "gsk_test_0123456789"},
+        environ={"FRUGAL_AI_TESTING": "1", "GROQ_API_KEY": "gsk_test_0123456789"},
         cloud={"models": {"groq": ["openai/gpt-oss-120b"]}},
     )
     memory = lambda: MemoryReading(total_gb=32.0, available_gb=available_gb)  # noqa: E731
@@ -398,8 +398,8 @@ async def test_a_run_cannot_start_on_a_model_while_it_is_being_deleted(tmp_path,
     modèle. Les autres modèles démarrent normalement."""
     import asyncio
 
-    from wavelocalai.errors import AppError
-    from wavelocalai.inference import delete as delete_module
+    from frugal_ai_workbench.errors import AppError
+    from frugal_ai_workbench.inference import delete as delete_module
 
     server = ollama()
     async with manage_app(tmp_path, server) as (app, client, _r):

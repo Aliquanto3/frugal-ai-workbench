@@ -7,13 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.errors import AppError
-from wavelocalai.models.defaults import ModelDefaults, choose_default
-from wavelocalai.models.registry import ModelInfo, ModelList
-from wavelocalai.store.preferences import InMemoryPreferenceStore
+from frugal_ai_workbench.errors import AppError
+from frugal_ai_workbench.models.defaults import ModelDefaults, choose_default
+from frugal_ai_workbench.models.registry import ModelInfo, ModelList
+from frugal_ai_workbench.store.preferences import InMemoryPreferenceStore
 
 NOW = "2026-10-18T12:00:00.000Z"
-SRC = Path(__file__).resolve().parents[3] / "src" / "wavelocalai"
+SRC = Path(__file__).resolve().parents[3] / "src" / "frugal_ai_workbench"
 
 
 def info(

@@ -1,6 +1,6 @@
 """
 Délai dépassé avec un vrai modèle : l'app est lancée avec un délai d'inférence très court pour
-le seul petit modèle (WAVELOCALAI_E2E_MODEL_SMALL), par le lanceur (launch_app.py). L'appel à
+le seul petit modèle (FRUGAL_AI_E2E_MODEL_SMALL), par le lanceur (launch_app.py). L'appel à
 Ollama est réel ; il est interrompu par le délai de l'application.
 
 Constats couverts : F3 et CAP-3 (« Délai dépassé » au lieu d'une trace dans le chat, le banc
@@ -33,7 +33,7 @@ def app_extra_env(e2e_models):
     others = {normalize_tag(e2e_models["chat"]), normalize_tag(e2e_models["judge"])}
     if normalize_tag(small) in others:
         pytest.fail(
-            "WAVELOCALAI_E2E_MODEL_SMALL doit différer du modèle de chat et du juge : son délai "
+            "FRUGAL_AI_E2E_MODEL_SMALL doit différer du modèle de chat et du juge : son délai "
             "d'inférence est volontairement trop court dans ce module.",
             pytrace=False,
         )

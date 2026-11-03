@@ -14,11 +14,11 @@ from pathlib import Path
 import httpx
 import pytest
 
-from wavelocalai.greenops.session import session_summary
-from wavelocalai.inference.streaming import CANCELLED_CO2
-from wavelocalai.runs.models import AssistantMessage, LeafResult
-from wavelocalai.web import routes_conversations
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.greenops.session import session_summary
+from frugal_ai_workbench.inference.streaming import CANCELLED_CO2
+from frugal_ai_workbench.runs.models import AssistantMessage, LeafResult
+from frugal_ai_workbench.web import routes_conversations
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..latency import assert_under_budget_async
@@ -121,7 +121,7 @@ async def test_json_export_has_messages_model_origin_rate_and_co2_with_method(se
     assert response.headers["content-disposition"].startswith("attachment; filename=")
     assert response.headers["content-disposition"].endswith('.json"')
     document = json.loads(response.text)
-    assert document["format"] == "wavelocalai.conversation/1"
+    assert document["format"] == "frugal-ai-workbench.conversation/1"
     assert document["conversation"]["model"] == "fake:1b"
     assert "D3" in document["definitions"]["tps"]
     reply = document["messages"][3]
@@ -140,7 +140,7 @@ async def test_markdown_export_reads_as_a_transcript(served):  # noqa: F811
     assert response.headers["content-type"].startswith("text/markdown")
     assert response.headers["content-disposition"].endswith('.md"')
     text = response.text
-    assert text.startswith("# Conversation wavelocalai")
+    assert text.startswith("# Conversation Frugal AI Workbench")
     assert f"## Vous\n\n{UNIQUE}" in text and f"## Modèle\n\n{ANSWER}" in text
     assert "fake:1b" in text and "origine : local" in text
     assert "débit : 42,0 tokens/s (mesuré par Ollama (D3))" in text
@@ -162,9 +162,7 @@ async def test_an_unmeasurable_co2_is_said_and_never_zero(served):  # noqa: F811
 
 
 async def test_exports_never_contain_a_configured_api_key(tmp_path):
-    settings = make_settings(
-        tmp_path, environ={"WAVELOCALAI_TESTING": "1", "GROQ_API_KEY": FAKE_KEY}
-    )
+    settings = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1", "GROQ_API_KEY": FAKE_KEY})
     assert FAKE_KEY in settings.secret_values()
     app = create_app(settings)
     async with app.router.lifespan_context(app):
@@ -259,7 +257,7 @@ async def test_routes_with_a_path_parameter_stay_under_the_read_budget(tmp_path)
 
     Deuxième meilleur de cinq appels après un échauffement (décision du 2026-10-23, `latency.py`) :
     robuste à un appel lent isolé sous la charge du runner, sans relever le budget."""
-    app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}))
+    app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}))
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(transport=transport, base_url=BASE) as client:
@@ -284,7 +282,7 @@ async def test_routes_with_a_path_parameter_stay_under_the_read_budget(tmp_path)
 async def test_a_route_that_becomes_slow_fails_the_latency_helper(tmp_path, monkeypatch):
     """Preuve que le test mord encore (toujours au budget NFR1/NFR2/AD-15, 300 ms) : une route
     ralentie à chaque appel (0,4 s, sans réseau) fait échouer `assert_under_budget_async`."""
-    app = create_app(make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}))
+    app = create_app(make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}))
     async with app.router.lifespan_context(app):
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(transport=transport, base_url=BASE) as client:
@@ -318,7 +316,7 @@ async def test_exports_work_on_a_conversation_without_any_answer(served, extensi
 
 async def test_delete_drops_the_technical_text_of_a_failed_run(served):  # noqa: F811
     # AD-13 : les `runs` gardés n'ont plus de texte ; `detail.technical` peut citer la question.
-    from wavelocalai.errors import build_envelope
+    from frugal_ai_workbench.errors import build_envelope
 
     app, client = served
     hub, store = app.state.hub, app.state.store

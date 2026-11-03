@@ -83,7 +83,7 @@ Les constats U1 à U18 reprennent ceux de `poste-rtx3060/UX.md`, avec la même n
 
 | ID | Constat | Gravité | Rattachés (elite) | Story |
 |---|---|---|---|---|
-| U1 | Aucune identité Wavestone (thème Streamlit par défaut) | moyen | U-01 | 2 |
+| U1 | Aucune identité visuelle (thème Streamlit par défaut) | moyen | U-01 | 2 |
 | U2 | Emojis en guise d'icônes, doublés (« 📂 📂 »), 🧠 partagé, emojis en `<h1>` | moyen | U-03 | 2 |
 | U3 | Barre d'outils de développement visible | mineur | U-01 | 2 |
 | U4 | Sémantique des couleurs inversée : rouge pour l'action principale, gris pour le Reset | majeur | | 2 |
@@ -117,7 +117,7 @@ C'est l'ordre d'exécution proposé pour la *Story Breakdown* de `bmad-spec`. **
 | id | Titre | Constats | Taille | Dépend de |
 |---|---|---|---|---|
 | 1 | Socle : installation figée, serveur local, CI active, tests au vert sans Ollama | E1, E2, E3, F8 | M | — |
-| 2 | Thème Wavestone, icônes et accessibilité | U1–U7, U18, F14 | L | 1 |
+| 2 | Thème générique, icônes et accessibilité | U1–U7, U18, F14 | L | 1 |
 | 3 | Vocabulaire, rédaction et formats `fr-FR` | U8–U10 | M | 1 |
 | 4 | Ingestion RAG réelle | F1, F12 | M | 2, 3 |
 | 5 | Échecs visibles et états vrais | F2, F3, F11, F17, U11, U20 | M | 2, 3 |

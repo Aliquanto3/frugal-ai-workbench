@@ -2,7 +2,7 @@
 Tests de la navigation et du vocabulaire (story 3) : menu st.navigation, nom unique par module,
 contrôle cloud unique, anciens noms absents des textes affichés.
 
-Référence : _bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md.
+Référence : _bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md.
 Usage: python -m pytest tests/app/test_navigation.py -v
 """
 
@@ -33,7 +33,7 @@ MODULE_PAGES = {
     "views/04_Agent_Lab.py": ("Agents autonomes", "Agent_Lab"),
     "views/01_Socle_Hardware.py": ("Sobriété et matériel", "Socle_Hardware"),
 }
-HOME_TAB_TITLE = "WaveLocalAI"
+HOME_TAB_TITLE = "Frugal AI Workbench"
 CLOUD_TOGGLE = "Autoriser le cloud"
 # Badges de DESIGN.md (badge-local, badge-cloud), tels que st.badge les rend.
 LOCAL_BADGE = ":green-badge[:material/computer: Local]"
@@ -114,7 +114,7 @@ def test_menu_order_names_and_icons(spies):
 
 
 def test_home_titles(spies):
-    """Accueil : h1 et onglet du navigateur « WaveLocalAI » ; une carte par module, dont le
+    """Accueil : h1 et onglet du navigateur « Frugal AI Workbench » ; une carte par module, dont le
     lien porte le nom exact du module ; « Arène des modèles » en tête, « Démo recommandée »."""
     at = _app()
     try:
@@ -382,7 +382,7 @@ def test_tool_names_follow_lexicon():
     assert {tool_id: meta["name"] for tool_id, meta in TOOLS_METADATA.items()} == {
         "get_current_time": "Heure",
         "calculator": "Calculatrice",
-        "search_wavestone_internal": "Recherche interne Wavestone",
+        "search_internal": "Recherche interne (simulée)",
         "send_email": "Envoi d'email",
         "analyze_csv": "Analyse de données",
         "generate_document": "Génération de document",

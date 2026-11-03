@@ -5,8 +5,8 @@ from __future__ import annotations
 import httpx
 from fastapi.testclient import TestClient
 
-from wavelocalai.models.ollama_probe import OllamaProbe
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.ollama_probe import OllamaProbe
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 

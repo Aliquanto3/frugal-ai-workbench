@@ -2,9 +2,9 @@
 
 - **Date :** 2026-10-18
 - **Périmètre :** UX et front. La performance mesurée et l'API back font l'objet de deux autres rapports de la même série.
-- **Sources lues :** `src/app/` (v1, branche `fix/anthropic-chat-temperature`, `5b5e2d1`), `docs/audits/frontend-2026-09/SYNTHESE.md` (D1 à D7), `_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/{DESIGN,EXPERIENCE}.md`, `_bmad-output/specs/spec-fiabilisation-frontend/`, captures de `docs/assets/` et des audits de septembre, front du harnais `agentic-harness-training-demo/src/wavestack/web` et son `ARCHITECTURE-SPINE.md` (AD-1, AD-3, AD-18, AD-28).
+- **Sources lues :** `src/app/` (v1, branche `fix/anthropic-chat-temperature`, `5b5e2d1`), `docs/audits/frontend-2026-09/SYNTHESE.md` (D1 à D7), `_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/{DESIGN,EXPERIENCE}.md`, `_bmad-output/specs/spec-fiabilisation-frontend/`, captures de `docs/assets/` et des audits de septembre, front du harnais `agentic-harness-training-demo/src/harness_lab/web` et son `ARCHITECTURE-SPINE.md` (AD-1, AD-3, AD-18, AD-28).
 - **Méthode :** lecture du code et des captures. L'application n'a pas été lancée (Ollama arrêté exprès).
-- **Hors de portée :** le dépôt `wavelocalai-v2` n'existe pas sur ce poste. Ce rapport décrit donc le front cible sans l'adosser à un code v2 existant.
+- **Hors de portée :** le dépôt `frugal-ai-workbench-v2` n'existe pas sur ce poste. Ce rapport décrit donc le front cible sans l'adosser à un code v2 existant.
 
 ## Résumé
 
@@ -141,7 +141,7 @@ Légende des états : V = vide, C = chargement, E = erreur, O = Ollama absent, C
 | Jetons | `tokens.css` reprend les jetons de `DESIGN.md` sous les mêmes noms ; `tests/test_web_tokens.py` vérifie qu'ils ne dérivent pas. Thème sombre sous `[data-theme="dark"]` et `prefers-color-scheme` | `tokens.css:1-5` |
 | Thème | `theme.js`, script classique en tête de page (pas de flash), choix Système, Clair ou Sombre en `localStorage`, accès protégés | `theme.js` |
 | i18n | `GET /api/ui_texts` sert les textes (`content/ui.yaml`) ; `i18n.js` remplace `data-i18n`, `data-i18n-title`, `data-i18n-aria-label` ; pluriels par `Intl.PluralRules`, nombres et dates par `Intl`. Le HTML garde son texte français : la page reste lisible si la route échoue | `i18n.js:1-12` |
-| Polices | Locales (woff2 OFL avec licence), `font-display: swap`. Aptos appelée par `local()`, jamais embarquée | `fonts.css`, AD-18 |
+| Polices | Locales (woff2 OFL avec licence), `font-display: swap`. Inter seule, embarquée | `fonts.css`, AD-18 |
 | Streaming | **Journal d'événements** et interface en projection (AD-1). Un seul flux `GET /api/stream`, enveloppes numérotées (`seq`), reprise par `Last-Event-ID`, `server_instance` pour détecter un redémarrage, keep-alive de 15 s. Côté client, lecture par `fetch` et parsing manuel, reconnexion toutes les 1 s, perte de connexion annoncée après 3 échecs | `app.py:1384-1428`, `app.js:200-260` |
 | Commandes | « Intentions » en `POST` JSON, en trois classes : à tout moment, refusées hors `idle` avec la raison (409), préemptives (arrêt). La session émet `session_state{state, reason_text}`, que le front utilise pour désactiver ses commandes en affichant la raison | AD-3 |
 | Sécurité locale | `TrustedHostMiddleware`, refus des `POST` d'une autre origine, JSON obligatoire, pas de CORS, écoute sur `127.0.0.1` | AD-18 |
@@ -154,7 +154,7 @@ Légende des états : V = vide, C = chargement, E = erreur, O = Ollama absent, C
 | Élément | Comment |
 |---|---|
 | Stack sans compilation (AD-18) | Telle quelle : rien à installer côté poste, rien à compiler, aucun droit admin. FastAPI sert tout |
-| Jetons miroirs de `DESIGN.md` plus test de dérive | Tels quels, avec les valeurs de **notre** `DESIGN.md` (primaire `#451DC7`, `#7E65E9` en sombre, etc.) |
+| Jetons miroirs de `DESIGN.md` plus test de dérive | Tels quels, avec les valeurs de **notre** `DESIGN.md` (primaire `#0B6B78`, `#7E65E9` en sombre, etc.) |
 | `theme.js` | Tel quel (clé renommée) |
 | `i18n.js` et textes en données | Tel quel, en **français seul** au départ : les clés coûtent peu et évitent les textes en dur dans le JS |
 | Client SSE avec `Last-Event-ID`, `server_instance` et reconnexion | Repris, mais **par exécution** (voir §3.6) plutôt qu'en journal global |
@@ -170,7 +170,7 @@ Légende des états : V = vide, C = chargement, E = erreur, O = Ollama absent, C
 |---|---|---|
 | Emoji dans la navigation (« 🛠️ Diagnostic », `index.html:27`) et symboles Unicode du thème (`theme.js:14`) | **Écarté** | Charte : icônes Material, aucun emoji |
 | Pas d'icônes Material | **Ajout** : sprite SVG local de Material Symbols (licence Apache 2.0), une trentaine d'icônes, `<svg><use href="#…">` | Charte, sans police de 300 Ko ni CDN |
-| Polices Fredoka et Atkinson Hyperlegible | **Non reprises** : notre `DESIGN.md` fixe Aptos puis Inter (déjà servie en local, `src/app/static/fonts/`) | Ne pas contredire `DESIGN.md` ; voir décision U3 |
+| Polices Fredoka et Atkinson Hyperlegible | **Non reprises** : notre `DESIGN.md` fixe Inter (déjà servie en local, `src/app/static/fonts/`) | Ne pas contredire `DESIGN.md` ; voir décision U3 |
 | Multi-pages, un HTML par écran | **Adapté** : une coquille unique avec un routeur client | D1 garde la bascule cloud en mémoire de page : elle serait perdue à chaque changement de page dans un site multi-pages. Une coquille garde aussi les flux en cours |
 | Journal unique de session (AD-1) avec verrou global (AD-3) | **Adapté** : exécutions (`run`) indépendantes, chacune avec son flux | L'Arène, le RAG et l'agent sont des opérations distinctes ; un verrou global bloquerait le chat pendant une installation de modèle |
 | Fichiers monolithes (`app.js` 7 659 lignes, `app.css` 4 800) | **Écarté** | Règle : un module par écran et par composant, environ 600 lignes au plus par fichier |
@@ -208,7 +208,7 @@ src/<paquet_v2>/web/
     base.css             reset, typographie, focus, mode projection
     components.css       composants partagés
     icons.svg            sprite Material Symbols (sous-ensemble)
-    fonts/               Inter + licence (Aptos par local())
+    fonts/               Inter + licence
     core/
       theme.js  i18n.js  router.js  api.js  sse.js  store.js  format.js  markdown.js
     components/
@@ -246,7 +246,7 @@ La navigation passe de 5 pages à **onglets internes** à 5 modules à **sous-é
 
 ```
 +--------------------------------------------------------------------------------------------+
-| WaveLocalAI | Accueil  Arène  Documents  Agents  Sobriété  Modèles |  [o] Ollama disponible |
+| Frugal AI Workbench | Accueil  Arène  Documents  Agents  Sobriété  Modèles |  [o] Ollama disponible |
 |             |                                                      |  [ ] Autoriser le cloud |
 |             |                                                      |  CO₂ session 412 mg  [Aff.]|
 +--------------------------------------------------------------------------------------------+
@@ -283,7 +283,7 @@ But : en 5 secondes, savoir si la démo peut partir et la lancer.
 +--------------------------------------------------------------------------------------------+
 | [barre haute]                                                                              |
 +--------------------------------------------------------------------------------------------+
-| WaveLocalAI                                                                                |
+| Frugal AI Workbench                                                                                |
 | Le démonstrateur d'IA générative souveraine, frugale et sécurisée.                         |
 |                                                                                            |
 | +-----------------+ +-----------------+ +-----------------+ +-----------------+            |
@@ -470,7 +470,7 @@ Exécution, puis résultat (même écran, sans rechargement) :
 +--------------------------------------------------------------------------------------------+
 | Agents autonomes   [Agent seul] [Équipe d'agents]                                          |
 | Modèle [ Qwen 3.6 7B · Local · outils vérifiés v ]   Outils : [Heure] [Calculatrice]       |
-| [Recherche interne Wavestone] [Analyse de données] ... [Envoi d'email: désactivé, SMTP absent]|
+| [Recherche interne (simulée)] [Analyse de données] ... [Envoi d'email: désactivé, SMTP absent]|
 +-------------------------------------------------------+------------------------------------+
 | Vous : Analyse ventes.csv et fais un graphique.       | Étapes                     0:18    |
 |                                                       | 1 [psychology] Réflexion   0,9 s v |
@@ -584,7 +584,7 @@ Format d'erreur unique, venu de l'API : `{code, message, action, detail}`. Le fr
 | Exigence | Mise en œuvre |
 |---|---|
 | Structure | `lang="fr"`, repères (`header`, `nav`, `main`), lien d'évitement « Aller au contenu », un `h1` par écran (le nom du module), `h2`/`h3` sans saut |
-| Titre de page | `document.title` mis à jour à chaque route (« Arène · WaveLocalAI ») ; focus déplacé sur le `h1` au changement d'écran ; annonce polie |
+| Titre de page | `document.title` mis à jour à chaque route (« Arène · Frugal AI Workbench ») ; focus déplacé sur le `h1` au changement d'écran ; annonce polie |
 | Clavier | Tout au clavier ; ordre logique ; `:focus-visible` à 3:1 ; raccourcis documentés (Entrée, Maj+Entrée, Échap) sans touche unique |
 | Contrastes | Jetons de `DESIGN.md`, déjà calculés en clair et en sombre ; écart connu de `#7E65E9` en sombre (4,26:1) consigné |
 | Couleur | Aucune information par la couleur seule : badges, statuts et séries ont un libellé |
@@ -743,7 +743,7 @@ Le **MVP** regroupe les lots 0 à 2 : il couvre les deux parcours de référence
 |---|---|---|---|
 | U1 | Stack du front v2 | A. modules natifs sans compilation (harnais) ; B. HTMX et Jinja2 ; C. SPA compilée (Svelte ou React) ; D. rester sur Streamlit | **A** : aucun Node, aucune installation, et la reprise directe du harnais. C seulement si le front dépasse une quinzaine d'écrans |
 | U2 | Coquille unique ou multi-pages | Coquille avec routeur client ; une page HTML par module (harnais) | **Coquille** : D1 garde la bascule cloud en mémoire de page, et les flux survivent à la navigation |
-| U3 | Typographie | Aptos puis Inter (`DESIGN.md` actuel) ; Fredoka et Atkinson Hyperlegible (harnais) | **Aptos puis Inter**, pour ne pas contredire `DESIGN.md`. À revoir seulement si une identité commune aux démonstrateurs Wavestone est voulue |
+| U3 | Typographie | Inter (`DESIGN.md` actuel) ; Fredoka et Atkinson Hyperlegible (harnais) | **Inter**, pour ne pas contredire `DESIGN.md`. À revoir seulement si une identité commune aux démonstrateurs est voulue |
 | U4 | Persistance des conversations et résultats | Mémoire du processus ; fichiers JSON dans `data/` (non versionné) ; aucune | **Fichiers dans `data/`**, avec un bouton « Effacer ». Le cloud reste désactivé à chaque ouverture (D1) |
 | U5 | Place de « Gestion des modèles » | Onglet de l'Arène (`EXPERIENCE.md`) ; écran « Modèles » à part | **Écran à part** : c'est de l'administration, pas de la démo. Modifie l'IA d'`EXPERIENCE.md` |
 | U6 | CO₂ des modèles cloud de taille inconnue | « non mesurable » expliqué ; fourchette EcoLogits (déjà utilisée par le harnais) marquée « estimé » | **« non mesurable » au MVP**, puis EcoLogits si la méthode est validée par l'auditeur back |

@@ -12,8 +12,8 @@ import sys
 
 import pytest
 
-from wavelocalai.agents.tools import Workspace, WorkspaceError
-from wavelocalai.agents.tools.workspace import check_output_name
+from frugal_ai_workbench.agents.tools import Workspace, WorkspaceError
+from frugal_ai_workbench.agents.tools.workspace import check_output_name
 
 
 @pytest.fixture
@@ -202,7 +202,7 @@ def test_a_junction_is_detected_without_path_is_junction():
     import stat
     from types import SimpleNamespace
 
-    from wavelocalai.agents.tools import workspace
+    from frugal_ai_workbench.agents.tools import workspace
 
     class OldPath:  # chemin sans `is_junction`, comme sous Python 3.11
         def __init__(self, tag: int) -> None:

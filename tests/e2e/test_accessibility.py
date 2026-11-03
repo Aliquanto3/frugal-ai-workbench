@@ -20,9 +20,10 @@ Les trois listes (couleurs natives, composants inactifs, écarts acceptés) figu
 résumé de la session et dans le rapport JSON (dossier `e2e-reports` du dossier temporaire de
 pytest) : rien n'est masqué.
 
-En sombre, `primaryColor` #7E65E9 est un compromis (DESIGN.md, note `primary-dark`, 27/09) :
-aucune valeur ne donne 4,5:1 à la fois au texte blanc des boutons et au violet employé comme
-texte. Les pastilles d'outils choisies d'Agent_Lab (4,24:1) sont l'écart accepté.
+En sombre, `primaryColor` #0B7A86 est un compromis (DESIGN.md, note `primary-dark`) : aucune
+valeur ne donne 4,5:1 à la fois au texte blanc des boutons et à la primaire employée comme
+texte. Les pastilles d'outils choisies d'Agent_Lab (3,41:1, calculé le 2026-11-03, à confirmer
+par axe) sont l'écart accepté.
 """
 
 import json
@@ -55,9 +56,9 @@ ACCEPTED_CONTRAST_GAPS = (
         "page": "Agent_Lab",
         "scheme": "dark",
         "component": "pills",
-        "fg": "#7e65e9",
-        "bg": "#161329",
-        "ratio": 4.24,
+        "fg": "#0b7a86",
+        "bg": "#0e1d21",
+        "ratio": 3.41,
         "reference": DESIGN_PRIMARY_DARK,
     },
 )

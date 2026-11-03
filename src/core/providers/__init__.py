@@ -1,5 +1,5 @@
 # src/core/providers/__init__.py
-"""Providers LLM pour WaveLocalAI."""
+"""Providers LLM pour Frugal AI Workbench."""
 
 from src.core.providers.anthropic_provider import AnthropicProvider
 from src.core.providers.groq_provider import GroqProvider

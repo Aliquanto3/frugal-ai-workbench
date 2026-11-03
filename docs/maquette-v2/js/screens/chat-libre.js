@@ -287,7 +287,7 @@ export async function mount(host, ctx) {
     const content =
       kind === "json"
         ? JSON.stringify({ model_choice: picker.value, messages: transcript }, null, 2)
-        : `# Conversation WaveLocalAI\n\n${lines.join("\n\n")}\n`;
+        : `# Conversation Frugal AI Workbench\n\n${lines.join("\n\n")}\n`;
     const blob = new Blob([content], { type: kind === "json" ? "application/json" : "text/markdown" });
     const link = element("a");
     link.href = URL.createObjectURL(blob);

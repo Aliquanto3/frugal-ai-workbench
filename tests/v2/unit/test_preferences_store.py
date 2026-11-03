@@ -7,12 +7,12 @@ import re
 
 from fastapi.testclient import TestClient
 
-from wavelocalai.models.facts import facts_from_ollama
-from wavelocalai.models.facts_store import SqliteFactsStore
-from wavelocalai.store.db import Store, db_path
-from wavelocalai.store.migrate import migrate
-from wavelocalai.store.preferences import SqlitePreferenceStore
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.facts import facts_from_ollama
+from frugal_ai_workbench.models.facts_store import SqliteFactsStore
+from frugal_ai_workbench.store.db import Store, db_path
+from frugal_ai_workbench.store.migrate import migrate
+from frugal_ai_workbench.store.preferences import SqlitePreferenceStore
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 
@@ -107,7 +107,7 @@ def test_create_app_uses_the_persisted_preference_after_a_restart(tmp_path):
 
 
 def test_the_app_never_writes_the_toml(tmp_path):
-    toml = tmp_path / "wavelocalai.toml"
+    toml = tmp_path / "frugal-ai-workbench.toml"
     toml.write_text("[server]\nport = 8502\n", encoding="utf-8")
     before = toml.read_bytes()
     prefs = SqlitePreferenceStore(lambda: None)

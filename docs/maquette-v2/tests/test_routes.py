@@ -33,7 +33,7 @@ def test_axe_without_violation(page, base_url, route, theme):
     open_route(page, base_url, route_path(route), theme=theme)
     settle(page)
     assert page.evaluate("() => window.__maquette.current().slug") == route["slug"]
-    assert page.title() == f"{route['title']} · WaveLocalAI"
+    assert page.title() == f"{route['title']} · Frugal AI Workbench"
     assert page.locator("section.screen:not([hidden]) h1").count() == 1
     assert_no_axe_violations(page, f"{route['slug']} en thème {theme}")
 

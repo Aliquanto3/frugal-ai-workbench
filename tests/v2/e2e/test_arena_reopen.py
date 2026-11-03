@@ -304,12 +304,15 @@ def test_erasing_also_forgets_the_question_left_in_the_form_and_its_draft(page, 
     actions(page).get_by_role("button", name="Modifier la question").click()
     question = page.get_by_label("Question", exact=True)
     assert question.input_value() == "Texte à oublier"
-    assert page.evaluate("localStorage.getItem('wavelocalai.draft.arena')") == "Texte à oublier"
+    assert (
+        page.evaluate("localStorage.getItem('frugal-ai-workbench.draft.arena')")
+        == "Texte à oublier"
+    )
     actions(page).get_by_role("button", name="Effacer la comparaison").click()
     page.get_by_role("dialog").get_by_role("button", name="Effacer", exact=True).click()
     page.locator("wl-arena-lane").first.wait_for(state="detached")
     assert question.input_value() == ""
-    assert page.evaluate("localStorage.getItem('wavelocalai.draft.arena')") is None
+    assert page.evaluate("localStorage.getItem('frugal-ai-workbench.draft.arena')") is None
 
 
 def test_an_id_that_is_not_a_comparison_says_result_not_found_without_following_it(page, server):

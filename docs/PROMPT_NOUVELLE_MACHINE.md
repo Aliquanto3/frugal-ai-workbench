@@ -12,7 +12,7 @@ Sans assistant, suivez plutôt le [guide pas à pas](GUIDE_BENCHMARK_MANUEL.md),
 
 ````markdown
 Je veux exécuter le benchmark SLM de ce projet sur cette machine, puis publier les
-résultats. Le dépôt est https://github.com/Aliquanto3/wavelocalai
+résultats. Le dépôt est https://github.com/Aliquanto3/frugal-ai-workbench
 
 Contexte à connaître avant de commencer :
 - Les scripts multi-machines sont sur la branche `feat/benchmark-multi-machine`

@@ -23,7 +23,7 @@ Streamlit n'est pas conçu pour être compilé. Problèmes à résoudre :
 `run_app.py` - Wrapper pour lancer Streamlit depuis l'exe
 
 ## 2. Fichier Spec PyInstaller
-`wavelocalai.spec` - Configuration complète et commentée
+`frugal-ai-workbench.spec` - Configuration complète et commentée
 
 ## 3. Scripts de Build
 - `build_windows.bat`
@@ -49,7 +49,7 @@ Guide utilisateur pour chaque plateforme
 [Script complet avec gestion des chemins relatifs]
 ````
 
-### `wavelocalai.spec`
+### `frugal-ai-workbench.spec`
 ````python
 [Spec PyInstaller complet avec commentaires détaillés]
 ````

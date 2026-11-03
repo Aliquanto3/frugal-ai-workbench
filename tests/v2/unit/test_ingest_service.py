@@ -14,27 +14,27 @@ from typing import Any
 
 import pytest
 
-from wavelocalai.errors import AppError, ProviderError
-from wavelocalai.greenops.local_meter import LocalMeter
-from wavelocalai.greenops.session import session_summary
-from wavelocalai.inference.local_slot import LocalSlot
-from wavelocalai.models.factory import ModelFactory
-from wavelocalai.models.fake import (
+from frugal_ai_workbench.errors import AppError, ProviderError
+from frugal_ai_workbench.greenops.local_meter import LocalMeter
+from frugal_ai_workbench.greenops.session import session_summary
+from frugal_ai_workbench.inference.local_slot import LocalSlot
+from frugal_ai_workbench.models.factory import ModelFactory
+from frugal_ai_workbench.models.fake import (
     FAKE_EMBED_REF,
     FAKE_REF,
     FakeChatModel,
     FakeEmbedder,
     Sleep,
 )
-from wavelocalai.models.port import ModelRef
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.rag import repo
-from wavelocalai.rag.index import NumpyIndex, SqliteVecIndex, VectorIndex
-from wavelocalai.rag.ingest import IngestService
-from wavelocalai.rag.split import ChunkDraft
-from wavelocalai.rag.staging import StagedFile
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.models.port import ModelRef
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.rag import repo
+from frugal_ai_workbench.rag.index import NumpyIndex, SqliteVecIndex, VectorIndex
+from frugal_ai_workbench.rag.ingest import IngestService
+from frugal_ai_workbench.rag.split import ChunkDraft
+from frugal_ai_workbench.rag.staging import StagedFile
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..carbon_stub import Probe
 from ..conftest import make_settings, needs_vec
@@ -121,7 +121,7 @@ def index(request) -> VectorIndex:
 async def rig(tmp_path, index, _stub_codecarbon):
     settings = make_settings(
         tmp_path,
-        environ={"WAVELOCALAI_TESTING": "1"},
+        environ={"FRUGAL_AI_TESTING": "1"},
         rag={"embed_batch_size": 4, "chunk_size": 200, "chunk_overlap": 20},
     )
     store = Store.open(db_path(settings.data_dir))
@@ -627,7 +627,7 @@ async def test_cancelling_while_a_failure_is_queued_still_marks_the_document_fai
 ):
     import threading
 
-    from wavelocalai.rag import ingest as ingest_module
+    from frugal_ai_workbench.rag import ingest as ingest_module
 
     gate, entered = threading.Event(), threading.Event()
     failure = ingest_module._failure

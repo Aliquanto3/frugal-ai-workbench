@@ -197,7 +197,7 @@ def last_run(server=None):
 
 
 def test_the_screen_shows_the_picker_the_creativity_slider_the_field_and_its_help(chat):
-    assert chat.title() == "Chat libre · WaveLocalAI"
+    assert chat.title() == "Chat libre · Frugal AI Workbench"
     assert chat.locator("h1").filter(has_text="Chat libre").is_visible()
     # Le sélecteur est sur le défaut `chat`, avec sa raison.
     assert chat.locator("wl-model-picker .wl-picker-help").inner_text().endswith(REASON)
@@ -791,7 +791,7 @@ def contrast_violations(page):
 
 
 @pytest.mark.parametrize(
-    ("theme", "fill"), [("light", "rgb(69, 29, 199)"), ("dark", "rgb(106, 77, 230)")]
+    ("theme", "fill"), [("light", "rgb(11, 107, 120)"), ("dark", "rgb(79, 193, 207)")]
 )
 def test_the_first_filled_button_uses_primary_fill_with_white_text_and_passes_color_contrast(
     chat, theme, fill
@@ -801,7 +801,8 @@ def test_the_first_filled_button_uses_primary_fill_with_white_text_and_passes_co
     style = send.evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color]; }"
     )
-    assert style == [fill, "rgb(255, 255, 255)"]
+    on_primary = "rgb(255, 255, 255)" if theme == "light" else "rgb(5, 34, 39)"
+    assert style == [fill, on_primary]
     count, report = contrast_violations(chat)  # sans exclusion
     assert count == 0, report
 
@@ -815,7 +816,7 @@ def test_a_disabled_filled_button_is_told_by_colors_not_by_opacity(chat, server)
     style = send.evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color, s.opacity]; }"
     )
-    assert style == ["rgb(22, 22, 42)", "rgb(180, 180, 198)", "1"]
+    assert style == ["rgb(22, 29, 33)", "rgb(162, 175, 183)", "1"]
     count, report = contrast_violations(chat)
     assert count == 0, report
 

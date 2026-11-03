@@ -8,8 +8,8 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/sprint-change-proposal-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md'
-  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/DESIGN.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-8.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-1-11.md'
 warnings: []
@@ -18,19 +18,19 @@ deferred:
       Le sprite `icons.svg` du front garde ses 19 symboles Material Symbols Rounded d'origine ; les 18 symboles que la maquette y a ajoutés (hourglass, check-circle, cancel, schedule, block, autorenew, download, upload, replay, edit, delete, folder, open-in-full, close-fullscreen, lightbulb, terminal, chat, stop) sont des tracés Material Icons (Filled) et n'entrent pas. Les versions Rounded officielles de ces symboles (et celles que DESIGN.md nomme sans que le sprite les ait : `build`, `psychology`, `output`, `pending_actions`, `leaderboard`) sont à fournir par Anaël ; la story qui a besoin d'une icône la demande au test des icônes, qui échoue tant qu'elle manque.
     evidence: |-
       Aucun téléchargement pendant le run (consigne) ; `docs/maquette-v2/icons.svg` n'a que des tracés Filled en plus des 19 d'origine ; `test_every_icon_the_front_uses_is_in_the_sprite_and_the_sprite_is_rounded_only`.
-    location: src/wavelocalai/web/static/icons.svg
+    location: src/frugal_ai_workbench/web/static/icons.svg
     severity: medium
   - summary: >-
       Écarts ouverts du §7 (d) du correct course rencontrés ici, non tranchés, variante la plus conservatrice gardée : n° 3 (l'Arène garde l'icône `swords` du code livré et de la maquette, pas `leaderboard` de DESIGN.md ; aucune carte Références n'est créée) et n° 9 (la carte Mode de l'Accueil garde son état actuel, sans compteur « N appels cloud dans cette session »).
     evidence: |-
       `sprint-change-proposal-2026-10-19.md` §7 (d) ; `core/registry.js` (icône `swords`), `screens/home.js` (carte Mode inchangée).
-    location: src/wavelocalai/web/static/core/registry.js
+    location: src/frugal_ai_workbench/web/static/core/registry.js
     severity: low
   - summary: >-
       Nom long du module Modèles sur l'Accueil : le tableau d'EXPERIENCE.md n'en donne pas (le module y est « nouveau »). « Installation et choix par usage » est celui de la maquette (`accueil.modules.models.long`) ; « Arène des modèles » (Arène) vient du tableau d'EXPERIENCE.md. À confirmer par Anaël avec la livraison des écrans.
     evidence: |-
       `docs/maquette-v2/i18n/screens/accueil.fr.json` ; `i18n/fr.json` (`home.modules_long`).
-    location: src/wavelocalai/web/static/i18n/fr.json
+    location: src/frugal_ai_workbench/web/static/i18n/fr.json
     severity: low
 ---
 

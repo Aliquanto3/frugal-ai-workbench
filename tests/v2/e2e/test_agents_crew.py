@@ -111,7 +111,7 @@ def reset_crew(base_url, crew_id):
 
 
 def test_the_screen_is_equipe_d_agents_with_its_schema_and_the_topic_of_the_crew(crew):
-    assert crew.title() == "Équipe d'agents · WaveLocalAI"
+    assert crew.title() == "Équipe d'agents · Frugal AI Workbench"
     assert crew.get_by_role("heading", level=1).inner_text() == "Équipe d'agents"
     tabs = crew.get_by_role("navigation", name="Écrans du module Agents")
     assert tabs.get_by_role("link", name="Équipe d'agents").get_attribute("aria-current") == "page"

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.agents.crews import (
+from frugal_ai_workbench.agents.crews import (
     MAX_AGENTS,
     CrewAgent,
     CrewLibrary,
@@ -15,9 +15,9 @@ from wavelocalai.agents.crews import (
     load_crews,
     task_for,
 )
-from wavelocalai.agents.tools import AgentTool, ToolRegistry
-from wavelocalai.errors import AppError
-from wavelocalai.store.preferences import InMemoryPreferenceStore
+from frugal_ai_workbench.agents.tools import AgentTool, ToolRegistry
+from frugal_ai_workbench.errors import AppError
+from frugal_ai_workbench.store.preferences import InMemoryPreferenceStore
 
 REPO_FILE = Path(__file__).resolve().parents[3] / "config" / "agent_crews.json"
 
@@ -68,8 +68,8 @@ def fields(lib: CrewLibrary, agents, **kw) -> dict[str, str]:
 
 
 def test_the_versioned_file_holds_the_v1_crews_and_each_is_valid(tmp_path):
-    from wavelocalai.agents.tools import Workspace, build_registry
-    from wavelocalai.config import load_settings
+    from frugal_ai_workbench.agents.tools import Workspace, build_registry
+    from frugal_ai_workbench.config import load_settings
 
     settings = load_settings(
         toml_path=tmp_path / "x.toml", env_file=tmp_path / "x.env", environ={}, overrides={}

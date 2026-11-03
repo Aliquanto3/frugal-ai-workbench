@@ -5,13 +5,13 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.models.anthropic import AnthropicChatModel
-from wavelocalai.models.mistral import MistralChatModel
-from wavelocalai.models.ollama import OllamaChatModel
-from wavelocalai.models.openai_compat import OpenAICompatChatModel
-from wavelocalai.models.port import ChatMessage, ChatRequest, Done, ModelRef, TextDelta
-from wavelocalai.models.structured import parse_structured, schema_errors
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.models.anthropic import AnthropicChatModel
+from frugal_ai_workbench.models.mistral import MistralChatModel
+from frugal_ai_workbench.models.ollama import OllamaChatModel
+from frugal_ai_workbench.models.openai_compat import OpenAICompatChatModel
+from frugal_ai_workbench.models.port import ChatMessage, ChatRequest, Done, ModelRef, TextDelta
+from frugal_ai_workbench.models.structured import parse_structured, schema_errors
 
 from ..fake_cloud import (
     FAKE_KEYS,

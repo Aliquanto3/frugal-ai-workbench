@@ -27,9 +27,9 @@ MODE_CREW = "Équipe d'agents"
 # se rendre au premier passage, le temps de charger CrewAI).
 MODE_MARKERS = {
     MODE_SOLO: lambda page: page.get_by_placeholder(INSTRUCTION_PLACEHOLDER).first,
-    MODE_CREW: lambda page: h.main(page)
-    .get_by_role("heading", name="Enchaînement des agents", exact=True)
-    .first,
+    MODE_CREW: lambda page: (
+        h.main(page).get_by_role("heading", name="Enchaînement des agents", exact=True).first
+    ),
 }
 EMAIL_TOOL = "Envoi d'email"
 EMAIL_TO = "e2e@example.com"
@@ -38,7 +38,7 @@ EMAIL_TO = "e2e@example.com"
 MEMORY_GUARD_TEXT = "Mémoire vive insuffisante"
 RAM_GUARD_HINT = (
     "Le garde-fou mémoire bloque l'agent sur cette machine : libérez de la mémoire ou choisissez "
-    "un modèle plus petit avec WAVELOCALAI_E2E_MODEL_AGENT."
+    "un modèle plus petit avec FRUGAL_AI_E2E_MODEL_AGENT."
 )
 
 
@@ -152,7 +152,7 @@ def test_email_requires_confirmation(page, app, require_models, smtp_sink, gener
     except Exception:  # noqa: BLE001
         pytest.fail(
             "L'agent n'a pas préparé d'email (aucune confirmation affichée). Choisissez avec "
-            "WAVELOCALAI_E2E_MODEL_AGENT un modèle qui appelle les outils de façon fiable. "
+            "FRUGAL_AI_E2E_MODEL_AGENT un modèle qui appelle les outils de façon fiable. "
             f"Conversation : {h.flat(h.main(page).inner_text())[-800:]}",
             pytrace=False,
         )

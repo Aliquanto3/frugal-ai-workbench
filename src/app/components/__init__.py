@@ -1,5 +1,5 @@
 # src/app/components/__init__.py
-"""Composants UI réutilisables pour WaveLocalAI."""
+"""Composants UI réutilisables pour Frugal AI Workbench."""
 
 from src.app.components.chat_message import render_chat_message, render_thinking_block
 from src.app.components.metrics_display import (

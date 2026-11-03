@@ -3,7 +3,7 @@ Tests des états d'échec et des états vrais (story 5), avec AppTest : délai d
 service indisponible, accélérateur détecté, blocage mémoire, premier chargement, aucun modèle.
 
 Ollama, l'inférence et Ragas sont simulés (tests/app/conftest.py) : aucun réseau.
-Référence : _bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md.
+Référence : _bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md.
 Usage: python -m pytest tests/app/test_states.py -v
 """
 

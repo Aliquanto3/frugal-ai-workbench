@@ -10,11 +10,11 @@ from datetime import date
 
 import pytest
 
-from wavelocalai.config import ConfigError, load_settings
-from wavelocalai.greenops.equivalence import car_equivalence
-from wavelocalai.hardware import machine_state
-from wavelocalai.models.ollama_probe import OllamaProbe
-from wavelocalai.web.system_state import SystemSampler
+from frugal_ai_workbench.config import ConfigError, load_settings
+from frugal_ai_workbench.greenops.equivalence import car_equivalence
+from frugal_ai_workbench.hardware import machine_state
+from frugal_ai_workbench.models.ollama_probe import OllamaProbe
+from frugal_ai_workbench.web.system_state import SystemSampler
 
 from ..conftest import make_settings
 
@@ -153,13 +153,13 @@ async def test_a_gpu_reader_that_raises_clears_the_state_and_logs_it(tmp_path, c
 
 
 def toml_with(tmp_path, body: str):
-    path = tmp_path / "wavelocalai.toml"
+    path = tmp_path / "frugal-ai-workbench.toml"
     path.write_text(body, encoding="utf-8")
     return load_settings(toml_path=path, env_file=tmp_path / "absent.env", environ={})
 
 
 def test_the_versioned_toml_carries_a_dated_and_sourced_factor():
-    from wavelocalai.config import DEFAULT_TOML
+    from frugal_ai_workbench.config import DEFAULT_TOML
 
     settings = load_settings(toml_path=DEFAULT_TOML, environ={})
     factor = settings.carbon.car_equivalence
@@ -198,6 +198,6 @@ def test_without_a_setting_there_is_no_equivalence():
 
 
 def make_settings_factor(g_per_km: float):
-    from wavelocalai.config import CarEquivalence
+    from frugal_ai_workbench.config import CarEquivalence
 
     return CarEquivalence(g_per_km=g_per_km, source="essai", retrieved_at=date(2026, 10, 19))

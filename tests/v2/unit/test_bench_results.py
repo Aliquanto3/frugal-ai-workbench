@@ -8,8 +8,8 @@ import json
 import shutil
 from pathlib import Path
 
-from wavelocalai.models import bench_results
-from wavelocalai.models.bench_results import BenchReferences, same_digest
+from frugal_ai_workbench.models import bench_results
+from frugal_ai_workbench.models.bench_results import BenchReferences, same_digest
 
 FIXTURE = Path(__file__).parent.parent / "fixtures" / "slm-quality-results.sample.json"
 

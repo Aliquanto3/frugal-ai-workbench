@@ -11,10 +11,10 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.errors import ERRORS, AppError, build_envelope
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.runs.models import STATUSES, LeafResult
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.errors import ERRORS, AppError, build_envelope
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.runs.models import STATUSES, LeafResult
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..producers import produce_arena, produce_chat
 

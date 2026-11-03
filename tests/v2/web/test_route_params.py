@@ -14,8 +14,8 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
-from wavelocalai.config import Settings
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.config import Settings
+from frugal_ai_workbench.web.app import create_app
 
 from .route_discovery import discover
 

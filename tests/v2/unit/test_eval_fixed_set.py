@@ -12,11 +12,14 @@ from datetime import date
 
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.evaluation import metrics, prompts
-from wavelocalai.evaluation.judge import JudgeReply
-from wavelocalai.inference.judge_port import NOT_EVALUATED_INVALID, NOT_EVALUATED_UNAVAILABLE
-from wavelocalai.models.port import ChatRequest, Done, ModelRef, TextDelta
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.evaluation import metrics, prompts
+from frugal_ai_workbench.evaluation.judge import JudgeReply
+from frugal_ai_workbench.inference.judge_port import (
+    NOT_EVALUATED_INVALID,
+    NOT_EVALUATED_UNAVAILABLE,
+)
+from frugal_ai_workbench.models.port import ChatRequest, Done, ModelRef, TextDelta
 
 from .. import eval_fixed_set as fixed
 

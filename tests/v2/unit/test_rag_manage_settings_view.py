@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.config import Settings
-from wavelocalai.rag.manage import offline_settings_view
+from frugal_ai_workbench.config import Settings
+from frugal_ai_workbench.rag.manage import offline_settings_view
 
 
 @pytest.mark.asyncio

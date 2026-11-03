@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from wavelocalai.config import RagSettings
-from wavelocalai.rag.settings import PREF_KEY, RagTunables, effective, stored_overrides
-from wavelocalai.store.preferences import InMemoryPreferenceStore
+from frugal_ai_workbench.config import RagSettings
+from frugal_ai_workbench.rag.settings import PREF_KEY, RagTunables, effective, stored_overrides
+from frugal_ai_workbench.store.preferences import InMemoryPreferenceStore
 
 TOML = RagSettings(chunk_size=800, chunk_overlap=100, top_k=4, embedding_model="nomic:latest")
 

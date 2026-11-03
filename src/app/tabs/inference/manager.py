@@ -35,7 +35,7 @@ FILTER_CLOUD = "Cloud"
 # --- 2. MODAL DE TÉLÉCHARGEMENT ---
 @st.dialog("Ajouter un modèle")
 def open_download_modal(installed_names: list):
-    st.caption("Téléchargez des modèles depuis la bibliothèque Ollama ou le catalogue Wavestone.")
+    st.caption("Téléchargez des modèles depuis la bibliothèque Ollama ou le catalogue curaté.")
 
     col_sel, col_info = st.columns([2, 1])
 

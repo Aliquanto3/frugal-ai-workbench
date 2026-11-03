@@ -1,4 +1,4 @@
-"""Lanceur de l'application : `uv run wavelocalai [options Streamlit]`.
+"""Lanceur de l'application : `uv run frugal-ai-workbench [options Streamlit]`.
 
 Se place à la racine du dépôt (Streamlit ne lit `.streamlit/config.toml` que dans le
 répertoire courant ; sinon le serveur écouterait sur le réseau), crée `data/models.json`
@@ -39,7 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     missing = [p for p in required if not p.exists()]
     if missing:
         print(
-            f"Racine du dépôt introuvable ({ROOT}) : lancer `uv run wavelocalai` depuis le"
+            f"Racine du dépôt introuvable ({ROOT}) : lancer `uv run frugal-ai-workbench` depuis le"
             " clone du dépôt (installation éditable).",
             file=sys.stderr,
         )

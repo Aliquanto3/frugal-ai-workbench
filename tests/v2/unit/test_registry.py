@@ -8,12 +8,12 @@ from typing import Any
 
 import pytest
 
-from wavelocalai.errors import AppError
-from wavelocalai.hardware.memory import MemoryAdvisor, MemoryReading
-from wavelocalai.models.facts import InMemoryFactsStore
-from wavelocalai.models.ollama_api import OllamaUnavailableError
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.models.run_stats import InMemoryRunStats
+from frugal_ai_workbench.errors import AppError
+from frugal_ai_workbench.hardware.memory import MemoryAdvisor, MemoryReading
+from frugal_ai_workbench.models.facts import InMemoryFactsStore
+from frugal_ai_workbench.models.ollama_api import OllamaUnavailableError
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.models.run_stats import InMemoryRunStats
 
 from ..conftest import make_settings
 

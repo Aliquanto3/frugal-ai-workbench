@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.rag.index import NumpyIndex, SqliteVecIndex, VectorIndex
-from wavelocalai.rag.repo import search_chunks
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.rag.index import NumpyIndex, SqliteVecIndex, VectorIndex
+from frugal_ai_workbench.rag.repo import search_chunks
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..conftest import needs_vec
 

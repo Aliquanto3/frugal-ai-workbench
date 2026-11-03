@@ -28,7 +28,7 @@ provoquer le moindre conflit de fusion.
 ### 1. Préparer
 
 ```bash
-git clone <url> && cd wavelocalai
+git clone <url> && cd frugal-ai-workbench
 python -m venv .venv-bench
 .venv-bench/Scripts/python -m pip install ollama codecarbon psutil python-dotenv huggingface_hub[hf_xet]
 # Ollama 0.30 minimum (0.34+ recommandé) : https://ollama.com/download
@@ -117,7 +117,7 @@ même version du benchmark, plutôt que d'aligner des chiffres trompeurs.
 | Raisonnement, instructions, outils, JSON | Oui, à version identique : le modèle ne change pas |
 | Génération (tok/s), lecture du prompt | Oui, c'est précisément l'objet de la comparaison |
 | Empreinte mémoire, % en VRAM | Oui, mais dépend du contexte testé |
-| Empreinte carbone | Non directement : elle dépend du mix électrique (`WAVELOCAL_COUNTRY_ISO`) et du matériel |
+| Empreinte carbone | Non directement : elle dépend du mix électrique (`FRUGAL_AI_COUNTRY_ISO`) et du matériel |
 | Latence ressentie | Oui, mais sensible à la charge de la machine |
 
 ## Modèles en attente de support

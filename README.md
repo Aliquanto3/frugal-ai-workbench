@@ -1,4 +1,4 @@
-# 🌊 WaveLocalAI
+# Frugal AI Workbench
 
 **Workbench de démonstration d'IA locale et responsable**
 
@@ -8,9 +8,9 @@
 [![Tests](https://img.shields.io/badge/tests-118%20passed-brightgreen.svg)](#)
 [![Coverage](https://img.shields.io/badge/coverage-86.5%25-brightgreen.svg)](#)
 
-> 💡 *Démonstration interactive des Small Language Models (SLM) pour Wavestone : Performance, Green IT et Souveraineté des Données.*
+> 💡 *Démonstration interactive des Small Language Models (SLM) : Performance, Green IT et Souveraineté des Données.*
 
-![Démonstration de la v2 de WaveLocalAI : accueil, Arène des modèles, Discussion avec sources, Agent seul, Sobriété et matériel](docs/assets/v2-demo.gif)
+![Démonstration de la v2 de Frugal AI Workbench : accueil, Arène des modèles, Discussion avec sources, Agent seul, Sobriété et matériel](docs/assets/v2-demo.gif)
 
 *La v2, en cinq captures à la suite : l'accueil et sa démo recommandée, l'Arène des modèles et son classement, la Discussion avec le passage source surligné, un agent qui appelle un outil, puis la Sobriété et matériel. Les captures viennent de doublures (modèles et réponses simulés, document fictif, aucune donnée réelle) : voir [Captures](#captures-de-la-v2).*
 
@@ -25,17 +25,17 @@ La v2 est une application web locale (serveur FastAPI, interface sans compilatio
 Même installation que la v1 (voir [Installation](#installation-5-min) pour installer uv et Ollama), puis :
 
 ```powershell
-git clone https://github.com/Aliquanto3/wavelocalai.git
-cd wavelocalai
+git clone https://github.com/Aliquanto3/frugal-ai-workbench.git
+cd frugal-ai-workbench
 
 # Crée .venv et installe les dépendances aux versions figées de uv.lock (installation éditable)
 uv sync
 
-# Lance la v2 (la v1 se lance toujours par `uv run wavelocalai`)
-uv run wavelocalai-v2
+# Lance la v2 (la v1 se lance toujours par `uv run frugal-ai-workbench`)
+uv run frugal-ai-workbench-v2
 ```
 
-Le navigateur par défaut s'ouvre tout seul sur http://127.0.0.1:8502 (le port 8501 reste à la v1) dès que le port répond : le serveur n'écoute que sur la machine locale. Options : `--port`, `--data-dir` (dossier des données, `data/` par défaut), `--config` (un fichier `wavelocalai.toml`) et `--no-browser` (n'ouvre pas le navigateur ; ou le réglage `[server] open_browser = false` de `wavelocalai.toml`). Si l'ouverture échoue (pas de navigateur, session sans affichage), l'URL est affichée dans la console et le serveur continue. Un modèle local reste à télécharger (`ollama pull qwen2.5:1.5b`) ; l'écran Modèles sait aussi les installer.
+Le navigateur par défaut s'ouvre tout seul sur http://127.0.0.1:8502 (le port 8501 reste à la v1) dès que le port répond : le serveur n'écoute que sur la machine locale. Options : `--port`, `--data-dir` (dossier des données, `data/` par défaut), `--config` (un fichier `frugal-ai-workbench.toml`) et `--no-browser` (n'ouvre pas le navigateur ; ou le réglage `[server] open_browser = false` de `frugal-ai-workbench.toml`). Si l'ouverture échoue (pas de navigateur, session sans affichage), l'URL est affichée dans la console et le serveur continue. Un modèle local reste à télécharger (`ollama pull qwen2.5:1.5b`) ; l'écran Modèles sait aussi les installer.
 
 Tests de la v2 : `uv run python -m pytest tests/v2` (sans Ollama) ; les parcours dans un navigateur (`tests/v2/e2e`, marqueur `e2e`) se lancent avec `-m e2e` et tournent chaque nuit sur Linux dans la CI (voir `AGENTS.md`).
 
@@ -55,7 +55,7 @@ Ces images sont produites par [`scripts/readme_captures_v2.py`](scripts/readme_c
 
 La v1 reste la version livrée tant que la v2 ne l'a pas remplacée ; sa documentation suit.
 
-![Démonstration de la v1 de WaveLocalAI : accueil, chat dans l'Arène des modèles, agent qui audite la machine, page Sobriété et matériel](docs/assets/demo.gif)
+![Démonstration de la v1 de Frugal AI Workbench : accueil, chat dans l'Arène des modèles, agent qui audite la machine, page Sobriété et matériel](docs/assets/demo.gif)
 
 *En 40 secondes : on pose une question à un modèle et on voit sa vitesse et son CO₂, un agent outillé audite la machine, puis la page Sobriété suit la charge et les émissions. Vidéo source : [`docs/assets/demo.mp4`](docs/assets/demo.mp4). Cette capture utilise un modèle cloud ; l'usage visé reste un petit modèle local via Ollama.*
 
@@ -63,7 +63,7 @@ La v1 reste la version livrée tant que la v2 ne l'a pas remplacée ; sa documen
 
 ## 🎯 Vision & Objectifs
 
-WaveLocalAI est un **proof of concept** conçu pour :
+Frugal AI Workbench est un **proof of concept** conçu pour :
 
 1. **🔒 Souveraineté des Données** : Tout reste sur votre machine (0 appel API par défaut)
 2. **🌱 Green IT** : Mesure de l'impact carbone temps réel (CodeCarbon)
@@ -90,12 +90,12 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 # Mac/Linux : curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 2. Récupérer le projet (git clone, ou le zip du dépôt décompressé)
-git clone https://github.com/Aliquanto3/wavelocalai.git
-cd wavelocalai
+git clone https://github.com/Aliquanto3/frugal-ai-workbench.git
+cd frugal-ai-workbench
 
 # 3. Lancer l'application : le premier lancement crée .venv, installe les dépendances
 #    et crée data/models.json depuis config/models_catalog.json
-uv run wavelocalai
+uv run frugal-ai-workbench
 
 # 4. Télécharger un modèle local (Ollama doit être installé)
 ollama pull qwen2.5:1.5b
@@ -103,18 +103,18 @@ ollama pull qwen2.5:1.5b
 
 Configuration optionnelle : `cp .env.example .env`, puis ajouter `MISTRAL_API_KEY` pour la comparaison Cloud.
 
-Sur un réseau d'entreprise qui intercepte le HTTPS (proxy avec certificat maison), faire utiliser à uv le magasin de certificats du système, comme pour WaveStack : `$env:UV_SYSTEM_CERTS = "1"` avant `uv run`.
+Sur un réseau d'entreprise qui intercepte le HTTPS (proxy avec certificat maison), faire utiliser à uv le magasin de certificats du système, comme pour les autres projets uv : `$env:UV_SYSTEM_CERTS = "1"` avant `uv run`.
 
 > **Machine de banc installée avant le passage à uv** : son `.venv` est encore le venv du banc, et `uv sync` ou `uv run` remplacerait son contenu par celui de l'application. Avant le premier `uv run`, recréer le banc dans `.venv-bench` (étape 2 de `docs/PROMPT_NOUVELLE_MACHINE.md`) puis supprimer l'ancien `.venv`. Ne pas se contenter de le renommer : sous Windows, les exécutables du venv (`hf.exe`) gardent le chemin de l'ancien dossier.
 
-**Mettre à jour** : `git pull`, puis `uv sync` (ou directement `uv run wavelocalai`).
+**Mettre à jour** : `git pull`, puis `uv sync` (ou directement `uv run frugal-ai-workbench`).
 
 L'interface s'ouvre sur http://localhost:8501. Par défaut, le serveur n'écoute que sur la machine locale (`.streamlit/config.toml`, `server.address = "localhost"`) : aucune URL réseau n'est annoncée et la télémétrie Streamlit est coupée. Le lanceur se place lui-même à la racine du dépôt, car Streamlit ne lit `.streamlit/config.toml` que dans le répertoire courant, sinon le serveur écouterait sur le réseau.
 
 **Ouvrir l'application sur le réseau** (démonstration depuis un autre poste) est un choix explicite, à faire au lancement uniquement, sur un réseau de confiance :
 
 ```powershell
-uv run wavelocalai --server.address 0.0.0.0
+uv run frugal-ai-workbench --server.address 0.0.0.0
 ```
 
 Streamlit annonce alors aussi une « Network URL » : l'application et les documents indexés deviennent accessibles aux autres machines du réseau. Les arguments supplémentaires sont transmis à `streamlit run`.
@@ -148,7 +148,7 @@ python -m venv .venv-app
 
 Le banc de qualité « difficile » des petits modèles locaux, conçu à partir de ce projet, vit désormais dans son propre dépôt : [**slm-quality-bench**](https://github.com/Aliquanto3/slm-quality-bench). Il évalue les modèles servis par Ollama, en français, sur deux pistes (réflexion coupée et activée), avec des questions protégées contre la contamination, un juge calibré sur des étiquettes humaines et des statistiques appariées.
 
-Les résultats de benchmark affichés par l'application en viennent : l'Action `sync-slm-results.yml` les recopie dans `benchmarks/slm-quality/` (`scripts/sync_slm_results.py`) et ouvre une PR. wavelocalai n'en produit plus lui-même.
+Les résultats de benchmark affichés par l'application en viennent : l'Action `sync-slm-results.yml` les recopie dans `benchmarks/slm-quality/` (`scripts/sync_slm_results.py`) et ouvre une PR. frugal-ai-workbench n'en produit plus lui-même.
 
 ---
 
@@ -178,7 +178,7 @@ Les résultats de benchmark affichés par l'application en viennent : l'Action `
 - **9 outils disponibles** (anciennement 3) :
   - 🕒 **Time** : Heure système
   - 🧮 **Calculator** : Calculs mathématiques sécurisés
-  - 🏢 **Wavestone Search** : Recherche interne simulée
+  - 🏢 **Internal Search** : Recherche interne simulée
   - 📧 **Email Sender** : Envoi d'emails via SMTP
   - 📊 **CSV Analyzer** : Analyse de données (Pandas)
   - 📝 **Document Generator** : Création de fichiers DOCX
@@ -278,15 +278,15 @@ SMTP_USER=votre-email@gmail.com
 SMTP_PASSWORD=votre-app-password
 
 # === Green IT ===
-WAVELOCAL_COUNTRY_ISO=FRA  # FRA, DEU, USA...
-WAVELOCAL_PUE=1.0          # 1.0=Local, 1.4=Datacenter
+FRUGAL_AI_COUNTRY_ISO=FRA  # FRA, DEU, USA...
+FRUGAL_AI_PUE=1.0          # 1.0=Local, 1.4=Datacenter
 
 # === RAG ===
-WAVELOCAL_EMBEDDING_MODEL=all-MiniLM-L6-v2
+FRUGAL_AI_EMBEDDING_MODEL=all-MiniLM-L6-v2
 
 # === Chemins ===
-WAVELOCAL_DATA_DIR=./data
-WAVELOCAL_LOGS_DIR=./data/logs
+FRUGAL_AI_DATA_DIR=./data
+FRUGAL_AI_LOGS_DIR=./data/logs
 ```
 
 ### Télémétries
@@ -327,7 +327,7 @@ Certaines télémétries dépendent de plusieurs variables, dont chacune suffit 
 
 ### Reranker local de la v2 (optionnel)
 
-La v2 (`wavelocalai-v2`, port 8502) peut reclasser les extraits trouvés avec un reranker local (fastembed, ONNX), installé avec les autres dépendances (`uv sync` seul suffit). **Elle ne télécharge jamais rien d'elle-même** : le reranker ne sert que s'il est déjà dans le dossier `data/models/fastembed` (sous le dossier de données de `wavelocalai.toml`). Sans lui, la recherche garde l'ordre des vecteurs, et « Réglages avancés » de la Discussion dit pourquoi (« Reclassement indisponible : … »).
+La v2 (`frugal-ai-workbench-v2`, port 8502) peut reclasser les extraits trouvés avec un reranker local (fastembed, ONNX), installé avec les autres dépendances (`uv sync` seul suffit). **Elle ne télécharge jamais rien d'elle-même** : le reranker ne sert que s'il est déjà dans le dossier `data/models/fastembed` (sous le dossier de données de `frugal-ai-workbench.toml`). Sans lui, la recherche garde l'ordre des vecteurs, et « Réglages avancés » de la Discussion dit pourquoi (« Reclassement indisponible : … »).
 
 Pour le récupérer, un seul geste explicite : le bouton « Installer le reranker » de l'écran Modèles, qui lance un run `pull` (barre de progression, annulable) et remplit le cache. Pour le faire hors de l'interface, en ligne de commande :
 
@@ -335,7 +335,7 @@ Pour le récupérer, un seul geste explicite : le bouton « Installer le reranke
 uv run python -c "from fastembed.rerank.cross_encoder import TextCrossEncoder; TextCrossEncoder(model_name='jinaai/jina-reranker-v2-base-multilingual', cache_dir='data/models/fastembed')"
 ```
 
-Le modèle se règle dans `[rag] reranker_model` de `wavelocalai.toml` (multilingue par défaut, pour des documents en français) ; le nom donné au script ci-dessus doit être le même. Pour jouer le test d'intégration, qui saute sans le cache : `python -m pytest tests/v2/integration/test_rag_rerank_local.py`.
+Le modèle se règle dans `[rag] reranker_model` de `frugal-ai-workbench.toml` (multilingue par défaut, pour des documents en français) ; le nom donné au script ci-dessus doit être le même. Pour jouer le test d'intégration, qui saute sans le cache : `python -m pytest tests/v2/integration/test_rag_rerank_local.py`.
 
 ### Ajout d'un Nouveau Modèle
 
@@ -462,8 +462,7 @@ Ce projet est distribué sous licence **MIT** - voir [LICENSE](LICENSE) pour plu
 ## 👤 Auteur
 
 **Anaël Yahi**
-Consultant en Transformation Numérique @ [Wavestone](https://www.wavestone.com/fr/)
-Spécialité : IA Générative
+Spécialité : IA générative
 
 - LinkedIn : [Anaël Yahi](https://www.linkedin.com/in/ana%C3%ABl-yahi/)
 - GitHub : [@Aliquanto3](https://github.com/Aliquanto3)
@@ -472,7 +471,6 @@ Spécialité : IA Générative
 
 ## 🙏 Remerciements
 
-- **Wavestone** pour le soutien au projet
 - **Alibaba (Qwen Team)** et **IBM (Granite)** pour leurs modèles SLM exceptionnels
 - **Mistral AI** pour leur API performante
 - **Ollama** pour le runtime local
@@ -492,9 +490,9 @@ Si ce projet vous est utile, n'hésitez pas à :
 
 ## 📊 Stats
 
-![GitHub stars](https://img.shields.io/github/stars/Aliquanto3/wavelocalai?style=social)
-![GitHub forks](https://img.shields.io/github/forks/Aliquanto3/wavelocalai?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/Aliquanto3/wavelocalai?style=social)
+![GitHub stars](https://img.shields.io/github/stars/Aliquanto3/frugal-ai-workbench?style=social)
+![GitHub forks](https://img.shields.io/github/forks/Aliquanto3/frugal-ai-workbench?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/Aliquanto3/frugal-ai-workbench?style=social)
 
 ---
 
@@ -517,7 +515,7 @@ Si ce projet vous est utile, n'hésitez pas à :
 
 ---
 
-*Développé avec ❤️ pour la communauté IA & Data de Wavestone*
+*Développé avec ❤️ pour la communauté IA & Data*
 
 **Version :** 2.0.0 (Décembre 2024)
 **Dernière mise à jour :** 15/12/2024

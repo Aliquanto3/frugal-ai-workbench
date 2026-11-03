@@ -1,11 +1,11 @@
 # 🏗️ Architecture Technique
 
-WaveLocalAI suit une architecture modulaire **"Domain-Driven Design" (DDD) allégée**, séparant strictement l'interface (Frontend) de la logique métier (Core).
+Frugal AI Workbench suit une architecture modulaire **"Domain-Driven Design" (DDD) allégée**, séparant strictement l'interface (Frontend) de la logique métier (Core).
 
 ## Arborescence
 
 ```text
-wavelocalai/
+frugal-ai-workbench/
 ├── data/                    # Persistance locale (Ignoré par Git)
 │   ├── chroma/              # Base vectorielle (RAG)
 │   ├── logs/                # Logs CodeCarbon & App

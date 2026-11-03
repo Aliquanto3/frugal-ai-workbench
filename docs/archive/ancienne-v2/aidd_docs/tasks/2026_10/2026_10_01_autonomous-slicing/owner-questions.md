@@ -389,7 +389,7 @@ Epic: `aidd_docs/backlog/epics/a-release-is-called-credible-only-by-its-logged-c
 ### Q63. What counts as a session toward the three?
 
 - Artifact: the epic's validation verdict.
-- Question: the PRD says "shown to a client or their engineer". Does an internal Wavestone review count, and do repeat showings to the same client count separately?
+- Question: the PRD says "shown to a client or their engineer". Does an internal review count, and do repeat showings to the same client count separately?
 - Options: (a) only showings to a party outside the consultant's own firm count; repeats with one client count, and the verdict also states the number of distinct clients; (b) only distinct clients count; (c) any showing, internal or external, counts.
 - Recommended default: (a). It follows the PRD's wording literally and surfaces the distinct-client count instead of hiding it. Cost: three sessions with one client can validate a release, which (b) would forbid.
 - Blocks: the verdict.

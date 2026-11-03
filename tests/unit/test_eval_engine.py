@@ -11,7 +11,6 @@ import pytest
 
 
 class TestEvalEngine:
-
     @pytest.fixture
     def mock_env(self):
         """Simule l'environnement avec ragas installé."""
@@ -71,7 +70,7 @@ class TestEvalEngine:
         mock_embedding_model = MagicMock()
 
         result = engine.evaluate_single_turn(
-            query="What is WaveLocalAI?",
+            query="What is Frugal AI Workbench?",
             response="It is a local AI tool.",
             retrieved_contexts=["Context 1"],
             judge_tag="mistral-large-latest",

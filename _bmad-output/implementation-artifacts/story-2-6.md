@@ -7,27 +7,27 @@ baseline_commit: 'b5602cd'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-2-2.md'
 warnings: []
 deferred:
   - summary: >-
-      Les copies `wavelocalai.db.bak-<version>` faites avant une migration (AD-12) ne passent pas par l'effacement : une conversation écrite avant une mise à jour de schéma peut rester lisible dans une de ces copies. Aucune migration n'a lieu avant la prochaine étape du schéma ; à traiter avec la première migration qui suit (supprimer ou purger la copie une fois la migration validée).
+      Les copies `frugal-ai-workbench.db.bak-<version>` faites avant une migration (AD-12) ne passent pas par l'effacement : une conversation écrite avant une mise à jour de schéma peut rester lisible dans une de ces copies. Aucune migration n'a lieu avant la prochaine étape du schéma ; à traiter avec la première migration qui suit (supprimer ou purger la copie une fois la migration validée).
     evidence: |-
       `store/migrate.py` : `backup_path` ; la copie n'est faite que sur une base existante qui migre.
-    location: src/wavelocalai/store/migrate.py
+    location: src/frugal_ai_workbench/store/migrate.py
     severity: low
   - summary: >-
       La liste `GET /api/conversations` est un ajout au contrat d'API (noms de routes indicatifs) : l'écran rouvre « la dernière conversation de chat ». Sans notion de conversation courante côté serveur, une personne qui efface la conversation courante retrouve, au rechargement, la précédente si elle existe encore. Avant la 2.6 aucune conversation ne s'effaçait : il n'y en a donc qu'une par poste en pratique ; une liste de conversations (UX) est hors périmètre. À ratifier dans `contrat-api.md`.
     evidence: |-
       `test_the_list_gives_the_latest_conversation_first_and_filters_by_kind`.
-    location: src/wavelocalai/web/routes_conversations.py
+    location: src/frugal_ai_workbench/web/routes_conversations.py
     severity: low
   - summary: >-
       Une réponse rouverte montre le tag du modèle (`qwen3.5:2b`) et non son nom d'affichage, et, si le run a été arrêté ou a échoué, aucun pied : ni durée ni débit n'ont été mesurés, et l'estimation du navigateur ne se reconstruit pas. Le CO₂ de chaque réponse est dans l'API et dans les exports ; il s'affiche dans le pied avec la story 2.3 (local) et 2.5 (cloud).
     evidence: |-
       `test_a_stopped_answer_comes_back_marked_stopped_with_its_partial`.
-    location: src/wavelocalai/web/static/screens/chat.js
+    location: src/frugal_ai_workbench/web/static/screens/chat.js
     severity: low
 ---
 
@@ -55,7 +55,7 @@ Rouvrir `#/arene/chat` sur la conversation en cours de la veille, l'exporter (JS
 
 ## Fichiers
 
-- `src/wavelocalai/runs/conversations.py`, `runs/conversation_export.py`, `runs/repo.py` (`erase_conversation`), `runs/hub.py` (`erase_conversation`), `runs/snapshot.py` (`run_snapshot_row`), `store/db.py` (`purge`), `errors.py` (`conversation_busy`), `web/routes_conversations.py`, `web/app.py`, `web/routes_test.py`
+- `src/frugal_ai_workbench/runs/conversations.py`, `runs/conversation_export.py`, `runs/repo.py` (`erase_conversation`), `runs/hub.py` (`erase_conversation`), `runs/snapshot.py` (`run_snapshot_row`), `store/db.py` (`purge`), `errors.py` (`conversation_busy`), `web/routes_conversations.py`, `web/app.py`, `web/routes_test.py`
 - Front : `screens/chat.js`, `components/wl-chat-thread.js` (`restoreAnswer`), `core/api.js`, `i18n/fr.json`
 - Tests : `tests/v2/web/test_conversations_api.py`, `tests/v2/e2e/test_conversations.py`, `tests/v2/e2e/test_chat.py`, `tests/v2/unit/test_store.py`, `tests/v2/unit/test_errors.py`
 

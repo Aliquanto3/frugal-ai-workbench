@@ -92,7 +92,7 @@ class TestAgentEngineIntegration:
     async def test_agent_uses_search_tool(self, agent):
         """Test que l'agent utilise la recherche interne."""
         # ✅ CORRECTION : Prompt plus explicite
-        query = "Cherche dans la base Wavestone qui est Anaël en utilisant l'outil de recherche"
+        query = "Cherche dans la base interne qui est Anaël en utilisant l'outil de recherche"
 
         tool_calls = []
         tool_results = []
@@ -110,7 +110,7 @@ class TestAgentEngineIntegration:
 
         # ✅ CORRECTION : Assertion plus tolérante
         has_used_search = len(tool_calls) > 0 and any(
-            "search" in tc["tool"].lower() or "wavestone" in tc["tool"].lower() for tc in tool_calls
+            "search" in tc["tool"].lower() or "internal" in tc["tool"].lower() for tc in tool_calls
         )
 
         # Soit l'outil est utilisé, soit la réponse contient les bonnes infos
@@ -120,7 +120,7 @@ class TestAgentEngineIntegration:
 
         assert (
             has_used_search or has_valid_answer
-        ), "L'agent devrait utiliser search_wavestone_internal ou connaître la réponse"
+        ), "L'agent devrait utiliser search_internal ou connaître la réponse"
 
     async def test_agent_multiple_tools(self, agent):
         """Test que l'agent peut utiliser plusieurs outils en séquence."""
@@ -176,7 +176,7 @@ class TestAgentEngineToolsAvailability:
         # Outils existants
         assert "get_current_time" in tool_names
         assert "calculator" in tool_names
-        assert "search_wavestone_internal" in tool_names
+        assert "search_internal" in tool_names
 
         # NOUVEAU : Outils ajoutés
         assert "send_email" in tool_names

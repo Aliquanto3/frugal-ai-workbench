@@ -1,6 +1,6 @@
 # 📂 Scripts d'Administration & Maintenance
 
-Ce répertoire contient les outils en ligne de commande (CLI) permettant de gérer le cycle de vie de l'application WaveLocalAI, de la configuration des modèles à l'audit de performance avancé.
+Ce répertoire contient les outils en ligne de commande (CLI) permettant de gérer le cycle de vie de l'application Frugal AI Workbench, de la configuration des modèles à l'audit de performance avancé.
 
 ## 📋 Prérequis
 

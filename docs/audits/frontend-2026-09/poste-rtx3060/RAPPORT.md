@@ -8,7 +8,7 @@
 
 Ce rapport a un jumeau, rédigé en parallèle sur une autre machine, dans `docs/audits/frontend-2026-09/<machine>/`. Les deux ont vocation à être fusionnés avant l'implémentation (voir le §4.5).
 
-L'audit UX et visuel (esthétique, accessibilité, cohérence, charte Wavestone) est dans [`UX.md`](UX.md). Il a été fait sur cette machine seulement, puisque le rendu ne dépend pas du matériel. Le plan de remédiation du §4 couvre les deux audits.
+L'audit UX et visuel (esthétique, accessibilité, cohérence, charte générique) est dans [`UX.md`](UX.md). Il a été fait sur cette machine seulement, puisque le rendu ne dépend pas du matériel. Le plan de remédiation du §4 couvre les deux audits.
 
 ## 1. Synthèse
 
@@ -164,7 +164,7 @@ BMAD n'est pas encore installé dans ce dépôt. La version de référence est l
   - Ollama arrêté fait passer l'accueil à « Indisponible ».
 - **CAP-4 Débit comparable au benchmark** — *intent* : le t/s affiché mesure la génération seule, comme `benchmark_slm.py`. *Success* : le premier message après chargement affiche un débit à ±15 % des suivants, et le temps de chargement est affiché à part.
 - **CAP-5 Défauts adaptés à la machine** — *intent* : un utilisateur qui ne touche à rien obtient une démo rapide. *Success* : sur `poste-rtx3060`, aucun modèle présélectionné ne dépasse ~4 Go d'empreinte, et la page Hardware affiche le GPU.
-- **CAP-6 Interface à la charte, accessible et cohérente** — *intent* : l'interface ressemble à Wavestone et se lit sans effort. *Success* :
+- **CAP-6 Interface à la charte, accessible et cohérente** — *intent* : l'interface a une identité propre et se lit sans effort. *Success* :
   - zéro violation axe `color-contrast` ou `heading-order`, en clair comme en sombre ;
   - un seul nom par module et par commande ;
   - des formats `fr-FR` ;
@@ -192,7 +192,7 @@ Ordre d'exécution de haut en bas.
 | id | Titre | Constats | Taille | `spec_checkpoint` | `done_checkpoint` | Note pour `invoke_dev_with` |
 |---|---|---|---|---|---|---|
 | 1 | Environnement frontend reproductible | F0, F2 (cause 1) | S | **oui** : fixer `ragas` ou `langchain-community` ; `requirements-app.txt` ou fichier de contraintes | non | Partir des versions du §3, qui marchent sauf Ragas. Documenter `.venv-app` dans le README et `docs/TROUBLESHOOT.md`. |
-| 2 | Thème Wavestone, icônes et accessibilité | U1–U7, U18, F8 | L | **oui** : valider la maquette issue de `bmad-ux` | **oui** : revue visuelle en clair et en sombre | Créer `.streamlit/config.toml` (ébauche en `UX.md` §4). Ajouter `st.logo`, et `toolbarMode = "viewer"`. Remplacer les emojis par des icônes Material. Supprimer les hex en dur (encart « base vide »). Rendre visible la rangée d'outils de l'agent. Nommer le bouton de la corbeille. |
+| 2 | Thème générique, icônes et accessibilité | U1–U7, U18, F8 | L | **oui** : valider la maquette issue de `bmad-ux` | **oui** : revue visuelle en clair et en sombre | Créer `.streamlit/config.toml` (ébauche en `UX.md` §4). Ajouter `st.logo`, et `toolbarMode = "viewer"`. Remplacer les emojis par des icônes Material. Supprimer les hex en dur (encart « base vide »). Rendre visible la rangée d'outils de l'agent. Nommer le bouton de la corbeille. |
 | 3 | Vocabulaire et rédaction unifiés | U8, U9, U10 | M | **oui** : valider le lexique d'`EXPERIENCE.md` | non | Un nom par module, identique dans le menu, la carte, le titre et l'onglet. Outils de l'agent en français. Utilitaire de formats `fr-FR` (nombres, unités, dates). Accorder les pluriels. |
 | 4 | Brancher l'ingestion RAG sur le moteur | F1, F7 | M | non | **oui** : démo manuelle d'un PDF réel | `UploadedFile` → fichier temporaire → `rag_engine.ingest_file`. Aligner le nom d'embedding par défaut de `RAGEngine` sur celui de la page. Afficher le nombre d'extraits réellement ajoutés. |
 | 5 | Échecs visibles et état de santé réel | F2 (cause 2), F3, U11 | M | non | non | Tester `result.error` avant `result.metrics` dans chat, labo et arena. `EvalResult` doit pouvoir porter « non évalué ». Brancher l'indicateur « Système » sur `LLMProvider.health_check()`. Tests unitaires avec un `InferenceResult` en erreur. |

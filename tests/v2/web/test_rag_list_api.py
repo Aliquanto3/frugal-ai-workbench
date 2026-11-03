@@ -8,8 +8,8 @@ import asyncio
 import httpx
 import pytest
 
-from wavelocalai.models.fake import FAKE_EMBED_REF
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.fake import FAKE_EMBED_REF
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..rag_files import make_blank_pdf
@@ -87,7 +87,7 @@ async def test_a_base_with_only_a_failed_document_lists_it_with_its_reason_and_c
 
 
 async def test_a_document_being_indexed_is_listed_as_indexing_and_not_counted(served):
-    from wavelocalai.models.fake import Sleep
+    from frugal_ai_workbench.models.fake import Sleep
 
     app, client = served
     embedder = app.state.embedders[FAKE_EMBED_REF.tag]
@@ -110,7 +110,7 @@ async def test_a_document_being_indexed_is_listed_as_indexing_and_not_counted(se
 async def test_an_import_over_the_file_count_or_total_size_cap_is_refused(tmp_path):
     settings = make_settings(
         tmp_path,
-        environ={"WAVELOCALAI_TESTING": "1"},
+        environ={"FRUGAL_AI_TESTING": "1"},
         rag={"max_files": 2, "max_import_mb": 1},
     )
     app = create_app(settings)

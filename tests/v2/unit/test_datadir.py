@@ -7,7 +7,7 @@ import logging
 
 import pytest
 
-from wavelocalai.store.datadir import (
+from frugal_ai_workbench.store.datadir import (
     LOCK_NAME,
     DataDirLock,
     DataDirLockedError,
@@ -15,7 +15,7 @@ from wavelocalai.store.datadir import (
     ensure_data_dir,
     is_under_onedrive,
 )
-from wavelocalai.store.logs import BACKUP_COUNT, MAX_BYTES, close_logging, setup_logging
+from frugal_ai_workbench.store.logs import BACKUP_COUNT, MAX_BYTES, close_logging, setup_logging
 
 
 def test_second_lock_on_same_data_dir_is_refused_until_release(tmp_path):
@@ -23,7 +23,7 @@ def test_second_lock_on_same_data_dir_is_refused_until_release(tmp_path):
     second = DataDirLock(tmp_path)
     first.acquire()
     try:
-        with pytest.raises(DataDirLockedError, match="autre wavelocalai-v2"):
+        with pytest.raises(DataDirLockedError, match="autre frugal-ai-workbench-v2"):
             second.acquire()
     finally:
         first.release()
@@ -33,7 +33,7 @@ def test_second_lock_on_same_data_dir_is_refused_until_release(tmp_path):
 
 def test_lock_failure_other_than_a_live_server_says_the_real_cause(tmp_path, monkeypatch):
     """C5 : droits ou disque ne sont pas « un autre serveur » (mauvais diagnostic sinon)."""
-    from wavelocalai.store import datadir
+    from frugal_ai_workbench.store import datadir
 
     def refuse(handle):
         raise OSError(errno.EIO, "Erreur d'entrée/sortie")
@@ -42,7 +42,7 @@ def test_lock_failure_other_than_a_live_server_says_the_real_cause(tmp_path, mon
     with pytest.raises(DataDirLockError, match="Impossible de prendre le verrou") as raised:
         DataDirLock(tmp_path).acquire()
     assert not isinstance(raised.value, DataDirLockedError)
-    assert "autre wavelocalai-v2" not in str(raised.value)
+    assert "autre frugal-ai-workbench-v2" not in str(raised.value)
 
 
 def test_lock_file_that_cannot_be_created_says_the_real_cause(tmp_path):
@@ -83,33 +83,35 @@ def logs(tmp_path):
 
 def test_logs_rotate_five_files_of_one_megabyte(logs):
     log_file = setup_logging(logs, console=False)
-    handler = next(h for h in logging.getLogger("wavelocalai").handlers if hasattr(h, "maxBytes"))
+    handler = next(
+        h for h in logging.getLogger("frugal_ai_workbench").handlers if hasattr(h, "maxBytes")
+    )
     assert (handler.maxBytes, handler.backupCount) == (1_000_000, 4)
     assert (MAX_BYTES, BACKUP_COUNT) == (1_000_000, 4)
     assert log_file.parent == logs / "logs"
 
-    logger = logging.getLogger("wavelocalai.test")
+    logger = logging.getLogger("frugal_ai_workbench.test")
     for _ in range(80):  # ~8 Mo : bien plus que 5 fichiers de 1 Mo
         logger.info("x" * 100_000)
     files = sorted(p.name for p in (logs / "logs").iterdir())
     assert files == [
-        "wavelocalai.log",
-        "wavelocalai.log.1",
-        "wavelocalai.log.2",
-        "wavelocalai.log.3",
-        "wavelocalai.log.4",
+        "frugal-ai-workbench.log",
+        "frugal-ai-workbench.log.1",
+        "frugal-ai-workbench.log.2",
+        "frugal-ai-workbench.log.3",
+        "frugal-ai-workbench.log.4",
     ]
     assert all(p.stat().st_size <= 1_100_000 for p in (logs / "logs").iterdir())
 
 
 def test_logs_mask_api_keys_even_in_exceptions(logs):
     log_file = setup_logging(logs, console=False, secrets=("valeur-secrete-connue",))
-    logger = logging.getLogger("wavelocalai.test")
+    logger = logging.getLogger("frugal_ai_workbench.test")
     try:
         raise RuntimeError("échec avec sk-proj-AbCdEf0123456789")
     except RuntimeError:
         logger.exception("appel refusé (valeur-secrete-connue)")
-    for handler in logging.getLogger("wavelocalai").handlers:
+    for handler in logging.getLogger("frugal_ai_workbench").handlers:
         handler.flush()
     text = log_file.read_text(encoding="utf-8")
     assert "sk-proj-AbCdEf" not in text and "valeur-secrete-connue" not in text
@@ -119,5 +121,7 @@ def test_logs_mask_api_keys_even_in_exceptions(logs):
 def test_setup_logging_is_idempotent(logs):
     setup_logging(logs, console=False)
     setup_logging(logs, console=False)
-    ours = [h for h in logging.getLogger("wavelocalai").handlers if hasattr(h, "baseFilename")]
+    ours = [
+        h for h in logging.getLogger("frugal_ai_workbench").handlers if hasattr(h, "baseFilename")
+    ]
     assert len(ours) == 1

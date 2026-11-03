@@ -12,9 +12,9 @@ import contextlib
 import httpx
 import pytest
 
-from wavelocalai.models.ollama_api import OllamaHttpSource
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.ollama_api import OllamaHttpSource
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from ..fake_ollama import FakeOllama, Plan, final, part
@@ -314,7 +314,7 @@ async def test_the_chat_route_is_a_write_and_obeys_the_local_origin_rule(tmp_pat
 
 
 async def test_the_fake_model_chats_through_the_same_route_in_testing_mode(served):
-    _, client = served  # `WAVELOCALAI_TESTING=1` : le `fake` est résoluble par le registre
+    _, client = served  # `FRUGAL_AI_TESTING=1` : le `fake` est résoluble par le registre
     started = (await _post(client, "Bonjour fake", model="fake:1b")).json()
     assert (await _ended(client, started["run_id"]))["status"] == "ok"
     events = await _events(client, started["run_id"])

@@ -6,7 +6,7 @@ import sqlite3
 
 import pytest
 
-from wavelocalai.store.migrate import migrate
+from frugal_ai_workbench.store.migrate import migrate
 
 NOW = "2026-10-18T12:00:00.000Z"
 ERROR = '{"code": "ingest_failed"}'
@@ -14,7 +14,7 @@ ERROR = '{"code": "ingest_failed"}'
 
 @pytest.fixture
 def conn(tmp_path):
-    db = tmp_path / "wavelocalai.db"
+    db = tmp_path / "frugal-ai-workbench.db"
     migrate(db)
     connection = sqlite3.connect(db)
     connection.execute("PRAGMA foreign_keys=ON")

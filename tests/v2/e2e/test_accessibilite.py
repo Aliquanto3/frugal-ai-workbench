@@ -740,7 +740,10 @@ def test_every_screen_has_one_h1_a_distinct_title_and_the_french_language(
         go(page, path)
         assert screen(page).locator("h1").count() == 1, path
         titles.append(page.title())
-    assert all(title.endswith(" · WaveLocalAI") or title == "WaveLocalAI" for title in titles)
+    assert all(
+        title.endswith(" · Frugal AI Workbench") or title == "Frugal AI Workbench"
+        for title in titles
+    )
     assert len(set(titles)) == len(titles), titles
 
 

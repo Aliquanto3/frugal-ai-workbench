@@ -1,4 +1,4 @@
-# 🧰 Guide des Outils Agents - WaveLocalAI
+# 🧰 Guide des Outils Agents - Frugal AI Workbench
 
 Ce document détaille les **9 outils** disponibles pour les agents autonomes (Mode Solo) et les équipes multi-agents (Mode Crew).
 
@@ -10,7 +10,7 @@ Ce document détaille les **9 outils** disponibles pour les agents autonomes (Mo
 |-------|-----------|-------------|----------------|
 | 🕒 **Time** | System | Heure système actuelle | Non |
 | 🧮 **Calculator** | Computation | Calculs mathématiques sécurisés | Non |
-| 🏢 **Wavestone Search** | Data | Recherche interne simulée | Non |
+| 🏢 **Internal Search** | Data | Recherche interne simulée | Non |
 | 📧 **Email Sender** | Communication | Envoi d'emails via SMTP | **Oui** (SMTP) |
 | 📊 **CSV Analyzer** | Data | Analyse de fichiers CSV/Excel | Non |
 | 📝 **Document Generator** | Output | Création de fichiers DOCX | Non |
@@ -91,22 +91,22 @@ calculator("(1250 * 0.15) * 3")
 
 ---
 
-## 🏢 3. Wavestone Search (search_wavestone_internal)
+## 🏢 3. Internal Search (search_internal)
 
 ### Description
-Moteur de recherche simulé dans une base de connaissance RH/Projets Wavestone.
+Moteur de recherche simulé dans une base de connaissance RH/Projets fictive.
 
 ### Base de données simulée
 ```
 - Anaël Yahi : Consultant IA, spécialité GenAI et Green IT
-- Projets : WaveLocalAI, Benchmarks SLM
+- Projets : Frugal AI Workbench, Benchmarks SLM
 - Expertises : LLM, RAG, Agents autonomes
 ```
 
 ### Utilisation
 **Prompt exemple :**
 ```
-Qui est Anaël dans l'équipe Wavestone ?
+Qui est Anaël dans l'équipe ?
 ```
 
 **Fonctionnalités :**
@@ -466,7 +466,7 @@ Contenu de la section 2...
 
 ---
 
-*Rapport généré par WaveLocalAI*
+*Rapport généré par Frugal AI Workbench*
 ```
 
 ### Cas d'usage
@@ -570,7 +570,7 @@ TOOLS_METADATA = {
 
 ### Workflow 3 : Reporting Exécutif
 ```
-1. search_wavestone_internal → Contexte projet
+1. search_internal → Contexte projet
 2. analyze_csv → Données quantitatives
 3. generate_chart → Graphiques
 4. generate_document → Rapport DOCX

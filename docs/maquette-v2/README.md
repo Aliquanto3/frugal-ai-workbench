@@ -1,4 +1,4 @@
-# Maquette du front de WaveLocalAI v2
+# Maquette du front de Frugal AI Workbench v2
 
 ## 1. Objet
 
@@ -123,7 +123,7 @@ Chaque écart est signalé sans être tranché. Références : epics.md (stories
 
 ### Accueil
 
-- `h1` « Accueil » (03 §3.9) ; EXPERIENCE.md place le titre « WaveLocalAI » en tête. **Réglé par la décision 9.**
+- `h1` « Accueil » (03 §3.9) ; EXPERIENCE.md place le titre « Frugal AI Workbench » en tête. **Réglé par la décision 9.**
 - Cartes des modules : nom court du menu en titre, nom long en sous-titre (« Documents », « Assistant documentaire »). **Réglé par la décision 10.**
 - Carte « Références » ajoutée, avec l'icône de l'Arène (DESIGN.md : icône jamais partagée ; l'icône reste non tranchée). **Réglé par la décision 8.**
 - Carte Mode : « N appels cloud dans cette session », compteur qu'aucune story ne définit.
@@ -298,7 +298,7 @@ Depuis la racine du dépôt :
 .venv\Scripts\python.exe -m pytest docs/maquette-v2/tests -q --tb=short
 ```
 
-Les tests pilotent Edge ou Chromium (variable `WAVELOCALAI_E2E_CHROMIUM`, sinon Edge à son emplacement habituel). Ils contrôlent :
+Les tests pilotent Edge ou Chromium (variable `FRUGAL_AI_E2E_CHROMIUM`, sinon Edge à son emplacement habituel). Ils contrôlent :
 
 - les routes de `donnees/routes.json` et la coquille ;
 - chaque scénario exporté par chaque écran, avec axe-core sans exclusion (clair, sombre, projection) ;

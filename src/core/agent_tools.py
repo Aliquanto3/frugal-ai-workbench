@@ -152,12 +152,12 @@ def _get_current_time_impl() -> str:
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
-def _search_wavestone_impl(query: str) -> str:
+def _search_internal_impl(query: str) -> str:
     """Logique pure pour la recherche interne."""
     knowledge = {
         "meteo": "Il fait toujours beau dans le Cloud, mais gris à Paris aujourd'hui (12°C).",
         "anael": "Anaël est un consultant IA Senior spécialisé dans le GenAI.",
-        "pue": "Le PUE moyen des datacenters Wavestone est de 1.4.",
+        "pue": "Le PUE moyen des datacenters de l'entreprise est de 1.4.",
         "politique": "La politique Green IT impose d'éteindre les GPU le week-end.",
     }
 
@@ -698,9 +698,9 @@ def calculator(expression: str) -> str:
 
 
 @tool
-def search_wavestone_internal(query: str) -> str:
+def search_internal(query: str) -> str:
     """
-    Simule un moteur de recherche interne à l'entreprise Wavestone.
+    Simule un moteur de recherche interne à l'entreprise.
     Utilise cet outil pour chercher des informations sur les employés, les projets ou les politiques RH.
 
     Args:
@@ -709,7 +709,7 @@ def search_wavestone_internal(query: str) -> str:
     Returns:
         str: Résultats de la recherche
     """
-    return _search_wavestone_impl(query)
+    return _search_internal_impl(query)
 
 
 @tool
@@ -871,7 +871,7 @@ CREW_TOOL_OVERRIDES = {"send_email": send_email_crew}
 AVAILABLE_TOOLS = [
     get_current_time,
     calculator,
-    search_wavestone_internal,
+    search_internal,
     send_email,
     analyze_csv,
     generate_document,
@@ -895,8 +895,8 @@ TOOLS_METADATA = {
         "category": "computation",
         "requires_config": False,
     },
-    "search_wavestone_internal": {
-        "name": "Recherche interne Wavestone",
+    "search_internal": {
+        "name": "Recherche interne (simulée)",
         "description": "Base interne simulée",
         "category": "data",
         "requires_config": False,

@@ -14,11 +14,11 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.errors import AppError
-from wavelocalai.runs import repo
-from wavelocalai.runs.hub import RunHub, check_params, strip_source_text
-from wavelocalai.runs.models import AssistantMessage, Co2, LeafResult
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.errors import AppError
+from frugal_ai_workbench.runs import repo
+from frugal_ai_workbench.runs.hub import RunHub, check_params, strip_source_text
+from frugal_ai_workbench.runs.models import AssistantMessage, Co2, LeafResult
+from frugal_ai_workbench.store.db import Store, db_path
 
 from ..producers import LOCAL_CO2, produce_arena, produce_chat
 
@@ -149,7 +149,7 @@ async def test_failed_close_purges_the_run_frees_its_kind_and_interrupts_at_next
 
     monkeypatch.setattr(repo, "finish_run_row", full_disk)
     with (
-        caplog.at_level(logging.ERROR, logger="wavelocalai.runs.hub"),
+        caplog.at_level(logging.ERROR, logger="frugal_ai_workbench.runs.hub"),
         pytest.raises(sqlite3.OperationalError, match="disk is full"),
     ):
         await hub.finish_run(parent.run_id)

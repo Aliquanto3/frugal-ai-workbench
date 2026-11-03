@@ -6,13 +6,13 @@ import sqlite3
 
 from fastapi.testclient import TestClient
 
-from wavelocalai.models.facts import facts_from_ollama
-from wavelocalai.models.facts_store import SqliteFactsStore
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.models.run_stats import SqliteRunStats
-from wavelocalai.store.db import Store, db_path, utc_now_iso
-from wavelocalai.store.migrate import migrate
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.facts import facts_from_ollama
+from frugal_ai_workbench.models.facts_store import SqliteFactsStore
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.models.run_stats import SqliteRunStats
+from frugal_ai_workbench.store.db import Store, db_path, utc_now_iso
+from frugal_ai_workbench.store.migrate import migrate
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from .test_registry import FakeOllama, _fixture_source

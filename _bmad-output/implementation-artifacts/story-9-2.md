@@ -7,8 +7,8 @@ baseline_commit: '4472c5c'
 context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
 warnings: []
 deferred: []
 ---
@@ -25,7 +25,7 @@ réponse partielle est gardée **et notée** par le juge comme une lane terminé
 sautée comme une annulation — et la lane continue de montrer CO₂ et débit mesurés (AD-10). Ouvre la
 voie à la story 9.3 (même fichiers).
 
-## Réglages ajoutés (`wavelocalai.toml` `[arena]`)
+## Réglages ajoutés (`frugal-ai-workbench.toml` `[arena]`)
 
 - `max_tokens` (défaut 800) : plafond passé dans `ChatRequest.max_tokens` de chaque lane (déjà porté
   par AD-8 et tous les adaptateurs, story 9.2 n'a eu qu'à le renseigner).
@@ -99,15 +99,15 @@ voie à la story 9.3 (même fichiers).
 
 ## Fichiers
 
-- Config : `wavelocalai.toml`, `src/wavelocalai/config.py` (`ArenaSettings`).
-- Code : `src/wavelocalai/inference/loop_detector.py` (nouveau), `src/wavelocalai/inference/arena.py`,
-  `src/wavelocalai/web/routes_runs.py`, `src/wavelocalai/web/routes_test.py`,
-  `src/wavelocalai/runs/arena_export.py`.
-- Front : `src/wavelocalai/web/static/components/wl-arena-lane.js`,
-  `src/wavelocalai/web/static/screens/arena.js`, `arena-run.js`, `src/wavelocalai/web/static/arena.css`,
-  `src/wavelocalai/web/static/core/api/runs.js`, `src/wavelocalai/web/static/i18n/fr/components.json`.
-- Doc : `_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md`,
-  `_bmad-output/planning-artifacts/ux-designs/ux-wavelocalai-2026-09-26/EXPERIENCE.md`.
+- Config : `frugal-ai-workbench.toml`, `src/frugal_ai_workbench/config.py` (`ArenaSettings`).
+- Code : `src/frugal_ai_workbench/inference/loop_detector.py` (nouveau), `src/frugal_ai_workbench/inference/arena.py`,
+  `src/frugal_ai_workbench/web/routes_runs.py`, `src/frugal_ai_workbench/web/routes_test.py`,
+  `src/frugal_ai_workbench/runs/arena_export.py`.
+- Front : `src/frugal_ai_workbench/web/static/components/wl-arena-lane.js`,
+  `src/frugal_ai_workbench/web/static/screens/arena.js`, `arena-run.js`, `src/frugal_ai_workbench/web/static/arena.css`,
+  `src/frugal_ai_workbench/web/static/core/api/runs.js`, `src/frugal_ai_workbench/web/static/i18n/fr/components.json`.
+- Doc : `_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md`,
+  `_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/EXPERIENCE.md`.
 - Tests : `tests/v2/unit/test_loop_detector.py` (nouveau),
   `tests/v2/web/test_arena_stop_api.py` (nouveau), `tests/v2/e2e/test_arena_stop.py` (nouveau) ;
   réalignés : `tests/v2/e2e/test_arena.py`, `test_arena_address.py`, `test_arena_results.py`.

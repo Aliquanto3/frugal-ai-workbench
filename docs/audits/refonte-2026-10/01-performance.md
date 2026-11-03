@@ -1,7 +1,7 @@
 # Audit performance et stabilité de la v1 (octobre 2026)
 
 Poste : Windows 11, Python 3.12.14, `.venv` de l'application. Mesures du 2026-10-18.
-Scripts de mesure : `C:\Users\UTILIS~1\AppData\Local\Temp\claude\C--Users-Utilisateur-Documents-GitHub-wavelocalai\d88119c1-6cbe-4761-ad14-af4fdea26275\scratchpad\perf\` (`imp.py`, `pages.py`, `prof.py`), hors dépôt.
+Scripts de mesure : `C:\Users\UTILIS~1\AppData\Local\Temp\claude\C--Users-Utilisateur-Documents-GitHub-frugal-ai-workbench\d88119c1-6cbe-4761-ad14-af4fdea26275\scratchpad\perf\` (`imp.py`, `pages.py`, `prof.py`), hors dépôt.
 
 ## Résumé : où part le temps
 

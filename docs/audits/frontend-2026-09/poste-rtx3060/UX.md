@@ -16,13 +16,13 @@
   - noms accessibles des boutons.
 - **Référentiels** :
   - [Web Interface Guidelines](https://github.com/vercel-labs/web-interface-guidelines) de Vercel, via le skill `web-design-guidelines`. Les règles pensées pour l'anglais sont transposées au français : casse de phrase et non *Title Case*, guillemets « », espaces insécables.
-  - Le skill `frontend-design` d'Anthropic pour la direction artistique ; la charte Wavestone (skill `wavestone-web`) ; le skill `dataviz` pour les graphiques. Les palettes proposées au §4 ont été validées par son script, pas à l'œil.
+  - Le skill `frontend-design` d'Anthropic pour la direction artistique ; la charte générique (skill de charte) ; le skill `dataviz` pour les graphiques. Les palettes proposées au §4 ont été validées par son script, pas à l'œil.
   - WCAG 2.2 niveau AA pour les contrastes : 4,5:1 pour le texte courant, 3:1 pour le grand texte et les éléments graphiques.
 - **Piège de mesure** : Streamlit fait défiler la page dans un conteneur interne. Une capture Playwright en `full_page` s'arrête donc au bas de la fenêtre. Les captures « hautes » ont été prises avec une fenêtre de 2600 px.
 
 ## 1. Verdict
 
-**Le front est propre, mais générique, et il ne ressemble ni à Wavestone ni à ce qu'il défend.**
+**Le front est propre, mais générique, et il ne n'a ni identité propre ni ne ressemble à ce qu'il défend.**
 
 C'est le thème Streamlit par défaut : police Source Sans, rouge `#FF4B4B`, emojis en guise d'icônes. On le reconnaît au premier coup d'œil comme un prototype Streamlit.
 
@@ -37,7 +37,7 @@ Côté positif :
 - les parcours sont lisibles ;
 - l'état vide du RAG et l'accueil de l'Agent Lab (« Bonjour ! » et actions rapides) sont de bonnes intentions de design.
 
-Mon avis : pour une démo destinée à des clients Wavestone, la marche est surtout **d'identité et de cohérence**, pas d'ergonomie. Les parcours tiennent. C'est l'emballage qui dessert le propos.
+Mon avis : pour une démo destinée à des clients, la marche est surtout **d'identité et de cohérence**, pas d'ergonomie. Les parcours tiennent. C'est l'emballage qui dessert le propos.
 
 ## 2. Mesures
 
@@ -67,9 +67,9 @@ Gravité : **majeur** (trompe l'utilisateur ou bloque l'accessibilité AA), **mo
 
 ### Identité et thème
 
-**U1 — Aucune identité Wavestone · moyen**
+**U1 — Aucune identité visuelle · moyen**
 - Il n'existe pas de `.streamlit/config.toml`. Tout est au défaut Streamlit : Source Sans, primaire rouge, aucun logo.
-- La charte (`wavestone-web`) impose pourtant le violet `#451DC7`, le vert `#04F06A` en accent rare, Aptos avec Inter en repli, et le logo dans l'en-tête.
+- La charte (skill de charte) impose pourtant la primaire `#0B6B78`, le vert `#1D7337` en accent rare, Inter, et le logo dans l'en-tête.
 - Streamlit 1.64 permet tout cela sans CSS : `[theme.light]` et `[theme.dark]`, `font`, `headingFont`, `baseRadius`, `chartCategoricalColors`, `st.logo`. Voir le §4.
 
 **U2 — Emojis en guise d'icônes, parfois en double ou comme titres · moyen**
@@ -86,7 +86,7 @@ Gravité : **majeur** (trompe l'utilisateur ou bloque l'accessibilité AA), **mo
 **U4 — Sémantique des couleurs inversée · majeur**
 - Le rouge sert à l'action principale : « Lancer le Test », « FIGHT ! », « Lancer le Benchmark », « Gérer les Documents ». C'est aussi la couleur des erreurs (`st.error`) et des pastilles d'outils.
 - À l'inverse, « Tout supprimer (Reset) », la seule action vraiment destructrice, est un bouton secondaire gris (`03_RAG_Knowledge.py:126`).
-- Avec la charte, le primaire passe au violet `#451DC7` (9,32:1 avec texte blanc), et le rouge `#FF2A49` est réservé au risque, avec une confirmation.
+- Avec la charte, le primaire passe au violet `#0B6B78` (9,32:1 avec texte blanc), et le rouge `#B42318` est réservé au risque, avec une confirmation.
 
 **U5 — Contrastes insuffisants en thème clair · majeur**
 - Voir le tableau du §2. Les boutons principaux (3,30:1) et toutes les légendes (3,68:1) échouent au niveau AA, sur toutes les pages. En thème sombre, seul le bouton rouge échoue.
@@ -170,10 +170,10 @@ Gravité : **majeur** (trompe l'utilisateur ou bloque l'accessibilité AA), **mo
 
 ## 4. Direction de design proposée
 
-Elle suit la méthode du skill `frontend-design` : un plan de *tokens* d'abord, confronté au brief, puis le code. Pour la couleur et la typographie, le brief est ici **la charte Wavestone, qui prime**. La liberté ne porte que sur la mise en page et l'élément signature.
+Elle suit la méthode du skill `frontend-design` : un plan de *tokens* d'abord, confronté au brief, puis le code. Pour la couleur et la typographie, le brief est ici **la charte générique, qui prime**. La liberté ne porte que sur la mise en page et l'élément signature.
 
 **Brief.**
-- *Sujet* : un démonstrateur Wavestone d'IA générative locale et sobre.
+- *Sujet* : un démonstrateur d'IA générative locale et sobre.
 - *Public* : consultants et décideurs clients, en démonstration sur grand écran.
 - *Mission principale* : prouver, mesures à l'appui, qu'un petit modèle local suffit pour le cas d'usage montré.
 
@@ -193,21 +193,21 @@ toolbarMode = "viewer"
 [theme]
 baseRadius = "12px"          # --radius-sm de la charte
 # Police : Inter servie localement ([[theme.fontFaces]] + server.enableStaticServing),
-# plutôt que Google Fonts : une démo souveraine ne dépend pas d'un CDN. Aptos si licence.
+# plutôt que Google Fonts : une démo souveraine ne dépend pas d'un CDN.
 
 [theme.light]
-primaryColor = "#451DC7"               # blanc dessus : 9,32:1
+primaryColor = "#0B6B78"               # blanc dessus : 9,32:1
 backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F6F5FA"   # --ws-cream
+secondaryBackgroundColor = "#EEF1F0"   # --ws-cream
 textColor = "#0A0A14"                  # --ws-ink
 borderColor = "#E6E6EC"                # --ws-line
-linkColor = "#451DC7"
+linkColor = "#0B6B78"
 chartCategoricalColors = ["#6A4DE6", "#0E9F5E", "#2F7FD8", "#C98A00"]
 
 [theme.dark]
 primaryColor = "#6A4DE6"               # blanc dessus : 5,50:1
 backgroundColor = "#0A0A14"
-textColor = "#F6F5FA"
+textColor = "#EEF1F0"
 linkColor = "#9B85F0"                  # 6,31:1 sur fond sombre
 chartCategoricalColors = ["#7A5FEA", "#12A564", "#3B86DB", "#B07800"]
 ```
@@ -215,7 +215,7 @@ chartCategoricalColors = ["#7A5FEA", "#12A564", "#3B86DB", "#B07800"]
 **Ce que ce plan évite volontairement** (contrôle du skill `frontend-design` contre les rendus « par défaut ») :
 - la grille de cartes toutes identiques de l'accueil, à remplacer par une liste de modules hiérarchisée, avec la démo recommandée en tête ;
 - la numérotation « 01. / 02. » des modules, qui ne sont pas une séquence ;
-- le vert `#04F06A` en aplat de texte (1,54:1 avec du blanc) : il ne s'emploie qu'avec l'encre `#0A0A14` (12,83:1).
+- le vert `#1D7337` en aplat de texte (1,54:1 avec du blanc) : il ne s'emploie qu'avec l'encre `#0A0A14` (12,83:1).
 
 ## 5. Remédiation
 

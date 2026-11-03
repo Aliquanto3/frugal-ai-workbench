@@ -12,8 +12,8 @@ from pathlib import Path
 
 import pytest
 
-from wavelocalai.runs.hub import RunHub
-from wavelocalai.store.db import Store, db_path
+from frugal_ai_workbench.runs.hub import RunHub
+from frugal_ai_workbench.store.db import Store, db_path
 
 DETAILS = {"destinataire": "a@example.org", "objet": "Bonjour", "corps": "Corps"}
 

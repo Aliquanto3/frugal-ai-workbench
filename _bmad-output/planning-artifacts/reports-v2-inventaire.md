@@ -84,17 +84,17 @@ Les stories 1.9 à 1.11 n'étaient pas encore relues (second avis et revue à fa
 | B18 | Borne haute de Python | SP | 8.4 |
 | B19 | Récupération du reranker (run `pull`) | AD-17, story 4.7 | 5.5 |
 | B20 | Passage `bmad-ux` avant l'écran Modèles | SP | prérequis de l'Epic 5 (déjà décidé par la spine §Deferred), à lancer avant le run de l'Epic 5 |
-| B21 | E2E sur Edge par `WAVELOCALAI_E2E_CHROMIUM`, hors CI | RUN (Décisions) | 8.3 (suite E2E complète, mode d'emploi dans `AGENTS.md`) |
+| B21 | E2E sur Edge par `FRUGAL_AI_E2E_CHROMIUM`, hors CI | RUN (Décisions) | 8.3 (suite E2E complète, mode d'emploi dans `AGENTS.md`) |
 
 ## (c) Correctifs techniques (story de dette 8.1)
 
 | # | Élément | Source |
 |---|---|---|
-| C1 | `import wavelocalai` puis accès d'attribut, `importlib.import_module` et `__import__` échappent au test AST des couches | S1.1-R |
+| C1 | `import frugal_ai_workbench` puis accès d'attribut, `importlib.import_module` et `__import__` échappent au test AST des couches | S1.1-R |
 | C2 | Le test de budget de lecture ne voit pas une route `include_in_schema=False` posée par `include_router` | S1.2-d3 |
 | C3 | Les `Mount` (`/static/`) échappent à la découverte du test de budget | S1.2-R |
 | C4 | `uvicorn.access` journalise méthode et chemin au niveau INFO : garde qu'aucune route ne porte de texte saisi dans son chemin ou sa requête | S1.2-d4 |
-| C5 | Verrou : toute `OSError` lue comme « un autre wavelocalai-v2 » ; `setup_logging` avant le verrou écrit dans le journal du serveur vivant | S1.2-R |
+| C5 | Verrou : toute `OSError` lue comme « un autre frugal-ai-workbench-v2 » ; `setup_logging` avant le verrou écrit dans le journal du serveur vivant | S1.2-R |
 | C6 | Échec de la transaction de clôture (disque plein) : racine restée en mémoire, `run_ended` diffusé mais non persisté ; purger la racine et journaliser | S1.3-d6, S1.4-R |
 | C7 | Windows, Ctrl+Break : SIGBREAK termine le processus sans `store.close` ni `lock.release` | S1.7-R |
 | C8 | « Réessayer » (panneau Ollama) ne force pas la sonde | S1.9-d1 |
@@ -121,7 +121,7 @@ Les stories 1.9 à 1.11 n'étaient pas encore relues (second avis et revue à fa
 | D15 | `models/port.py` en double (1.4 et 1.5) | RUN | réconcilié à la fusion (décision du run) |
 | D16 | `PreferenceStore`, `SqliteFactsStore`, médiane `tps` à brancher | RUN | branchés (`web/app.py`, `SqliteRunStats`, `SqlitePreferenceStore`) |
 | D17 | pydantic 2.12.x, cache de sonde, défauts `agent`/`rag` | RUN | décisions d'Anaël du 2026-10-18, intégrées à la spec et à la spine |
-| D18 | Ollama par `127.0.0.1` (IPv6 de `localhost`) | RUN | déjà le défaut de `wavelocalai.toml` |
+| D18 | Ollama par `127.0.0.1` (IPv6 de `localhost`) | RUN | déjà le défaut de `frugal-ai-workbench.toml` |
 | D19 | Sept reports de `deferred-work.md` propres à la v1 (couleur primaire dans `test_accessibility.py`, attentes E2E Streamlit, `MetricsService.calculate_carbon`, relance des tests de l'Assistant documentaire, CO₂ des coupures dans les onglets v1, relance des agents LangChain) | DW | v1 en correctifs seulement ; leurs leçons transposables sont reprises en A19, A28, A29, A30 et B15 |
 | D20 | Détail des colonnes, liste des codes d'erreur | SP | règles de processus déjà appliquées par chaque story |
 | D21 | Moteur `llama-server` | SP | hors plan jusqu'à la fin de l'étape 8 (spec) |
@@ -132,7 +132,7 @@ Ni la spec ni la spine ne les tranchent ; les stories citent leur numéro et por
 
 | # | Question | Bloque | Options | Recommandation |
 |---|---|---|---|---|
-| Q1 | Texte des boutons pleins en thème sombre : blanc sur `primary-dark` (#7E65E9) fait 4,26:1, sous AA | **2.2 (en cours de run)**, puis tout bouton plein | A. fond `primary` (#451DC7) avec texte blanc dans les deux thèmes (≈ 9,3:1 ; bouton moins détaché du fond sombre). B. texte quasi noir sur `primary-dark` (≈ 4,9:1 ; inhabituel pour la charte). C. nouveau jeton plus sombre pour les fonds de bouton en sombre, via `bmad-ux` (propre, mais une passe UX avant 2.2) | **A**, consigné dans `DESIGN.md` par `bmad-ux` au plus tôt (test de dérive des jetons) |
+| Q1 | Texte des boutons pleins en thème sombre : blanc sur `primary-dark` (#7E65E9) fait 4,26:1, sous AA | **2.2 (en cours de run)**, puis tout bouton plein | A. fond `primary` (#0B6B78) avec texte blanc dans les deux thèmes (≈ 9,3:1 ; bouton moins détaché du fond sombre). B. texte quasi noir sur `primary-dark` (≈ 4,9:1 ; inhabituel pour la charte). C. nouveau jeton plus sombre pour les fonds de bouton en sombre, via `bmad-ux` (propre, mais une passe UX avant 2.2) | **A**, consigné dans `DESIGN.md` par `bmad-ux` au plus tôt (test de dérive des jetons) |
 | Q2 | Où l'utilisateur choisit-il un modèle par défaut (AD-15 prévoit des « défauts choisis » dans `preferences`, aucune route n'existe) | 5.4 | A. aucun choix persistant (défaut calculé, choix gardé par conversation seulement). B. « Définir par défaut » sur l'écran Modèles (`PUT /api/models/defaults/{purpose}`). C. le sélecteur retient le dernier choix par usage, sans geste | **B** : geste explicite, raison « Choisi par vous », réversible ; C rend le défaut imprévisible en démo |
 | Q3 | Bibliothèque d'équipes d'agents | 6.5, 6.6 | A. équipes figées dans un fichier versionné, seul le sujet change. B. équipes versionnées + modifications de l'utilisateur dans `preferences`. C. équipes entièrement éditables, stockées en base (nouvelle table) | **B** : parité avec « Configurer » de la v1 sans nouvelle table ; A perd une fonction de la v1 |
 | Q4 | Jeu fixe de non-régression de l'évaluation | 7.2 | A. une dizaine de cas tirés d'un document du domaine public, verdicts annotés par Anaël (≈ 1 h). B. verdicts produits par un modèle cloud fort puis relus. C. jeu synthétique sans annotation, test de stabilité seulement | **A** : seule source de vérité humaine ; demande une session d'annotation d'Anaël |
@@ -148,6 +148,6 @@ Ni la spec ni la spine ne les tranchent ; les stories citent leur numéro et por
 | Q2 | **B** : « Définir par défaut » sur l'écran Modèles | 5.4 |
 | Q3 | **B** : équipes versionnées, modifications dans `preferences` | 6.5, 6.6 |
 | Q4 | **B** : verdicts produits par un modèle cloud fort, relus par Anaël | 7.2 (relecture d'Anaël en prérequis de l'Epic 7) |
-| Q5 | **A** : v1, ses tests et ses scripts `src.core` retirés de `master`, v1 gardée par son tag | 8.4 (`requirements.txt`, `constraints.txt` et `wavelocalai-v2` retirés) |
+| Q5 | **A** : v1, ses tests et ses scripts `src.core` retirés de `master`, v1 gardée par son tag | 8.4 (`requirements.txt`, `constraints.txt` et `frugal-ai-workbench-v2` retirés) |
 | Q6 | **B** : E2E en job CI nocturne, plus en local | 8.3 |
 | Q7 | **B** : 5.6 et 5.8 sur fichier de test, 5.7 attend les données ; repli `rag` → `chat` gardé | 5.7, prérequis de l'Epic 5 |

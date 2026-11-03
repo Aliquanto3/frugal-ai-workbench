@@ -986,9 +986,9 @@ def test_the_question_draft_survives_a_reload_and_nothing_else_is_stored(page, s
         page.locator("textarea.eval-question").first.input_value() == "Un brouillon de question ?"
     )
     keys = page.evaluate(
-        "Object.keys(localStorage).filter((k) => k.startsWith('wavelocalai.draft.'))"
+        "Object.keys(localStorage).filter((k) => k.startsWith('frugal-ai-workbench.draft.'))"
     )
-    assert keys == ["wavelocalai.draft.evaluation"]
+    assert keys == ["frugal-ai-workbench.draft.evaluation"]
 
 
 def test_the_catalog_models_used_here_exist():

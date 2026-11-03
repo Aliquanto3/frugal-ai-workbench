@@ -4,31 +4,31 @@
 :root {
   color-scheme: light;
 
-  --color-primary: #451DC7;
-  --color-primary-fill: #451DC7;
+  --color-primary: #0B6B78;
+  --color-primary-fill: #0B6B78;
   --color-on-primary: #FFFFFF;
   --color-surface: #FFFFFF;
-  --color-surface-alt: #F6F5FA;
-  --color-ink: #0A0A14;
-  --color-ink-secondary: #4A4A5E;
-  --color-gray-graphic: #8A8A9E;
-  --color-line: #E6E6EC;
-  --color-link: #451DC7;
-  --color-accent-green: #04F06A;
-  --color-risk: #FF2A49;
-  --color-chart-1: #6A4DE6;
-  --color-chart-2: #0E9F5E;
-  --color-chart-3: #2F7FD8;
-  --color-chart-4: #C98A00;
+  --color-surface-alt: #EEF1F0;
+  --color-ink: #141A1F;
+  --color-ink-secondary: #4B5560;
+  --color-gray-graphic: #737E85;
+  --color-line: #C9D1D3;
+  --color-link: #0B6B78;
+  --color-accent-green: #1D7337;
+  --color-risk: #B42318;
+  --color-chart-1: #0B7A86;
+  --color-chart-2: #1D7337;
+  --color-chart-3: #2F68D0;
+  --color-chart-4: #9A7400;
 
   --radius: 12px;
   --radius-full: 9999px;
 
-  /* Aptos s'il est installé (Office), sinon Inter servie par base.css, sinon sans-serif. */
-  --font-body: Aptos, Inter, sans-serif;
-  --font-heading: Aptos, Inter, sans-serif;
-  --font-metric-value: Aptos, Inter, sans-serif;
-  --font-caption: Aptos, Inter, sans-serif;
+  /* Inter servie par base.css, sinon la police du système, sinon sans-serif. */
+  --font-body: Inter, system-ui, sans-serif;
+  --font-heading: Inter, system-ui, sans-serif;
+  --font-metric-value: Inter, system-ui, sans-serif;
+  --font-caption: Inter, system-ui, sans-serif;
 
   /* Rampe typographique (absente de DESIGN.md, non comparée par le test de dérive). */
   --text-body: 1rem;
@@ -40,19 +40,19 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --color-primary: #7E65E9;
-  --color-primary-fill: #6A4DE6;
-  --color-on-primary: #FFFFFF;
-  --color-surface: #0A0A14;
-  --color-surface-alt: #16162A;
-  --color-ink: #F6F5FA;
-  --color-ink-secondary: #B4B4C6;
-  --color-line: #2E2E44;
-  --color-link: #9B85F0;
-  --color-accent-green: #04F06A;
-  --color-risk: #FF2A49;
-  --color-chart-1: #7A5FEA;
-  --color-chart-2: #12A564;
-  --color-chart-3: #3B86DB;
-  --color-chart-4: #B07800;
+  --color-primary: #4FC1CF;
+  --color-primary-fill: #4FC1CF;
+  --color-on-primary: #052227;
+  --color-surface: #0E1316;
+  --color-surface-alt: #161D21;
+  --color-ink: #E7ECEE;
+  --color-ink-secondary: #A2AFB7;
+  --color-line: #56605F;
+  --color-link: #86D8E2;
+  --color-accent-green: #7CC59B;
+  --color-risk: #F28B82;
+  --color-chart-1: #4FC1CF;
+  --color-chart-2: #7CC59B;
+  --color-chart-3: #7FA8F5;
+  --color-chart-4: #E2BE45;
 }

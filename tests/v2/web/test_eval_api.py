@@ -17,20 +17,20 @@ from typing import Any
 import httpx
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.evaluation import prompts
-from wavelocalai.evaluation.judge import Judge
-from wavelocalai.models.fake import (
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.evaluation import prompts
+from frugal_ai_workbench.evaluation.judge import Judge
+from frugal_ai_workbench.models.fake import (
     FakeChatModel,
     Sleep,
     fake_embedders,
     fake_models,
     fake_vector,
 )
-from wavelocalai.models.port import ModelRef, TextDelta
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.runs.eval_snapshot import METRICS, NOT_EVALUATED_STOPPED, measure_totals
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.models.port import ModelRef, TextDelta
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.runs.eval_snapshot import METRICS, NOT_EVALUATED_STOPPED, measure_totals
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from .conftest import parse_sse
@@ -105,7 +105,7 @@ def cloud(tag: str, *words: str) -> FakeChatModel:
 async def eval_app(tmp_path: Path, *fakes: FakeChatModel, docs: bool = True, **settings):
     """App de test avec `fakes` (modèles évalués et juges) et, par défaut, une base de deux
     documents indexée par l'embedding `fake`."""
-    config = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, **settings)
+    config = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, **settings)
     every = [*fakes, *fake_models(config).values(), *fake_embedders(config).values()]
     registry = ModelRegistry(config, extra_refs={m.ref.tag: m.ref for m in every})
     app = create_app(config, registry=registry)
@@ -477,7 +477,7 @@ class _Defaults:
         self.tag = tag
 
     async def get(self, purpose: str, allow_cloud: bool = False):
-        from wavelocalai.models.defaults import ModelDefault
+        from frugal_ai_workbench.models.defaults import ModelDefault
 
         return ModelDefault(purpose=purpose, tags=[self.tag], reason="test", source="rule")
 

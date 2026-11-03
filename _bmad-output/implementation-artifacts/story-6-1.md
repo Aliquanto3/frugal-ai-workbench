@@ -9,27 +9,27 @@ context:
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
   - '{project-root}/_bmad-output/planning-artifacts/reports-v2-inventaire.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
 warnings: []
 deferred:
   - summary: >-
       Écart nouveau, variante conservatrice : la réponse finale n'est **pas** publiée jeton par jeton. Le service ne sait qu'à la fin du flux d'un tour s'il appelle des outils (son texte est alors une réflexion, `think`) ou s'il conclut ; le texte d'un tour est donc gardé (`Turn`) et la réponse part en un seul `token`, après l'étape `answer`. Le critère de la 6.4 (« la réponse finale arrive en flux dans `wl-chat-thread` ») est tenu par l'événement `token` ; l'effet visuel de frappe progressive est perdu. Alternative plus lourde : publier le texte au fil de l'eau sur un canal provisoire et le requalifier en `think` quand un `ToolCall` arrive (nouvel événement de requalification, front à adapter).
     evidence: |-
       `agents/loop.py::AgentLoop.run`, `inference/streaming.py::Turn`, `tests/v2/web/test_agent_api.py::test_a_task_runs_a_tool_then_answers_and_every_step_is_published` (`token` unique).
-    location: src/wavelocalai/agents/loop.py
+    location: src/frugal_ai_workbench/agents/loop.py
     severity: medium
   - summary: >-
       Écarts nouveaux, variante conservatrice. (1) Un outil `sensitive` n'est jamais exécuté en 6.1 (refus en `tool_result`) : aucun mécanisme d'approbation n'existe avant la 6.3 (AD-9 interdit tout chemin automatique). (2) Le registre d'outils est vide en production : les outils de la v1, `GET /api/agents/tools` et la disponibilité sont la 6.2 ; un run réel n'a donc des outils que par les tests jusque-là. (3) Borne de tours atteinte : fin `ok` avec la raison pour réponse (`stopped: "max_turns"`), pas `error` (« fin propre avec la raison »). (4) Aucun plafond d'appels d'outils par tour ni dédoublonnage d'appels identiques : la borne est celle des tours (`agents.max_turns`). (5) Le blocage des réflexions de modèles « thinking » étendu d'Anthropic n'est pas rejoué avec les appels d'outils : l'adaptateur n'active pas `thinking` (inchangé). (6) Une conversation d'agent prolongée ne rejoue au modèle que les tâches et réponses finales, pas les outils des tâches passées.
     evidence: |-
       `agents/loop.py` (`SENSITIVE_REFUSAL`, `MAX_TURNS_MESSAGE`), `agents/tools/registry.py`, `tests/v2/web/test_agent_api.py::test_unknown_unreadable_and_sensitive_calls_are_refused_without_running_a_tool`, `::test_the_turn_limit_ends_cleanly_with_the_reason`.
-    location: src/wavelocalai/agents/
+    location: src/frugal_ai_workbench/agents/
     severity: low
   - summary: >-
       Écarts additifs à confirmer. `ToolCall` porte un champ `error` (arguments illisibles, jamais devinés) ; Ollama, qui ne donne pas d'identifiant d'appel, reçoit un `id` fabriqué (9 caractères alphanumériques, format exigé par Mistral, revue) pour que les tours d'une boucle ne s'y confondent pas ; `metrics` d'un run `agent` porte `turn` ; `step` porte `turn`, `call_id` et `failed`. Noms consignés dans `contrat-api.md` §Agents (écart n° 18 : fixés par la story serveur). Rien n'a été joué sur un vrai fournisseur cloud (aucune clé, consigne) : les trois formats cloud sont prouvés sous les vrais SDK à transport simulé ; seul Ollama a tourné pour de vrai.
     evidence: |-
       `models/port.py::ToolCall`, `models/tool_format.py`, `tests/v2/unit/test_tool_calls.py`, `tests/v2/integration/test_agent_ollama.py`.
-    location: src/wavelocalai/models/port.py
+    location: src/frugal_ai_workbench/models/port.py
     severity: low
 ---
 
@@ -56,7 +56,7 @@ Un modèle local ou cloud appelle des outils en boucle, et chaque réflexion, ap
 
 ## Notes de développement
 
-- Nouveaux : `models/tool_format.py`, `agents/{loop,service}.py`, `agents/tools/`, `web/routes_agents.py`, `[agents]` dans `wavelocalai.toml` (`AgentSettings`). Modifiés : les quatre adaptateurs et `ollama.py` (outils, appels), `cloud.py` (`chat_text_messages` remplacé par `tool_format.chat_messages`), `inference/streaming.py` (`Turn`), `port.py` (`ToolCall.error`), `web/app.py`.
+- Nouveaux : `models/tool_format.py`, `agents/{loop,service}.py`, `agents/tools/`, `web/routes_agents.py`, `[agents]` dans `frugal-ai-workbench.toml` (`AgentSettings`). Modifiés : les quatre adaptateurs et `ollama.py` (outils, appels), `cloud.py` (`chat_text_messages` remplacé par `tool_format.chat_messages`), `inference/streaming.py` (`Turn`), `port.py` (`ToolCall.error`), `web/app.py`.
 - Aucune dépendance nouvelle. Aucun fichier du front. Aucun code d'erreur nouveau (`errors.py` inchangé).
 
 ## Rapport de dev

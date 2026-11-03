@@ -19,7 +19,7 @@ from crewai import LLM, Agent, Crew, Process, Task  # noqa: E402
 from crewai.tools import BaseTool  # noqa: E402
 from pydantic import PrivateAttr  # noqa: E402
 
-# Import des outils Wavestone
+# Import des outils
 from src.core.agent_tools import CREW_TOOL_OVERRIDES, get_tools_by_names  # noqa: E402
 from src.core.config import MISTRAL_API_KEY  # noqa: E402
 from src.core.model_detector import is_api_model  # noqa: E402
@@ -248,7 +248,7 @@ class CrewFactory:
                 "goal": "Trouver des faits précis.",
                 "backstory": "Tu es factuel et méticuleux.",
                 "model_tag": model_tag,
-                "tools": ["get_current_time", "calculator", "search_wavestone_internal"],
+                "tools": ["get_current_time", "calculator", "search_internal"],
             },
             {
                 "role": "Briefing Manager",

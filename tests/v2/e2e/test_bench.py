@@ -140,7 +140,7 @@ def finish_leftover_runs(server):
 
 def test_the_form_shows_the_scenario_its_folded_instruction_and_its_expected_format(page, server):
     open_bench(page, server)
-    assert page.title() == "Banc d'essai · WaveLocalAI"
+    assert page.title() == "Banc d'essai · Frugal AI Workbench"
     select = page.get_by_label("Scénario prédéfini")
     assert select.locator("option").all_inner_texts()[:3] == [
         "Classification (JSON)",

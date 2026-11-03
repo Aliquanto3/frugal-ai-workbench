@@ -14,10 +14,10 @@ from typing import Any
 import httpx
 import pytest
 
-from wavelocalai.models.ollama_probe import OllamaProbe
-from wavelocalai.runs.models import LeafResult
-from wavelocalai.web.app import create_app
-from wavelocalai.web.system_state import SystemSampler
+from frugal_ai_workbench.models.ollama_probe import OllamaProbe
+from frugal_ai_workbench.runs.models import LeafResult
+from frugal_ai_workbench.web.app import create_app
+from frugal_ai_workbench.web.system_state import SystemSampler
 
 from ..conftest import TEST_PORT, make_settings
 from ..producers import LOCAL_CO2, produce_arena, produce_chat
@@ -108,7 +108,7 @@ class Stream:
 @pytest.fixture
 async def system(tmp_path):
     """(app, client) avec Ollama simulé : un modèle chargé."""
-    settings = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"})
+    settings = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"})
     transport = ollama_transport(
         [{"name": "qwen3:1.7b", "size": 2 * 1024**3, "size_vram": 1024**3}]
     )

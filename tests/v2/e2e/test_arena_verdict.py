@@ -2,7 +2,7 @@
 
 Le serveur de ce fichier est lancé avec une table de prix de test (`--config`) : les prix et la
 date n'ont aucune valeur réelle, ils servent à vérifier le calcul et l'affichage ; la vraie table de
-`wavelocalai.toml` est vide tant qu'aucun prix sourcé n'est relevé. Les lanes sont des `fake`
+`frugal-ai-workbench.toml` est vide tant qu'aucun prix sourcé n'est relevé. Les lanes sont des `fake`
 scriptés (l'une d'origine cloud), le juge note 70 partout (égalité), par le vrai service de l'Arène.
 Chaque test qui lance une comparaison attend sa fin.
 
@@ -51,7 +51,7 @@ CLOUD_TAGS = {"fake:nuage", "fake:autre"}
 def priced(tmp_path_factory):
     """Le serveur avec une table de prix de test."""
     folder = tmp_path_factory.mktemp("e2e-verdict")
-    config = folder / "wavelocalai.toml"
+    config = folder / "frugal-ai-workbench.toml"
     config.write_text(PRICE_TABLE, encoding="utf-8")
     data = folder / "data"
     data.mkdir()

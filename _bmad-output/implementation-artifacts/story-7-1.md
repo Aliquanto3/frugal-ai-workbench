@@ -8,22 +8,22 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-wavelocalai-2026-10-18/ARCHITECTURE-SPINE.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/planning-artifacts/architecture/architecture-frugal-ai-workbench-2026-10-18/ARCHITECTURE-SPINE.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
   - '{project-root}/_bmad-output/implementation-artifacts/story-3-3.md'
 warnings: []
 deferred:
   - summary: >-
       Choix de conception à confirmer, variante la plus conservatrice gardée. (1) Les extraits communs sont cherchés par la stratégie `naive`, sans reclassement (4.7) : la comparaison porte sur les modèles, pas sur la recherche ; `top_k` est celui en vigueur. (2) La fidélité vérifie une affirmation par appel du juge (« une à une »), au plus 10 affirmations par réponse : un modèle bavard n'est noté que sur ses dix premières. Un juge local fait donc jusqu'à 13 appels par réponse (1 + 10 + 1 + 1). (3) Un verdict « appuyée » dont l'extrait désigné n'existe pas garde son verdict, `support` devient `null` (le serveur ne corrige pas le juge). (4) `question_index` compte à partir de 0 (comme `round` de `retrieval_step`). (5) La notation commence quand toutes les réponses sont données (trois étapes qui avancent dans l'ordre, pas de chargement alterné entre le modèle évalué et le juge) ; les locaux répondent un modèle après l'autre. (6) Plafonds : 1 à 4 modèles, 1 à 20 questions de 20 000 caractères au plus. (7) `partial` vaut vrai aussi pour un run `error` (une évaluation arrêtée par un incident d'orchestration), pas seulement `cancelled` et `interrupted` : sinon ses cellules resteraient « en cours » à la réouverture.
     evidence: |-
-      `src/wavelocalai/evaluation/service.py`, `prompts.py`, `runs/eval_snapshot.py::PARTIAL_STATUSES` ; `tests/v2/web/test_eval_api.py`.
-    location: src/wavelocalai/evaluation/service.py
+      `src/frugal_ai_workbench/evaluation/service.py`, `prompts.py`, `runs/eval_snapshot.py::PARTIAL_STATUSES` ; `tests/v2/web/test_eval_api.py`.
+    location: src/frugal_ai_workbench/evaluation/service.py
     severity: medium
   - summary: >-
       Ajout à la lettre des critères : l'événement `eval_answer {lane, question_index, text, error}` (la réponse de chaque modèle, texte saisi donc dans le flux, effacé avec lui, AD-7 et AD-13) et `eval_questions {questions}`. Sans eux le front ne saurait ni quelle question porte quel rang ni ce que le modèle a répondu (l'appel est silencieux : aucun `token`, et `metrics` est publié par un nouveau paramètre `publish_metrics` de `stream_into_run`). Consignés dans `contrat-api.md`.
     evidence: |-
       `contrat-api.md` § « Évaluation (story 7.1) » ; `inference/streaming.py::stream_into_run(publish_metrics=)`.
-    location: _bmad-output/specs/spec-wavelocalai-v2/contrat-api.md
+    location: _bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md
     severity: low
   - summary: >-
       Résolu en revue (`GET /api/rag/eval/runs`, `runs/eval_snapshot.py::list_eval_runs`, consigné au contrat). Constat d'origine : pas de route de liste des évaluations passées (`GET /api/rag/eval/runs`) : le critère 7.1 ne la demande pas, mais la story 7.3 doit « lister les évaluations passées, les plus récentes d'abord » (décision n° 14 du 2026-10-19). À ajouter par la 7.3 (comme `list_arena_runs` pour l'Arène : `runs/snapshot.py`, `eval_questions` lu dans le flux), ou par une passe serveur avant elle.
@@ -34,14 +34,14 @@ deferred:
   - summary: >-
       Fusion avec les stories parallèles (5.1, 5.3, 6.1) : la migration s'appelle `0006_evaluations.sql` (et `schema_v6.sql`) ; si l'une d'elles fusionne avant avec une `0006`, renuméroter les deux fichiers, l'instantané et `test_default_temperature.py::test_migration_0005_...` (qui borne désormais `migrate(path, target=5)`, au lieu de la dernière version). `web/app.py` reçoit, en plus de l'enregistrement du routeur, trois lignes de cycle de vie (`app.state.evaluation` : défaut, construction par `routes_eval.build_service`, remise à `None`), le service ayant besoin de la fabrique de modèles et de l'index, locaux au cycle de vie.
     evidence: |-
-      `git diff master -- src/wavelocalai/web/app.py` (5 lignes) ; `tests/v2/unit/snapshots/schema_v6.sql`.
-    location: src/wavelocalai/web/app.py
+      `git diff master -- src/frugal_ai_workbench/web/app.py` (5 lignes) ; `tests/v2/unit/snapshots/schema_v6.sql`.
+    location: src/frugal_ai_workbench/web/app.py
     severity: low
   - summary: >-
       Résolu en revue (texte d'action neutre, code inchangé). Constat d'origine : le texte de `run_not_found` (`errors.py`) parlait de « comparaison » : il s'affiche tel quel pour une évaluation (ou un banc) introuvable. À reformuler en 7.3 et 7.4 (code inchangé, texte neutre).
     evidence: |-
-      `src/wavelocalai/errors.py` (`run_not_found`).
-    location: src/wavelocalai/errors.py
+      `src/frugal_ai_workbench/errors.py` (`run_not_found`).
+    location: src/frugal_ai_workbench/errors.py
     severity: low
   - summary: >-
       La justesse des notes n'est pas prouvée ici : un vrai juge de 1,5 milliard de paramètres (`qwen2.5:1.5b`) rend des notes plausibles mais peu fiables (fidélité 0 avec une affirmation « contredite », pertinence 68, précision 100 sur la note de cadrage de l'atelier). Le jeu fixe et son seuil d'accord viennent avec la 7.2 (relecture d'Anaël en prérequis).
@@ -86,7 +86,7 @@ L'écran (7.3), le jeu fixe de non-régression et le seuil d'accord du juge (7.2
 
 ## Fichiers
 
-- `src/wavelocalai/store/migrations/0006_evaluations.sql`, `src/wavelocalai/evaluation/{service,prompts,scoring,repo}.py`, `src/wavelocalai/runs/eval_snapshot.py`, `src/wavelocalai/rag/eval_base.py`, `src/wavelocalai/web/routes_eval.py`
+- `src/frugal_ai_workbench/store/migrations/0006_evaluations.sql`, `src/frugal_ai_workbench/evaluation/{service,prompts,scoring,repo}.py`, `src/frugal_ai_workbench/runs/eval_snapshot.py`, `src/frugal_ai_workbench/rag/eval_base.py`, `src/frugal_ai_workbench/web/routes_eval.py`
 - Tests : `tests/v2/web/test_eval_api.py`, `tests/v2/unit/test_eval_scoring.py`, `tests/v2/integration/test_eval_ollama.py`, `tests/v2/unit/snapshots/schema_v6.sql` (nouveaux) ; `tests/v2/unit/test_schema.py`, `tests/v2/unit/test_default_temperature.py` (complété, réaligné)
 
 ## Rapport de dev

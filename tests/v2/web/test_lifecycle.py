@@ -6,11 +6,11 @@ import sqlite3
 
 from fastapi.testclient import TestClient
 
-from wavelocalai.__main__ import main
-from wavelocalai.store.db import db_path
-from wavelocalai.store.logs import close_logging
-from wavelocalai.store.migrate import discover
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.__main__ import main
+from frugal_ai_workbench.store.db import db_path
+from frugal_ai_workbench.store.logs import close_logging
+from frugal_ai_workbench.store.migrate import discover
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, closed_port, make_settings
 

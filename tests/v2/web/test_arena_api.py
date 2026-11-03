@@ -13,13 +13,13 @@ import json
 import httpx
 import pytest
 
-from wavelocalai.errors import ProviderError
-from wavelocalai.inference.arena import LANE_STATUSES
-from wavelocalai.models.fake import FakeChatModel, Sleep
-from wavelocalai.models.port import LoadState, ModelRef, TextDelta
-from wavelocalai.models.registry import ModelRegistry
-from wavelocalai.store.db import Store, db_path
-from wavelocalai.web.app import create_app
+from frugal_ai_workbench.errors import ProviderError
+from frugal_ai_workbench.inference.arena import LANE_STATUSES
+from frugal_ai_workbench.models.fake import FakeChatModel, Sleep
+from frugal_ai_workbench.models.port import LoadState, ModelRef, TextDelta
+from frugal_ai_workbench.models.registry import ModelRegistry
+from frugal_ai_workbench.store.db import Store, db_path
+from frugal_ai_workbench.web.app import create_app
 
 from ..conftest import TEST_PORT, make_settings
 from .conftest import parse_sse
@@ -42,7 +42,7 @@ def say(*words: str) -> list[TextDelta]:
 
 @contextlib.asynccontextmanager
 async def arena_app(tmp_path, *fakes: FakeChatModel, **settings):
-    config = make_settings(tmp_path, environ={"WAVELOCALAI_TESTING": "1"}, **settings)
+    config = make_settings(tmp_path, environ={"FRUGAL_AI_TESTING": "1"}, **settings)
     registry = ModelRegistry(config, extra_refs={m.ref.tag: m.ref for m in fakes})
     app = create_app(config, registry=registry)
     app.state.models.update({m.ref.tag: m for m in fakes})  # la fabrique les prend au démarrage
@@ -284,8 +284,9 @@ async def test_cancelling_the_parent_cancels_every_lane_and_keeps_the_partials(
         await _until(
             app,
             run_id,
-            lambda ev: {e["data"].get("lane") for e in ev if e["type"] == "token"}
-            >= {"fake:a", "fake/c"},
+            lambda ev: (
+                {e["data"].get("lane") for e in ev if e["type"] == "token"} >= {"fake:a", "fake/c"}
+            ),
         )
         result = await client.post(f"/api/runs/{run_id}/cancel")
         assert result.json() == {"run_id": run_id, "cancelled": True, "status": "cancelled"}

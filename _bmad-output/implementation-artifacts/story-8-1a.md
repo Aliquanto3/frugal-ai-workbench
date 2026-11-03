@@ -8,7 +8,7 @@ context:
   - '{project-root}/AGENTS.md'
   - '{project-root}/_bmad-output/planning-artifacts/epics.md'
   - '{project-root}/_bmad-output/planning-artifacts/decisions-2026-10-19.md'
-  - '{project-root}/_bmad-output/specs/spec-wavelocalai-v2/contrat-api.md'
+  - '{project-root}/_bmad-output/specs/spec-frugal-ai-workbench-v2/contrat-api.md'
 warnings: []
 deferred:
   - summary: >-
@@ -18,10 +18,10 @@ deferred:
       et laissait la base et le verrou à l'OS. Le préchauffage tourne dans le pool de threads par
       défaut, que `asyncio.run` attend à la fermeture de la boucle.
     evidence: |-
-      Journal de `wavelocalai.log` : 7,5 s entre « Finished server process » et « base fermée,
+      Journal de `frugal-ai-workbench.log` : 7,5 s entre « Finished server process » et « base fermée,
       verrou relâché » quand le signal arrive moins de 8 s après le démarrage ; trace
       `faulthandler` : `local_meter._start_sync` → `codecarbon ... _setup_windows_emi`.
-    location: src/wavelocalai/greenops/local_meter.py
+    location: src/frugal_ai_workbench/greenops/local_meter.py
     severity: low
   - summary: >-
       Le flux d'un run dont la clôture a échoué en base se termine sans `run_ended` (la transaction
@@ -29,7 +29,7 @@ deferred:
       redémarrage, le run `interrupted`. Pas de second essai d'écriture (disque plein).
     evidence: |-
       `runs/hub.py::_abandon`, `tests/v2/unit/test_hub.py::test_failed_close_purges_the_run_...`.
-    location: src/wavelocalai/runs/hub.py
+    location: src/frugal_ai_workbench/runs/hub.py
     severity: low
   - summary: >-
       Un run qui démarre sur un modèle en cours de suppression reçoit `404 model_not_found`
@@ -37,7 +37,7 @@ deferred:
       suppression ») demanderait un code et son texte, à décider.
     evidence: |-
       `runs/hub.py::RunHub.deleting_model`, `inference/delete.py`.
-    location: src/wavelocalai/runs/hub.py
+    location: src/frugal_ai_workbench/runs/hub.py
     severity: low
 ---
 
@@ -51,8 +51,8 @@ stories suivantes s'y ajoutent sans conflit.
 
 ## Critères d'acceptation et preuves
 
-1. **C1** : `tests/v2/unit/test_layers.py` relève `import wavelocalai` suivi d'un accès d'attribut
-   (`wavelocalai.runs`, alias compris), `getattr(wavelocalai, "runs")`, `importlib.import_module`
+1. **C1** : `tests/v2/unit/test_layers.py` relève `import frugal_ai_workbench` suivi d'un accès d'attribut
+   (`frugal_ai_workbench.runs`, alias compris), `getattr(frugal_ai_workbench, "runs")`, `importlib.import_module`
    et `__import__` (noms absolus, relatifs avec `package=`), et refuse un import dynamique dont le
    nom n'est pas un littéral (non vérifiable). Modules pièges ajoutés et cas légitimes acceptés.
 2. **C2, C3** : `tests/v2/web/route_discovery.py` découvre toutes les routes (dans un routeur inclus
@@ -146,7 +146,7 @@ Revue Opus, une passe, sur `ce1aac9..171efbc` (branche à jour de master par `ba
 
 | Sévérité | Source | Constat | Suite |
 |---|---|---|---|
-| medium | second avis 1 | C1 : `import_module as im`, `getattr(importlib, "import_module")(...)`, `w = wavelocalai; w.runs`, `getattr(wavelocalai, nom)` et `package=` calculé échappaient au contrôle (le dernier était résolu contre le paquet du fichier). | Corrigé : alias du chargeur et réaffectations suivis, chargeur obtenu par `getattr`, nom ou `package=` non littéraux refusés (« non vérifiable ») ; 5 modules pièges. |
+| medium | second avis 1 | C1 : `import_module as im`, `getattr(importlib, "import_module")(...)`, `w = frugal_ai_workbench; w.runs`, `getattr(frugal_ai_workbench, nom)` et `package=` calculé échappaient au contrôle (le dernier était résolu contre le paquet du fichier). | Corrigé : alias du chargeur et réaffectations suivis, chargeur obtenu par `getattr`, nom ou `package=` non littéraux refusés (« non vérifiable ») ; 5 modules pièges. |
 | medium | second avis 2 | Copie `.bak-N` tenue (Windows) : `VACUUM` et deux checkpoints rejoués à chaque écriture tant qu'elle reste. | Corrigé : deux reports séparés (espace libre, copies) ; une copie tenue ne rejoue que la suppression ; test qui prouve qu'aucun `VACUUM` n'est relancé. |
 | low | second avis 3 | « Réessayer » : chaque clic lançait deux sondes et une publication ; 20 clics = 40 requêtes vers Ollama. | Corrigé : une sonde forcée en cours sert aux clics suivants, une seule publication `system_state` en attente par application ; test (20 clics, une requête). |
 | low | second avis 4 | `route_discovery.py` : WebSocket et routes sans méthode ignorées en silence. | Corrigé : la découverte échoue (« route non couverte ») ; test. Rejeté pour les attributs `original_router`, `include_context`, `dependant` : c'est la solution retenue par C2 (aucune classe interne importée), gardée par le recoupement avec `app.openapi()`. |

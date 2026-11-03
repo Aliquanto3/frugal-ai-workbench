@@ -3,7 +3,7 @@
 > **Version :** 2.0 (Calibration Avancée)
 > **Sources :** ACV Mistral AI (2025) & Régression EcoLogits.
 
-Ce document détaille comment **WaveLocalAI** calcule l'empreinte carbone, en distinguant la mesure locale de l'estimation API.
+Ce document détaille comment **Frugal AI Workbench** calcule l'empreinte carbone, en distinguant la mesure locale de l'estimation API.
 
 ## 1. Modèles Locaux (Mesure Physique)
 L'évaluation repose sur une mesure électrique directe via des sondes matérielles.

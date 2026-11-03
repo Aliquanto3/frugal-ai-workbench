@@ -42,7 +42,7 @@ CREW_PROMPT_LIBRARY = {
                     "role": "Chercheur",
                     "goal": "Collecter données marché",
                     "backstory": "Expert en veille stratégique et analyse concurrentielle",
-                    "tools": ["get_current_time", "search_wavestone_internal"],
+                    "tools": ["get_current_time", "search_internal"],
                 },
                 {
                     "role": "Analyste",
@@ -278,7 +278,7 @@ def render_agent_crew_tab(
                 "role": "Analyste principal",
                 "goal": "Réaliser l'analyse demandée",
                 "model_tag": default_tag,
-                "backstory": "Expert consultant Wavestone spécialisé en IA",
+                "backstory": "Expert consultant spécialisé en IA",
                 "tools": ["calculator", "system_monitor"],
             }
         ]

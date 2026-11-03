@@ -11,7 +11,7 @@ from dataclasses import dataclass
 HOME_TITLE = "Accueil"
 HOME_ICON = ":material/home:"
 # Titre de l'onglet du navigateur et du h1 de l'accueil.
-APP_NAME = "WaveLocalAI"
+APP_NAME = "Frugal AI Workbench"
 
 
 @dataclass(frozen=True)

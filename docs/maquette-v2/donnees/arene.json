@@ -1,5 +1,5 @@
 {
-  "_doc": "Données simulées de l'Arène (Epic 3). Contenus 100 % fictifs. `lanes` : ce que le serveur mesurerait par modèle pour la question par défaut (réponse, métriques de l'événement `metrics` au format AD-6 et AD-10, note et raison du juge). `price_eur_per_1k` : table de prix cloud datée (story 3.5, `wavelocalai.toml`). `machine`, `digests` : preuve de mesure des exports (story 3.6). `runs` : comparaisons « conservées » que l'on rouvre par `#/arene/comparer/<run_id>` ; `outcomes` : état de fin de chaque lane (ok, empty, timeout, failed, cancelled) ; `erased` : texte effacé, mesures gardées (AD-13).",
+  "_doc": "Données simulées de l'Arène (Epic 3). Contenus 100 % fictifs. `lanes` : ce que le serveur mesurerait par modèle pour la question par défaut (réponse, métriques de l'événement `metrics` au format AD-6 et AD-10, note et raison du juge). `price_eur_per_1k` : table de prix cloud datée (story 3.5, `frugal-ai-workbench.toml`). `machine`, `digests` : preuve de mesure des exports (story 3.6). `runs` : comparaisons « conservées » que l'on rouvre par `#/arene/comparer/<run_id>` ; `outcomes` : état de fin de chaque lane (ok, empty, timeout, failed, cancelled) ; `erased` : texte effacé, mesures gardées (AD-13).",
   "default_prompt": "Explique la dette technique à un enfant de 10 ans avec une métaphore filée.",
   "scenarios": [
     {
