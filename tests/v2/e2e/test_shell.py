@@ -405,9 +405,32 @@ def test_the_system_theme_follows_prefers_color_scheme_live_and_is_remembered(sh
     assert shell.get_by_label("Système").is_checked()
 
 
-def test_an_explicit_choice_ignores_the_system_and_system_is_the_default(page, server):
-    # Charte : sans choix mémorisé, la préférence du système, sinon le sombre.
-    set_system_scheme(page, "no-preference")
+def test_without_any_system_preference_system_gives_dark(page, server):
+    # Chromium assimile « no-preference » au clair : on retire la préférence du système en faisant
+    # répondre `matchMedia` « aucune correspondance » aux requêtes `prefers-color-scheme`.
+    page.add_init_script(
+        """
+        const real = window.matchMedia.bind(window);
+        window.matchMedia = (query) => {
+          const media = real(query);
+          if (!/prefers-color-scheme/.test(query)) return media;
+          return { matches: false, media: query, onchange: null,
+            addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {},
+            dispatchEvent() { return false; } };
+        };
+        """
+    )
+    page.goto(f"{server.base_url}/")
+    wait_ready(page)
+    assert page.get_attribute("html", "data-theme") == "dark"
+    assert page.get_attribute("html", "data-theme-choice") == "system"
+    open_display_menu(page)
+    assert page.get_by_label("Système").is_checked()
+
+
+def test_an_explicit_choice_ignores_the_system_and_system_follows_it(page, server):
+    # Charte : sans choix mémorisé, « Système » suit la préférence du système.
+    set_system_scheme(page, "dark")
     page.goto(f"{server.base_url}/")
     wait_ready(page)
     assert page.get_attribute("html", "data-theme") == "dark"
