@@ -382,6 +382,7 @@ def test_the_system_theme_follows_prefers_color_scheme_live_and_is_remembered(sh
     shell.keyboard.press("Escape")
 
     set_system_scheme(shell, "dark")
+    choose_theme(shell, "Clair")  # « Système » est déjà le défaut : un autre choix d'abord
     choose_theme(shell, "Système")
     assert shell.get_attribute("html", "data-theme") == "dark"
     assert shell.get_attribute("html", "data-theme-choice") == "system"
@@ -404,15 +405,20 @@ def test_the_system_theme_follows_prefers_color_scheme_live_and_is_remembered(sh
     assert shell.get_by_label("Système").is_checked()
 
 
-def test_an_explicit_choice_ignores_the_system_and_light_stays_the_default(page, server):
-    set_system_scheme(page, "dark")  # un système sombre ne change pas le défaut : Clair
+def test_an_explicit_choice_ignores_the_system_and_system_is_the_default(page, server):
+    # Charte : sans choix mémorisé, la préférence du système, sinon le sombre.
+    set_system_scheme(page, "no-preference")
     page.goto(f"{server.base_url}/")
     wait_ready(page)
-    assert page.get_attribute("html", "data-theme") == "light"
-    assert page.get_attribute("html", "data-theme-choice") == "light"
+    assert page.get_attribute("html", "data-theme") == "dark"
+    assert page.get_attribute("html", "data-theme-choice") == "system"
     open_display_menu(page)
-    assert page.get_by_label("Clair").is_checked()
+    assert page.get_by_label("Système").is_checked()
     page.keyboard.press("Escape")
+    set_system_scheme(page, "light")
+    wait_for(page, "() => document.documentElement.dataset.theme === 'light'")
+    set_system_scheme(page, "dark")
+    wait_for(page, "() => document.documentElement.dataset.theme === 'dark'")
 
     choose_theme(page, "Clair")
     set_system_scheme(page, "light")

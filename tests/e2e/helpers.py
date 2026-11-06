@@ -54,7 +54,7 @@ EMOJI_RE = re.compile(
 )
 
 # Contrastes qui ne font pas échouer test_accessibility.py (couleurs natives de Streamlit,
-# texte de composants inactifs, écarts acceptés de DESIGN.md), listés en fin de session
+# texte de composants inactifs, écarts acceptés d'ACCEPTED_CONTRAST_GAPS), listés en fin de session
 # (conftest.py) : jamais masqués.
 AXE_NON_FAILING_FINDINGS: list[dict] = []
 

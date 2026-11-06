@@ -65,7 +65,7 @@ Les tags sont ceux d'Ollama (`ollama list`). Les sélecteurs de l'app affichent 
   - `heading-order` et `button-name` : toute violation fait échouer le test.
   - Une violation de contraste est imputable au thème quand sa couleur de texte est une couleur de `.streamlit/config.toml`, telle quelle ou mélangée au fond avec une opacité quelconque (à 2 près par canal) : Streamlit dérive par exemple ses textes estompés (`fadedText40/60`) de `textColor` avec une transparence. Elle fait échouer le test.
   - Le texte d'un composant inactif (widget désactivé : `aria-disabled` ou `:disabled`) n'a pas d'exigence de contraste (WCAG 1.4.3). Il est listé à part, comme les couleurs natives de Streamlit sans rapport avec le thème.
-  - Écarts acceptés : `ACCEPTED_CONTRAST_GAPS` de `test_accessibility.py` les énumère un par un (page, thème, composant, couleurs exactes, ratio exact, renvoi à DESIGN.md). Seul un écart identique passe ; le même composant avec un autre ratio ou une autre couleur, un autre composant ou une autre page font échouer le test. Aucune tolérance de ratio, aucune acceptation par motif ou par page entière.
+  - Écarts acceptés : `ACCEPTED_CONTRAST_GAPS` de `test_accessibility.py` les énumère un par un (page, thème, composant, couleurs exactes, ratio exact, renvoi à une référence ; liste vide depuis la charte v2.1). Seul un écart identique passe ; le même composant avec un autre ratio ou une autre couleur, un autre composant ou une autre page font échouer le test. Aucune tolérance de ratio, aucune acceptation par motif ou par page entière.
   - Couleurs natives, composants inactifs et écarts acceptés figurent au résumé de fin de session et dans `e2e-reports/` (dossier temporaire de pytest, clé `accepted` pour les écarts acceptés). Rien n'est masqué, aucun test n'est marqué `skip` ni `xfail`.
 
 Au 2026-09-27, sur poste-rtx3060 avec de vrais modèles, axe relève deux cas :
@@ -111,7 +111,7 @@ Chaque constat de `docs/audits/frontend-2026-09/SYNTHESE.md` (§3) a au moins un
 
 | Constat | Test e2e | Couverture hors navigateur |
 |---|---|---|
-| U1 Aucune identité visuelle | `test_pages.py::test_primary_action_uses_brand_color` (couleur, police Inter locale, fond), `test_accessibility.py` (fond clair et sombre) | `tests/app/test_theme.py::test_theme_colors_match_design` |
+| U1 Aucune identité visuelle | `test_pages.py::test_buttons_are_outlined_never_filled_in_streamlit_red_or_blue` (contour, polices de la charte locales, fond), `test_accessibility.py` (fond clair et sombre) | `tests/app/test_theme.py::test_theme_colors_match_design` |
 | U2 Emojis en guise d'icônes et de titres | `test_pages.py::test_page_structure` : aucun emoji dans h1–h4 | `tests/app/test_theme.py::test_app_sources_have_no_emoji` |
 | U3 Barre d'outils de développement | `test_pages.py::test_home_is_local_and_available` : pas de bouton Deploy | `tests/app/test_theme.py::test_toolbar_and_static_serving` |
 | U4 Rouge pour l'action principale | `test_pages.py::test_primary_action_uses_brand_color` | — |

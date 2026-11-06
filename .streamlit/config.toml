@@ -1,6 +1,6 @@
 # Configuration Streamlit versionnée du démonstrateur.
 # Charte générique v2.1 (skills/charte/dist/streamlit-*.toml), sombre d'abord.
-# Chaque clé existe dans Streamlit 1.64.0 (streamlit/config.py).
+# Chaque clé existe dans Streamlit 1.66 (streamlit/config.py).
 
 [client]
 # Ni bouton « Deploy » ni menu de développement ; le choix du thème reste dans le menu.
@@ -20,7 +20,9 @@ enableStaticServing = true
 gatherUsageStats = false
 
 # Thème commun. Avec [theme.light] et [theme.dark] définis, Streamlit crée un thème « Custom Theme
-# Auto » qui suit prefers-color-scheme ; le menu permet de forcer l'un ou l'autre. Règle de la
+# Auto » qui suit prefers-color-scheme du navigateur, comme tokens.css : sombre quand le système est
+# en sombre, clair quand il est en clair. Seul écart : sans aucune préférence exprimée (cas rare),
+# Streamlit retient le clair, là où la charte veut le sombre. Le menu force l'un ou l'autre. Règle de la
 # charte pour Streamlit : jamais `type="primary"` (Streamlit remplirait le bouton en primaryColor,
 # avec un libellé blanc imposé) ; les boutons restent en contour (borderColor = trait-fort).
 [theme]

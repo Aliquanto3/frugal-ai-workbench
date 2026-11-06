@@ -12,6 +12,8 @@
   `data-theme="light"`. Bouton principal en aplat neutre (`--color-button`, `--color-on-button`),
   focus `--color-focus`, `--color-line-strong` pour les contours de contrôles, `--color-alert` et
   `--color-accent-green` pour l'alerte et le succès, filet or sous le titre de l'accueil.
+- Thème de la v2 (`core/theme.js`) : le choix mémorisé, sinon la préférence du système, sinon le
+  sombre. Sans choix mémorisé, le réglage est « Système ».
 - Polices : Atkinson Hyperlegible (texte), Sora 600 (titres), JetBrains Mono (code), servies
   localement avec leurs licences OFL ; Inter retirée.
 - Favicon, pictogramme et logotype de la charte ; graphiques d'outils en palette v2.1.
@@ -21,13 +23,18 @@
 
 ### Limites
 
-- Le choix de thème de la v2 reste « Clair » par défaut (`core/theme.js`) ; seul le CSS passe en
-  sombre d'abord.
 - Streamlit : `st.badge` garde ses couleurs nommées (vert, orange), hors thème ; le logotype suit
   `prefers-color-scheme`, pas le menu de thème de Streamlit.
 - GIF du README (v1 et v2) périmés, à refaire ; captures historiques de `docs/assets/`,
   `docs/audits/`, `docs/maquette-v2*`, `benchmarks/` et notes antérieures inchangées.
 - Les tests E2E (Playwright) sont réalignés par lecture : ils ne sont pas joués en local.
+- `audit.py --strict` : `CHANGELOG.md` (notes antérieures) et quatre fichiers de tests sont exclus
+  par `--ignorer`, parce qu'ils portent des couleurs d'essai voulues hors charte (contrastes faibles
+  ou rouge par défaut de Streamlit, détectés par axe) ou un motif lu comme une police :
+  `tests/e2e/test_pages.py`, `tests/unit/test_e2e_suite.py`, `tests/v2/e2e/test_accessibilite.py`,
+  `tests/v2/unit/test_charte.py`.
+- Bloc de réflexion de la v1 (`render_thinking_block`) : texte brut au thème Streamlit, sans le fond
+  gris d'avant ni l'italique.
 
 ## 2.0.0a9 (2026-11-03)
 

@@ -559,11 +559,14 @@ def test_the_switch_css_follows_the_wl_switch_tokens_of_design_md():
     assert "var(--color-surface)" in rule(".switch input::before")
 
 
-def test_the_theme_module_offers_light_dark_and_system_with_light_as_the_default():
+def test_the_theme_module_offers_light_dark_and_system_and_falls_back_to_dark():
     text = (STATIC / "core/theme.js").read_text(encoding="utf-8")
     assert 'THEMES = ["light", "dark", "system"]' in text
-    assert "prefers-color-scheme: dark" in text and '"change"' in text
-    assert 'return THEMES.includes(stored) ? stored : "light"' in text
+    # Règle de la charte : choix mémorisé, sinon préférence du système, sinon sombre.
+    assert "prefers-color-scheme: light" in text and '"change"' in text
+    assert 'return THEMES.includes(stored) ? stored : "system"' in text
+    assert 'systemMedia()?.matches ? "light" : "dark"' in text
+    assert 'return choice === "light" ? "light" : "dark"' in text
     html = (STATIC / "index.html").read_text(encoding="utf-8")
     assert re.findall(r'name="theme" value="(\w+)"', html) == ["light", "dark", "system"]
     # Aucun troisième jeu de jetons : `tokens.css` a le sombre (`:root`) et le clair, une fois sous

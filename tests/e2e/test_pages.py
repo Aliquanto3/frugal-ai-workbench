@@ -28,7 +28,7 @@ PAGE_IDS = ["Accueil"] + [m.url_path for m in MODULES]
 STREAMLIT_DEPRECATION_RE = re.compile(r"streamlit.*deprecat", re.I)
 CONFIG_PATH = Path(__file__).resolve().parents[2] / ".streamlit" / "config.toml"
 
-# Couleur primaire claire (DESIGN.md, .streamlit/config.toml) et rouge par défaut de Streamlit.
+# Contour clair des boutons (.streamlit/config.toml, charte v2.1) et rouge par défaut de Streamlit.
 BUTTON_BORDER_LIGHT_RGB = "rgb(128, 138, 151)"  # borderColor clair (trait-fort)
 STREAMLIT_RED_RGB = "rgb(255, 75, 75)"
 
@@ -112,9 +112,8 @@ def test_buttons_are_outlined_never_filled_in_streamlit_red_or_blue(page, app):
     families = page.evaluate("[...document.fonts].map(f => f.family.replace(/[\"']/g, ''))")
     assert {"Atkinson Hyperlegible", "Sora", "JetBrains Mono"} <= set(families), families
     for face in toml.load(CONFIG_PATH)["theme"]["fontFaces"]:
-        if True:
-            response = page.request.get(f"{app.base_url}/{face['url']}")
-            assert response.status == 200, f"{face['url']} : HTTP {response.status}"
+        response = page.request.get(f"{app.base_url}/{face['url']}")
+        assert response.status == 200, f"{face['url']} : HTTP {response.status}"
     background = page.locator('[data-testid="stApp"]').evaluate(
         "e => getComputedStyle(e).backgroundColor"
     )

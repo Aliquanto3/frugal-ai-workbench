@@ -4,6 +4,7 @@ bouton, polices de la charte. Bibliothèque standard seulement, aucun navigateur
 
 from __future__ import annotations
 
+import hashlib
 import re
 from pathlib import Path
 
@@ -69,6 +70,12 @@ TEXT_PAIRS = [
     ("ink", "surface"),
     ("ink", "surface-alt"),
     ("ink", "action-tint"),
+    ("ink-secondary", "action-tint"),
+    ("primary", "action-tint"),
+    ("link", "action-tint"),
+    ("risk", "action-tint"),
+    ("alert", "action-tint"),
+    ("accent-green", "action-tint"),
     ("ink-secondary", "surface"),
     ("ink-secondary", "surface-alt"),
     ("primary", "surface"),
@@ -84,6 +91,8 @@ TEXT_PAIRS = [
     ("on-button", "button"),
     ("on-button", "button-hover"),
 ]
+# Couple à ne pas employer pour du texte : `accent` sur `action-tint` (4,39:1 en clair). L'accent
+# n'est pas posé sur ce fond aujourd'hui ; en marque non textuelle, il tient 3:1 (liste ci-dessous).
 # Marques non textuelles : contour des champs (line-strong, gray-graphic), focus, points, pastilles
 # et icônes : 3:1. Le filet or du titre est décoratif : hors liste.
 NON_TEXT_PAIRS = [
@@ -95,6 +104,7 @@ NON_TEXT_PAIRS = [
     ("focus", "surface-alt"),
     ("primary", "action-tint"),
     ("alert", "action-tint"),
+    ("accent", "action-tint"),
     ("accent", "surface"),
     ("accent", "surface-alt"),
     ("chart-1", "surface"),
@@ -163,6 +173,27 @@ def test_dark_and_light_values_are_the_charte_v21_ones():
     for name, expected in (("dark", DARK), ("light", LIGHT), ("system", LIGHT)):
         actual = {key: found[name].get(key, "").upper() for key in expected}
         assert actual == expected, name
+
+
+# Empreinte des 69 couples `--jeton: #HEX` de tokens.css (trois blocs, dans l'ordre, commentaires
+# retirés, hex en majuscules, un couple par ligne), indépendante des fins de ligne. Toutes ces valeurs
+# figurent dans skills/charte/dist/charte.css de charte-generique v2.1 (vérifié à la revue de la
+# story 3.2). Après une mise à jour voulue de la charte : vérifier les valeurs, puis recalculer
+# l'empreinte avec `fingerprint(TOKENS)`.
+TOKENS_FINGERPRINT = "d53cd17382a8ad94088ee7b07eb99749ca960df866c0761f7647181f183f1087"
+
+
+def fingerprint(css: str) -> str:
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    pairs = re.findall(r"(--[\w-]+)\s*:\s*(#[0-9A-Fa-f]{3,8})\s*;", css)
+    return hashlib.sha256("\n".join(f"{k}: {v.upper()}" for k, v in pairs).encode()).hexdigest()
+
+
+def test_tokens_css_keeps_the_charte_v21_values():
+    assert fingerprint(TOKENS) == TOKENS_FINGERPRINT
+    assert fingerprint(TOKENS.replace("\n", "\r\n")) == TOKENS_FINGERPRINT
+    altered = TOKENS.replace("#8DB0F7", "#8DB0F8", 1)
+    assert fingerprint(altered) != TOKENS_FINGERPRINT
 
 
 def test_the_system_light_block_equals_the_forced_light_block():

@@ -119,7 +119,7 @@ def pytest_terminal_summary(terminalreporter):
         return
     terminalreporter.section(
         "axe-core : contrastes non imputables au thème (couleurs natives, composants inactifs) "
-        "et écarts acceptés (DESIGN.md)"
+        "et écarts acceptés (ACCEPTED_CONTRAST_GAPS)"
     )
     for f in helpers.AXE_NON_FAILING_FINDINGS:
         terminalreporter.write_line(

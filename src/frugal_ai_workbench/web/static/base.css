@@ -82,8 +82,12 @@ p {
   margin: 0 0 1em;
 }
 
+/* Lien du texte courant souligné (WCAG 1.4.1 : sa couleur seule ne le distingue pas assez du texte).
+   La navigation, les cartes et les boutons-liens retirent le soulignement dans leur propre règle. */
 a {
   color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 img,

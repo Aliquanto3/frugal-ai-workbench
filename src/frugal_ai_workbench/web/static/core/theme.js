@@ -3,14 +3,16 @@
 // gardé : sans stockage (fenêtre privée, données bloquées), le choix tient pour la page ouverte.
 // Chargé en tête de page avec `blocking="render"` : `data-theme` est posé avant le premier rendu.
 //
-// Trois choix (D-7) : « Clair » (défaut), « Sombre » et « Système ». `data-theme` de `<html>` porte
-// toujours le jeu de jetons appliqué (`light` ou `dark`) : « Système » n'a pas de troisième jeu, il
-// choisit l'un des deux d'après `prefers-color-scheme` et le suit quand le système change, page
-// ouverte. `data-theme-choice` porte le choix de la personne.
+// Trois choix (D-7) : « Clair », « Sombre » et « Système ». Règle de la charte : le choix mémorisé,
+// sinon la préférence du système, sinon le sombre. Sans choix mémorisé, c'est donc « Système », et
+// « Système » donne le clair seulement si le système le demande (`prefers-color-scheme: light`).
+// `data-theme` de `<html>` porte toujours le jeu de jetons appliqué (`light` ou `dark`) : « Système »
+// n'a pas de troisième jeu, il suit le système quand celui-ci change, page ouverte.
+// `data-theme-choice` porte le choix de la personne.
 
 const THEME_KEY = "wl.theme";
 const PROJECTION_KEY = "wl.projection";
-const DARK_QUERY = "(prefers-color-scheme: dark)";
+const LIGHT_QUERY = "(prefers-color-scheme: light)";
 export const THEMES = ["light", "dark", "system"];
 
 function read(key) {
@@ -31,22 +33,22 @@ function write(key, value) {
 
 function systemMedia() {
   try {
-    return matchMedia(DARK_QUERY);
+    return matchMedia(LIGHT_QUERY);
   } catch {
     return null;
   }
 }
 
-// Le choix gardé (`light`, `dark` ou `system`), « Clair » faute de mieux.
+// Le choix gardé (`light`, `dark` ou `system`), « Système » faute de choix mémorisé.
 export function getTheme() {
   const stored = read(THEME_KEY);
-  return THEMES.includes(stored) ? stored : "light";
+  return THEMES.includes(stored) ? stored : "system";
 }
 
-// Le jeu de jetons qu'un choix donne : `light` ou `dark`.
+// Le jeu de jetons qu'un choix donne : `light` ou `dark`, le sombre faute de préférence du système.
 export function appliedTheme(choice) {
-  if (choice === "system") return systemMedia()?.matches ? "dark" : "light";
-  return choice === "dark" ? "dark" : "light";
+  if (choice === "system") return systemMedia()?.matches ? "light" : "dark";
+  return choice === "light" ? "light" : "dark";
 }
 
 let current = getTheme();
@@ -57,7 +59,7 @@ function apply() {
 }
 
 export function setTheme(theme) {
-  current = THEMES.includes(theme) ? theme : "light";
+  current = THEMES.includes(theme) ? theme : "system";
   apply();
   write(THEME_KEY, current);
 }
