@@ -836,21 +836,22 @@ def _eval_matrix(names, scores, co2_mg):
 
 
 def test_documents_evaluation_more_models_than_colors():
-    """6 modèles pour 4 couleurs : la forme distingue ceux qui partagent une couleur, dans la
+    """8 modèles pour les 6 couleurs de la charte v2.1 : la forme distingue ceux qui partagent une couleur, dans la
     légende comme sur le graphique."""
-    names = [f"Modèle {i}" for i in range(6)]
-    spec, _ = _eval_matrix(names, [0.9, 0.8, 0.7, 0.6, 0.5, 0.4], [1, 2, 3, 4, 5, 6])
+    names = [f"Modèle {i}" for i in range(8)]
+    scores = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]
+    spec, _ = _eval_matrix(names, scores, [1, 2, 3, 4, 5, 6, 7, 8])
     points, _ = _layers(spec)
     shape = points["encoding"]["shape"]
     assert shape["scale"]["domain"] == names
-    assert shape["scale"]["range"] == ["circle"] * 4 + ["square"] * 2
+    assert shape["scale"]["range"] == ["circle"] * 6 + ["square"] * 2
     assert shape["legend"] == points["encoding"]["color"]["legend"]
     # Chaque paire (couleur, forme) est unique.
     color_domain = points["encoding"]["color"]["scale"]["domain"]
     pairs = {
-        (color_domain.index(n) % 4, s) for n, s in zip(names, shape["scale"]["range"], strict=True)
+        (color_domain.index(n) % 6, s) for n, s in zip(names, shape["scale"]["range"], strict=True)
     }
-    assert len(pairs) == 6
+    assert len(pairs) == 8
 
 
 def test_documents_evaluation_labels_do_not_overlap():
