@@ -1,21 +1,37 @@
 /* Reset, typographie, focus, mouvement et mode projection (UX-DR2). */
 
-/* Inter, servie depuis ce dossier (aucun CDN) : la pile Inter -> system-ui -> sans-serif est dans
-   tokens.css ; le navigateur ne télécharge Inter que pour les caractères qu'il affiche. */
+/* Polices de la charte (Atkinson Hyperlegible, Sora 600, JetBrains Mono), servies depuis ce dossier
+   (aucun CDN) : les piles de repli sont dans tokens.css. Licences OFL jointes. */
 @font-face {
-  font-family: "Inter";
+  font-family: "Atkinson Hyperlegible";
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 400;
   font-display: swap;
-  src: url("/static/fonts/InterVariable.woff2") format("woff2");
+  src: url("/static/fonts/atkinson-hyperlegible-latin-400-normal.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Inter";
-  font-style: italic;
-  font-weight: 100 900;
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-weight: 700;
   font-display: swap;
-  src: url("/static/fonts/InterVariable-Italic.woff2") format("woff2");
+  src: url("/static/fonts/atkinson-hyperlegible-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/static/fonts/sora-latin-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
 }
 
 *,
@@ -45,13 +61,13 @@ h1,
 h2,
 h3 {
   font-family: var(--font-heading);
+  font-weight: 600;
   line-height: 1.25;
   margin: 0 0 0.5em;
 }
 
 h1 {
   font-size: var(--text-heading);
-  font-weight: 700;
 }
 
 h2 {
@@ -83,7 +99,7 @@ input {
 
 /* Focus visible à 3:1 au moins sur toutes les surfaces (primary : 9,32:1 clair, 4,6:1 sombre). */
 :focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -238,14 +254,14 @@ h1 > .icon-mod {
   gap: 0.6rem;
   padding: 0.85rem 1rem;
   border: 1px solid var(--color-line);
-  border-inline-start: 6px solid var(--color-amber-strong);
+  border-inline-start: 6px solid var(--color-alert);
   border-radius: var(--radius);
-  background: color-mix(in srgb, var(--color-chart-4) 12%, var(--color-surface));
+  background: color-mix(in srgb, var(--color-alert) 12%, var(--color-surface));
 }
 
 .alert-warning .icon {
   flex: none;
-  color: var(--color-amber-strong);
+  color: var(--color-alert);
 }
 
 /* Zone désactivée (dépôt de fichiers, champ hors service...) : jamais par la seule opacité. */

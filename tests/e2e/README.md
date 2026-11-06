@@ -70,7 +70,7 @@ Les tags sont ceux d'Ollama (`ollama list`). Les sélecteurs de l'app affichent 
 
 Au 2026-09-27, sur poste-rtx3060 avec de vrais modèles, axe relève deux cas :
 
-- **En sombre, compromis connu (DESIGN.md) :** aucune `primaryColor` ne donne 4,5:1 à la fois au texte blanc des boutons principaux et au violet que Streamlit emploie comme texte (valeur du curseur, pastilles choisies, dont le fond mêle 10 % de la primaire au fond). La valeur retenue, `#7E65E9`, équilibre les écarts (note `primary-dark` de DESIGN.md) : curseur sur le fond 4,62:1 (conforme), pastilles d'outils de l'agent 4,24:1 (mesuré par axe), texte blanc des boutons 4,26:1 et curseurs de la barre latérale 4,17:1 (calculés). Les mêmes écarts touchent tout composant du même type, y compris dans les onglets qu'axe ne voit pas (pastilles de filtre de la Gestion des modèles, outils de l'équipe d'agents). Les 8 pastilles d'outils choisies d'Agent_Lab en sombre (`#7e65e9` sur `#161329`, 4,24:1) sont l'unique entrée d'`ACCEPTED_CONTRAST_GAPS` : `test_axe_no_theme_violation[Agent_Lab-dark]` passe et les liste comme écarts acceptés ; les boutons principaux, dans des onglets masqués au moment de l'analyse et en blanc (couleur hors thème), ne sont pas relevés par axe.
+- **En sombre :** plus de compromis connu depuis la charte v2.1 (la primaire sombre tient 4,5:1 sur le fond) ; la liste `ACCEPTED_CONTRAST_GAPS` est vide.
 - **En clair comme en sombre :** le libellé « Outil non configuré » (2,70:1 en clair, 3,57:1 en sombre) est `textColor` à 40 % d'opacité, donc une couleur du thème. Comme il appartient à un widget désactivé, il est listé comme composant inactif, sans faire échouer le test.
 
 ## Attentes et relances

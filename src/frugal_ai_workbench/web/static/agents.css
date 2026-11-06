@@ -14,7 +14,7 @@
 .agents-warning {
   margin: 0.5rem 0 0;
   padding: 0.25rem 0.75rem;
-  border-inline-start: 6px solid var(--color-chart-4);
+  border-inline-start: 6px solid var(--color-alert);
   background: var(--color-surface-alt);
   border-radius: var(--radius);
 }

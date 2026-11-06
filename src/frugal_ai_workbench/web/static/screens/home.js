@@ -221,7 +221,7 @@ function baseSummary(totals) {
 }
 
 export function mount(host) {
-  const title = element("h1", "", t("screens.home"));
+  const title = element("h1", "home-title", t("screens.home"));
   const lead = element("p", "lead", t("home.lead"));
 
   const system = buildSystem();

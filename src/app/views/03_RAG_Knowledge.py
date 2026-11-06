@@ -148,9 +148,7 @@ def open_knowledge_manager():
         )
         st.info(f"{ready}.")
 
-        if st.button(
-            "Indexer les documents", type="primary", icon=":material/upload:", width="stretch"
-        ):
+        if st.button("Indexer les documents", icon=":material/upload:", width="stretch"):
             current = {}
 
             def on_start(name):
@@ -318,7 +316,7 @@ if doc_count == 0:
     with st.container(border=True):
         st.header("Votre base documentaire est vide")
         st.write("Importez vos documents pour pouvoir les interroger.")
-        if st.button("Importer des documents", type="primary", icon=":material/upload_file:"):
+        if st.button("Importer des documents", icon=":material/upload_file:"):
             show_knowledge_manager()
 
     st.header("Pourquoi un assistant documentaire local ?")

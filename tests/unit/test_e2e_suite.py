@@ -125,7 +125,7 @@ def test_external_hosts_are_external(host):
 @pytest.mark.parametrize(
     ("url", "external"),
     [
-        ("https://fonts.googleapis.com/css2?family=Inter", True),
+        ("https://fonts.googleapis.com/css2?family=Sora", True),
         ("wss://example.com/socket", True),
         ("http://192.0.2.1:8501/", True),
         ("http://10.0.0.1/", True),
@@ -621,18 +621,31 @@ ACCEPTED_PILL = {
     "page": "Agent_Lab",
     "rule": "color-contrast",
     "component": "pills",
-    "fg": "#0b7a86",
-    "bg": "#0e1d21",
+    "fg": "#8db0f7",
+    "bg": "#1a2742",
     "ratio": 3.41,
 }
+
+
+@pytest.fixture(autouse=True)
+def trial_gap(monkeypatch):
+    """La charte v2.1 n'accepte aucun écart ; le mécanisme se teste avec un écart d'essai
+    (constante de données du module testé)."""
+    from tests.e2e import test_accessibility as module
+
+    monkeypatch.setattr(
+        module,
+        "ACCEPTED_CONTRAST_GAPS",
+        ({**ACCEPTED_PILL, "reference": "écart d'essai de la suite"},),
+    )
 
 
 def test_accepted_gap_matches_exact_gap_only():
     from tests.e2e.test_accessibility import accepted_gap
 
     gap = accepted_gap(ACCEPTED_PILL)
-    assert gap is not None and "DESIGN.md" in gap["reference"]
-    assert accepted_gap({**ACCEPTED_PILL, "fg": "#0B7A86"}) is gap
+    assert gap is not None and "écart d'essai" in gap["reference"]
+    assert accepted_gap({**ACCEPTED_PILL, "fg": "#8DB0F7"}) is gap
 
 
 @pytest.mark.parametrize(
@@ -640,8 +653,8 @@ def test_accepted_gap_matches_exact_gap_only():
     [
         {"ratio": 3.40},
         {"ratio": 3.42},
-        {"fg": "#0b7a87"},
-        {"bg": "#0e1316"},
+        {"fg": "#8db0f8"},
+        {"bg": "#0f1318"},
         {"component": "stSlider"},
         {"component": None},
         {"page": "Inference_Arena"},
@@ -674,7 +687,7 @@ def test_inactive_and_native_take_priority_over_accepted_gap():
     from tests.e2e.test_accessibility import classify
 
     assert classify(ACCEPTED_PILL, True, _palette()) == "inactive"
-    # Palette sans la primaire : #0b7a86 devient une couleur native.
+    # Palette sans la primaire : #8db0f7 devient une couleur native.
     assert classify(ACCEPTED_PILL, False, {"#ffffff"}) == "natives"
 
 
@@ -687,7 +700,7 @@ def test_neighbouring_gap_routes_to_failures():
 
 def test_report_and_session_summary_contents():
     """Rapport JSON : quatre catégories ; résumé de session : tout sauf les échecs, chacun
-    avec sa catégorie lisible (renvoi à DESIGN.md pour l'écart accepté)."""
+    avec sa catégorie lisible (renvoi à la référence de l'écart accepté)."""
     from tests.e2e.test_accessibility import non_failing, sort_findings
 
     neighbour = {**ACCEPTED_PILL, "ratio": 3.3}
@@ -702,7 +715,7 @@ def test_report_and_session_summary_contents():
     assert [f["component"] for f in report["natives"]] == ["stCaption"]
     assert [f["component"] for f in report["inactive"]] == ["stCheckbox"]
     (accepted,) = report["accepted"]
-    assert accepted["category"].startswith("écart accepté (DESIGN.md")
+    assert accepted["category"].startswith("écart accepté (écart d'essai")
     summary = non_failing(report)
     assert len(summary) == 3 and all("category" in f for f in summary)
     assert neighbour not in summary

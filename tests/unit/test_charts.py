@@ -52,8 +52,8 @@ NOW = datetime(2026, 9, 27, 12, 0)
 
 
 def test_palette_size_reads_theme():
-    """Charte : quatre couleurs catégorielles, en clair comme en sombre (config.toml)."""
-    assert palette_size() == 4
+    """Charte v2.1 : six couleurs catégorielles, en clair comme en sombre (config.toml)."""
+    assert palette_size() == 6
 
 
 def test_theme_tokens_are_replaced_by_streamlit_frontend():
@@ -331,20 +331,20 @@ def _fake_options(options: dict):
 
 def test_ink_expr_from_theme(monkeypatch):
     """Encres claire et sombre du thème : expression exacte, choisie contre le fond."""
-    options = {"theme.light.textColor": "#141A1F", "theme.dark.textColor": "#E7ECEE"}
+    options = {"theme.light.textColor": "#121821", "theme.dark.textColor": "#E8ECF2"}
     monkeypatch.setattr(charts, "st", SimpleNamespace(get_option=_fake_options(options)))
     assert ink_expr() == {
-        "expr": "contrast(background, '#141A1F') >= contrast(background, '#E7ECEE') "
-        "? '#141A1F' : '#E7ECEE'"
+        "expr": "contrast(background, '#121821') >= contrast(background, '#E8ECF2') "
+        "? '#121821' : '#E8ECF2'"
     }
 
 
 def test_ink_expr_falls_back_to_common_text_color(monkeypatch):
-    options = {"theme.textColor": "#141A1F"}
+    options = {"theme.textColor": "#121821"}
     monkeypatch.setattr(charts, "st", SimpleNamespace(get_option=_fake_options(options)))
     assert ink_expr() == {
-        "expr": "contrast(background, '#141A1F') >= contrast(background, '#141A1F') "
-        "? '#141A1F' : '#141A1F'"
+        "expr": "contrast(background, '#121821') >= contrast(background, '#121821') "
+        "? '#121821' : '#121821'"
     }
 
 

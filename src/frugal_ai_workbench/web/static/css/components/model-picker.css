@@ -125,7 +125,7 @@
 .wl-picker-warning .icon {
   width: 1.125rem;
   height: 1.125rem;
-  color: var(--color-chart-4);
+  color: var(--color-alert);
 }
 
 .wl-picker-pill {
@@ -193,7 +193,7 @@
   margin-top: 0.75rem;
   padding: 0.5rem 1rem;
   border: 1px solid var(--color-line);
-  border-inline-start: 6px solid var(--color-chart-4);
+  border-inline-start: 6px solid var(--color-alert);
   border-radius: var(--radius);
   background: var(--color-surface-alt);
 }

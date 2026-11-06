@@ -114,7 +114,7 @@
 
 /* Un bouton désactivé reste focalisable (`aria-disabled`) : sa raison est écrite dessous. */
 .ref-compare .btn[aria-disabled="true"] {
-  border-color: var(--color-line);
+  border-color: var(--color-line-strong);
   background: var(--color-surface-alt);
   color: var(--color-ink-secondary);
   cursor: not-allowed;

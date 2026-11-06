@@ -1,6 +1,6 @@
 /* Interrupteur en bascule `wl-switch` (D-6, DESIGN.md) : « Autoriser le cloud », « Mode projection ».
    Piste bordée `ink-secondary` (3:1 au moins sur le fond) sur `surface-alt`, curseur `surface` ;
-   activé : piste `primary-fill` et icône `check` dans le curseur. Le libellé est toujours à côté :
+   activé : piste `button` et icône `check` dans le curseur. Le libellé est toujours à côté :
    l'état ne se lit jamais par la seule couleur. L'état indisponible de DESIGN.md (`aria-disabled`,
    piste en pointillés `line`) arrivera avec son premier consommateur, qui devra aussi bloquer la
    bascule : `aria-disabled` seul n'empêche pas de cocher. */
@@ -48,8 +48,8 @@
 }
 
 .switch input:checked {
-  border-color: var(--color-primary-fill);
-  background: var(--color-primary-fill);
+  border-color: var(--color-button);
+  background: var(--color-button);
 }
 
 .switch input:checked::before {
@@ -66,7 +66,7 @@
   height: 1.0625rem;
   padding: 0.0625rem;
   box-sizing: border-box;
-  color: var(--color-primary-fill);
+  color: var(--color-primary);
   opacity: 0;
   transform: translateX(1.25rem);
   pointer-events: none;

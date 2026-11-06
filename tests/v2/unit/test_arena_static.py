@@ -131,10 +131,10 @@ def test_the_screen_reads_the_run_stream_once_and_resumes_by_after():
     assert "grid-auto-columns" in source("arena.css")  # deux colonnes visibles, défilement
 
 
-def test_the_launch_button_is_a_primary_fill_surface_with_a_visible_reason():
+def test_the_launch_button_is_a_button_fill_surface_with_a_visible_reason():
     css = source("arena.css")
     block = re.search(r"\.arena-launch \{(.*?)\}", css, re.DOTALL)
-    assert block and "var(--color-primary-fill)" in block.group(1)
+    assert block and "var(--color-button)" in block.group(1)
     assert "var(--color-primary)" not in block.group(1)  # A19 : jamais le violet de texte
     # Formulaire construit par `buildForm` (story 9.7, grille à deux colonnes, arena-form.js).
     assert "aria-describedby" in source("screens/arena-form.js")

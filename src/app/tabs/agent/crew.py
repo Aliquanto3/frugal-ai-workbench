@@ -468,10 +468,8 @@ def render_agent_crew_tab(
                 )
         with ce_2:
             launch_label = "Lancer malgré le risque" if is_risky else "Lancer l'équipe"
-            launch_type = "secondary" if is_risky else "primary"
             launch_btn = st.button(
                 launch_label,
-                type=launch_type,
                 icon=":material/warning:" if is_risky else ":material/play_arrow:",
                 width="stretch",
                 disabled=False,

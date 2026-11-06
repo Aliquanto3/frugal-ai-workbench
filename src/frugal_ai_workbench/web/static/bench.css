@@ -164,7 +164,7 @@
   border-radius: var(--radius);
   background: var(--color-surface-alt);
   color: var(--color-ink);
-  font-family: ui-monospace, Consolas, monospace;
+  font-family: var(--font-code);
   font-size: var(--text-caption);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -190,7 +190,7 @@
 }
 
 .bc-verdict-line[data-ok="true"] .icon {
-  color: var(--color-primary-fill);
+  color: var(--color-primary);
 }
 
 .bc-metrics {

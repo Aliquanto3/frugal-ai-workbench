@@ -12,7 +12,7 @@ axe-playwright-python, aucun CDN) sur l'app réelle.
   d'exigence de contraste (WCAG 1.4.3, « inactive user interface component ») : ces nœuds
   sont listés à part, comme les couleurs natives de Streamlit sans rapport avec le thème.
 - Écarts acceptés (`ACCEPTED_CONTRAST_GAPS`) : page, thème, composant, couleurs exactes et
-  ratio exact, avec leur renvoi à DESIGN.md. Seul un écart identique passe ; un écart voisin
+  ratio exact, avec leur renvoi à une référence. Seul un écart identique passe ; un écart voisin
   (autre ratio, autre couleur, autre composant, autre page) fait échouer le test. Aucune
   tolérance de ratio, aucune acceptation par motif ou par page entière.
 
@@ -20,10 +20,7 @@ Les trois listes (couleurs natives, composants inactifs, écarts acceptés) figu
 résumé de la session et dans le rapport JSON (dossier `e2e-reports` du dossier temporaire de
 pytest) : rien n'est masqué.
 
-En sombre, `primaryColor` #0B7A86 est un compromis (DESIGN.md, note `primary-dark`) : aucune
-valeur ne donne 4,5:1 à la fois au texte blanc des boutons et à la primaire employée comme
-texte. Les pastilles d'outils choisies d'Agent_Lab (3,41:1, calculé le 2026-11-03, à confirmer
-par axe) sont l'écart accepté.
+Charte v2.1 : aucun écart accepté pour l'instant (liste vide).
 """
 
 import json
@@ -46,22 +43,10 @@ _HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 # Écart d'arrondi toléré par canal (0-255) entre une couleur mesurée et un mélange du thème.
 BLEND_TOLERANCE = 2
 
-# DESIGN.md (note `primary-dark`, décision du 27/09, story 14) : écarts connus du compromis
-# sombre, tels qu'axe les mesure. Un écart n'est accepté que s'il est identique en tout point.
-DESIGN_PRIMARY_DARK = (
-    "DESIGN.md, note primary-dark (27/09) : pastille choisie 4,25:1 calculé, 4,24:1 mesuré"
-)
-ACCEPTED_CONTRAST_GAPS = (
-    {
-        "page": "Agent_Lab",
-        "scheme": "dark",
-        "component": "pills",
-        "fg": "#0b7a86",
-        "bg": "#0e1d21",
-        "ratio": 3.41,
-        "reference": DESIGN_PRIMARY_DARK,
-    },
-)
+# Écarts connus, tels qu'axe les mesure. Un écart n'est accepté que s'il est identique en tout point.
+# Charte v2.1 : la primaire sombre tient 4,5:1 sur le fond, plus aucun écart n'est accepté. Le
+# mécanisme reste (tests/unit/test_e2e_suite.py le vérifie avec un écart d'essai).
+ACCEPTED_CONTRAST_GAPS: tuple[dict, ...] = ()
 
 
 def accepted_gap(finding: dict) -> dict | None:

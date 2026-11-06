@@ -1,7 +1,7 @@
 """
 Tests du thème de la charte générique, des icônes et de l'accessibilité du code source (story 2).
 
-Référence : _bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md.
+Référence : charte générique v2.1 (skills/charte/dist/streamlit-*.toml).
 Usage: python -m pytest tests/app/test_theme.py -v
 """
 
@@ -17,30 +17,48 @@ from tests.app.test_pages import PAGES, RENDER_TIMEOUT_S
 
 CONFIG_PATH = ROOT_DIR / ".streamlit" / "config.toml"
 
-# Tableau Colors de DESIGN.md, clé config.toml -> valeur, par thème.
+# Thème de la charte générique v2.1 (skills/charte/dist/streamlit-*.toml), clé config.toml -> valeur.
+# Six séries au plus pour les graphiques.
 EXPECTED_THEME = {
     "light": {
-        "primaryColor": "#0B6B78",
-        "backgroundColor": "#FFFFFF",
-        "secondaryBackgroundColor": "#EEF1F0",
-        "textColor": "#141A1F",
-        "borderColor": "#C9D1D3",
-        "linkColor": "#0B6B78",
-        "chartCategoricalColors": ["#0B7A86", "#C2560E", "#2F68D0", "#B83A75"],
+        "primaryColor": "#1D5BC2",
+        "backgroundColor": "#F6F8FB",
+        "secondaryBackgroundColor": "#ECF0F5",
+        "textColor": "#121821",
+        "borderColor": "#808A97",
+        "linkColor": "#1D5BC2",
+        "chartCategoricalColors": [
+            "#1D5BC2",
+            "#A87A00",
+            "#1F8155",
+            "#B83A75",
+            "#C24D1B",
+            "#0E7C8C",
+        ],
+        "greenTextColor": "#1B7043",
     },
     "dark": {
-        "primaryColor": "#0B7A86",
-        "backgroundColor": "#0E1316",
-        "secondaryBackgroundColor": "#161D21",
-        "textColor": "#E7ECEE",
-        "borderColor": "#56605F",
-        "linkColor": "#86D8E2",
-        "chartCategoricalColors": ["#4FC1CF", "#F29A57", "#7FA8F5", "#EE7FB2"],
+        "primaryColor": "#8DB0F7",
+        "backgroundColor": "#0F1318",
+        "secondaryBackgroundColor": "#1E242C",
+        "textColor": "#E8ECF2",
+        "borderColor": "#67717E",
+        "linkColor": "#8DB0F7",
+        "chartCategoricalColors": [
+            "#8DB0F7",
+            "#E3C26B",
+            "#8CC7A0",
+            "#E58FB8",
+            "#F2A07B",
+            "#6CCAD8",
+        ],
+        "greenTextColor": "#8CC7A0",
     },
 }
-# Clés natives ajoutées hors tableau, pour un contraste AA sur les couleurs sémantiques.
-EXTRA_THEME_KEYS = {"light": {"greenTextColor"}, "dark": set()}
-FONT_STACK = "Inter, system-ui, sans-serif"
+EXTRA_THEME_KEYS = {"light": set(), "dark": set()}
+FONT_STACK = "'Atkinson Hyperlegible', system-ui, 'Segoe UI', Roboto, sans-serif"
+HEADING_STACK = "Sora, system-ui, 'Segoe UI', Roboto, sans-serif"
+CODE_STACK = "'JetBrains Mono', 'Cascadia Mono', Consolas, ui-monospace, monospace"
 
 # Une icône Material par page, jamais partagée (EXPERIENCE.md, Information Architecture),
 # déclarée une seule fois dans src/app/modules.py (menu et liens de l'accueil). Le favicon est
@@ -91,7 +109,7 @@ def _config():
 
 @pytest.mark.parametrize("mode", ["light", "dark"])
 def test_theme_colors_match_design(mode):
-    """[theme.light] et [theme.dark] reprennent le tableau Colors de DESIGN.md."""
+    """[theme.light] et [theme.dark] reprennent le thème de la charte v2.1."""
     section = _config()["theme"][mode]
 
     assert {k: section.get(k) for k in EXPECTED_THEME[mode]} == EXPECTED_THEME[mode]
@@ -118,17 +136,27 @@ def _mix(color: str, background: str, share: float) -> str:
     return "#{:02X}{:02X}{:02X}".format(*rgb)
 
 
-def test_dark_primary_compromise_does_not_degrade():
-    """Primaire sombre : compromis documenté dans DESIGN.md (note `primary-dark`), aucune valeur
-    ne donnant 4,5:1 partout. Planchers : les valeurs de la charte générique (2026-11-03)
-    arrondies au centième inférieur, pour qu'un changement de couleur ne dégrade pas un
-    contraste sans le dire."""
-    dark = _config()["theme"]["dark"]
-    primary, background = dark["primaryColor"], dark["backgroundColor"]
-    assert _contrast("#FFFFFF", primary) >= 5.06  # texte blanc des boutons principaux
-    assert _contrast(primary, background) >= 3.68  # valeur d'un curseur
-    assert _contrast(primary, dark["secondaryBackgroundColor"]) >= 3.35  # curseur, barre latérale
-    assert _contrast(primary, _mix(primary, background, 0.10)) >= 3.40  # pastille choisie
+@pytest.mark.parametrize("mode", ["light", "dark"])
+def test_theme_pairs_keep_the_charte_contrasts(mode):
+    """Texte 4,5:1 ; contour (`borderColor`), primaire et séries 3:1, sur le fond et sur le fond
+    secondaire, dans les deux thèmes."""
+    section = _config()["theme"][mode]
+    for bg in (section["backgroundColor"], section["secondaryBackgroundColor"]):
+        for key in ("textColor", "linkColor", "primaryColor", "greenTextColor"):
+            assert _contrast(section[key], bg) >= 4.5, f"{mode} {key} sur {bg}"
+        assert _contrast(section["borderColor"], bg) >= 3, f"{mode} borderColor sur {bg}"
+        for color in section["chartCategoricalColors"]:
+            assert _contrast(color, bg) >= 3, f"{mode} série {color} sur {bg}"
+
+
+def test_no_streamlit_button_is_primary():
+    """Charte : jamais `type="primary"` (Streamlit remplirait le bouton en primaryColor)."""
+    offenders = [
+        str(path.relative_to(ROOT_DIR))
+        for path in _app_sources() + sorted((APP_DIR / "tabs").rglob("*.py"))
+        if re.search(r"type\s*=\s*[\"']primary[\"']", path.read_text(encoding="utf-8"))
+    ]
+    assert offenders == []
 
 
 def test_theme_keys_exist_in_installed_streamlit():
@@ -148,22 +176,28 @@ def test_theme_keys_exist_in_installed_streamlit():
 
 
 def test_theme_shape_and_fonts():
-    """Rayon, pile de polices et Inter servie localement (aucun CDN)."""
+    """Rayon, pile de polices et polices de la charte servies localement (aucun CDN)."""
     theme = _config()["theme"]
 
-    assert theme["baseRadius"] == "12px"
+    assert theme["baseRadius"] == "10px"
     assert theme["font"] == FONT_STACK
-    assert theme["headingFont"] == FONT_STACK
+    assert theme["headingFont"] == HEADING_STACK
+    assert theme["codeFont"] == CODE_STACK
 
     faces = theme["fontFaces"]
-    assert {f["family"] for f in faces} == {"Inter"}
-    assert {f["style"] for f in faces} == {"normal", "italic"}
+    assert {(f["family"], f["weight"]) for f in faces} == {
+        ("Atkinson Hyperlegible", "400"),
+        ("Atkinson Hyperlegible", "700"),
+        ("Sora", "600"),
+        ("JetBrains Mono", "400"),
+    }
     for face in faces:
         url = face["url"]
         assert url.startswith("app/static/"), f"Police hors service statique : {url}"
         assert (APP_DIR / "static" / url.removeprefix("app/static/")).is_file(), url
 
-    assert (APP_DIR / "static" / "fonts" / "LICENSE.txt").is_file()
+    for licence in ("atkinsonhyperlegible", "sora", "jetbrainsmono"):
+        assert (APP_DIR / "static" / "fonts" / f"OFL-{licence}.txt").is_file()
     assert not list((APP_DIR / "static").rglob("*ptos*")), "Aucun fichier Aptos versionné"
 
 

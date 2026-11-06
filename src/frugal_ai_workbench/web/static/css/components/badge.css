@@ -23,15 +23,15 @@
 }
 
 .wl-badge-local {
-  --badge-tone: var(--color-chart-2);
+  --badge-tone: var(--color-accent-green);
 }
 
 .wl-badge-cloud {
-  --badge-tone: var(--color-chart-4);
+  --badge-tone: var(--color-alert);
 }
 
 .wl-badge-warning {
-  --badge-tone: var(--color-chart-4);
+  --badge-tone: var(--color-alert);
 }
 
 .wl-badge-label {

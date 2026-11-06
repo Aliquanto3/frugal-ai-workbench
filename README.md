@@ -12,6 +12,13 @@
 
 ![Démonstration de la v2 de Frugal AI Workbench : accueil, Arène des modèles, Discussion avec sources, Agent seul, Sobriété et matériel](docs/assets/v2-demo.gif)
 
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/media/charte-v2/v2-accueil-light.png">
+  <img alt="Accueil de la v2 à la charte générique v2.1 : thème sombre d'abord, boutons neutres, filet or sous le titre" src="docs/media/charte-v2/v2-accueil-dark.png">
+</picture>
+
+*Le GIF ci-dessus date d'avant la charte générique v2.1 (couleurs et polices de l'ancienne charte) : il est à refaire. La capture fixe ci-dessus, en clair et en sombre, montre l'interface actuelle ; la v1 Streamlit est dans `docs/media/charte-v2/v1-accueil-dark.png` et `v1-accueil-light.png`.*
+
 *La v2, en cinq captures à la suite : l'accueil et sa démo recommandée, l'Arène des modèles et son classement, la Discussion avec le passage source surligné, un agent qui appelle un outil, puis la Sobriété et matériel. Les captures viennent de doublures (modèles et réponses simulés, document fictif, aucune donnée réelle) : voir [Captures](#captures-de-la-v2).*
 
 ---
@@ -56,6 +63,8 @@ Ces images sont produites par [`scripts/readme_captures_v2.py`](scripts/readme_c
 La v1 reste la version livrée tant que la v2 ne l'a pas remplacée ; sa documentation suit.
 
 ![Démonstration de la v1 de Frugal AI Workbench : accueil, chat dans l'Arène des modèles, agent qui audite la machine, page Sobriété et matériel](docs/assets/demo.gif)
+
+*GIF de la v1 d'avant la charte v2.1, à refaire : voir les captures `docs/media/charte-v2/v1-accueil-*.png`.*
 
 *En 40 secondes : on pose une question à un modèle et on voit sa vitesse et son CO₂, un agent outillé audite la machine, puis la page Sobriété suit la charge et les émissions. Vidéo source : [`docs/assets/demo.mp4`](docs/assets/demo.mp4). Cette capture utilise un modèle cloud ; l'usage visé reste un petit modèle local via Ollama.*
 

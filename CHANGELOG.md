@@ -1,5 +1,34 @@
 # Changelog
 
+## 2.0.0a10 (2026-11-06)
+
+### Contenu
+
+- Migration vers la charte générique v2.1, sombre d'abord. Thème Streamlit (`.streamlit/config.toml`)
+  : primaire, fonds, texte et contour de la charte, six séries de graphique, `greenTextColor` sur
+  `succes`. Les boutons Streamlit ne sont plus `type="primary"` (contour `trait-fort`, jamais un aplat
+  bleu).
+- Jetons de la v2 (`tokens.css`) : sombre en `:root`, clair sous `prefers-color-scheme` et
+  `data-theme="light"`. Bouton principal en aplat neutre (`--color-button`, `--color-on-button`),
+  focus `--color-focus`, `--color-line-strong` pour les contours de contrôles, `--color-alert` et
+  `--color-accent-green` pour l'alerte et le succès, filet or sous le titre de l'accueil.
+- Polices : Atkinson Hyperlegible (texte), Sora 600 (titres), JetBrains Mono (code), servies
+  localement avec leurs licences OFL ; Inter retirée.
+- Favicon, pictogramme et logotype de la charte ; graphiques d'outils en palette v2.1.
+- Tests : `tests/v2/unit/test_charte.py` (valeurs, contrastes 4,5:1 et 3:1 dans les deux thèmes, aucun
+  bleu en aplat de bouton, polices) ; tests du thème Streamlit et des E2E réalignés.
+- Captures : `docs/media/charte-v2/` (v2 et v1, sombre et clair).
+
+### Limites
+
+- Le choix de thème de la v2 reste « Clair » par défaut (`core/theme.js`) ; seul le CSS passe en
+  sombre d'abord.
+- Streamlit : `st.badge` garde ses couleurs nommées (vert, orange), hors thème ; le logotype suit
+  `prefers-color-scheme`, pas le menu de thème de Streamlit.
+- GIF du README (v1 et v2) périmés, à refaire ; captures historiques de `docs/assets/`,
+  `docs/audits/`, `docs/maquette-v2*`, `benchmarks/` et notes antérieures inchangées.
+- Les tests E2E (Playwright) sont réalignés par lecture : ils ne sont pas joués en local.
+
 ## 2.0.0a9 (2026-11-03)
 
 ### Changement de nom

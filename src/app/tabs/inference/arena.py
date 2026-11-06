@@ -581,7 +581,6 @@ Format : Uniquement le chiffre (ex: 85)."""
         with btn_col1:
             start_btn = st.button(
                 "Lancer la comparaison",
-                type="primary",
                 width="stretch",
                 disabled=not enough_models,
             )

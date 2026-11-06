@@ -29,7 +29,7 @@ STREAMLIT_DEPRECATION_RE = re.compile(r"streamlit.*deprecat", re.I)
 CONFIG_PATH = Path(__file__).resolve().parents[2] / ".streamlit" / "config.toml"
 
 # Couleur primaire claire (DESIGN.md, .streamlit/config.toml) et rouge par défaut de Streamlit.
-PRIMARY_LIGHT_RGB = "rgb(11, 107, 120)"
+BUTTON_BORDER_LIGHT_RGB = "rgb(128, 138, 151)"  # borderColor clair (trait-fort)
 STREAMLIT_RED_RGB = "rgb(255, 75, 75)"
 
 # Libellés remplacés par le lexique (EXPERIENCE.md) : jamais affichés.
@@ -95,29 +95,30 @@ def test_page_structure(page, app, path, title):
     assert h.main(page).get_by_text("Ollama ne répond pas").count() == 0
 
 
-def test_primary_action_uses_brand_color(page, app):
-    """L'action principale est bleu pétrole (#0B6B78), jamais le rouge par défaut de Streamlit
-    (U4) ; police Inter chargée localement, fond blanc en thème clair (U1)."""
+def test_buttons_are_outlined_never_filled_in_streamlit_red_or_blue(page, app):
+    """Charte v2.1 : les boutons sont en contour (aucun `type="primary"`), jamais le rouge par
+    défaut de Streamlit (U4) ; polices de la charte chargées localement, fond de la charte en
+    thème clair (U1)."""
     # Base documentaire vide (app neuve) : « Importer des documents » est l'action principale.
     h.goto(page, app.base_url, DOCUMENTS.url_path)
     button = h.main(page).get_by_role("button", name="Importer des documents")
-    assert button.evaluate("e => getComputedStyle(e).backgroundColor") == PRIMARY_LIGHT_RGB
+    assert button.evaluate("e => getComputedStyle(e).borderColor") == BUTTON_BORDER_LIGHT_RGB
     colors = page.locator("button").evaluate_all(
         "els => els.map(e => getComputedStyle(e).backgroundColor)"
     )
     assert STREAMLIT_RED_RGB not in colors
-    # Inter déclarée par @font-face et servie localement (on vérifie la déclaration et le
+    # Polices déclarées par @font-face et servie localement (on vérifie la déclaration et le
     # fichier, pas la police employée).
     families = page.evaluate("[...document.fonts].map(f => f.family.replace(/[\"']/g, ''))")
-    assert "Inter" in families, families
+    assert {"Atkinson Hyperlegible", "Sora", "JetBrains Mono"} <= set(families), families
     for face in toml.load(CONFIG_PATH)["theme"]["fontFaces"]:
-        if face["family"] == "Inter":
+        if True:
             response = page.request.get(f"{app.base_url}/{face['url']}")
             assert response.status == 200, f"{face['url']} : HTTP {response.status}"
     background = page.locator('[data-testid="stApp"]').evaluate(
         "e => getComputedStyle(e).backgroundColor"
     )
-    assert background == "rgb(255, 255, 255)"
+    assert background == "rgb(246, 248, 251)"
 
 
 def test_agent_tools_all_visible_email_unconfigured(page, app):
