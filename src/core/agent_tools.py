@@ -45,6 +45,9 @@ matplotlib.use("Agg")
 
 # Répertoire de sortie pour les fichiers générés
 OUTPUT_DIR = Path("outputs")
+# Séries des graphiques d'outils : palette claire de la charte générique v2.1 (cat-1 à cat-6),
+# dans l'ordre ; images destinées à un document, donc sur fond clair.
+CHART_COLORS = ("#1D5BC2", "#A87A00", "#1F8155", "#B83A75", "#C24D1B", "#0E7C8C")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # Configuration Email (à mettre dans .env en production)
@@ -511,16 +514,22 @@ def _generate_chart_impl(
         plt.figure(figsize=(10, 6))
 
         if chart_type == "bar":
-            plt.bar(labels, values, color="#3498db")
+            plt.bar(labels, values, color=CHART_COLORS[0])
             plt.ylabel("Valeurs")
 
         elif chart_type == "line":
-            plt.plot(labels, values, marker="o", linewidth=2, color="#2ecc71")
+            plt.plot(labels, values, marker="o", linewidth=2, color=CHART_COLORS[2])
             plt.ylabel("Valeurs")
             plt.grid(True, alpha=0.3)
 
         elif chart_type == "pie":
-            plt.pie(values, labels=labels, autopct="%1.1f%%", startangle=90)
+            plt.pie(
+                values,
+                labels=labels,
+                autopct="%1.1f%%",
+                startangle=90,
+                colors=CHART_COLORS,
+            )
 
         else:
             return f"Erreur : Type de graphique non supporté : {chart_type}. Utilisez 'bar', 'line' ou 'pie'"

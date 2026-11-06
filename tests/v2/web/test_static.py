@@ -52,7 +52,7 @@ def test_page_and_files_forbid_any_resource_outside_the_origin(client):
         ("/static/tokens.css", "text/css"),
         ("/static/icons.svg", "image/svg+xml"),
         ("/static/i18n/fr/shell.json", "application/json"),
-        ("/static/fonts/InterVariable.woff2", "font/woff2"),
+        ("/static/fonts/sora-latin-600-normal.woff2", "font/woff2"),
     ],
 )
 def test_files_have_the_media_type_modules_need(client, path, media_type):

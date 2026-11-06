@@ -10,19 +10,13 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 import pytest
-import yaml
 
 from .static_files import catalog as merged_catalog
-from .static_files import (
-    components_css,
-)
+from .static_files import components_css
 from .static_files import registry_text as merged_registry
 
 ROOT = Path(__file__).resolve().parents[3]
 STATIC = ROOT / "src" / "frugal_ai_workbench" / "web" / "static"
-DESIGN = (
-    ROOT / "_bmad-output/planning-artifacts/ux-designs/ux-frugal-ai-workbench-2026-09-26/DESIGN.md"
-)
 TEXT_SUFFIXES = {".html", ".css", ".js", ".json", ".svg"}
 
 # Pictogrammes emoji (même périmètre que tests/e2e/helpers.py) : plans pictographiques, symboles
@@ -38,82 +32,7 @@ def text_files(*, suffixes: set[str] = TEXT_SUFFIXES) -> list[Path]:
     )
 
 
-# --- Dérive des jetons (UX-DR1) ---------------------------------------------------------------
-
-
-def design_tokens(design_text: str) -> dict:
-    front_matter = design_text.split("---")[1]
-    return yaml.safe_load(front_matter)
-
-
-def css_variables(css: str, selector: str) -> dict[str, str]:
-    block = re.search(re.escape(selector) + r"\s*\{(.*?)\}", css, re.DOTALL)
-    assert block, f"bloc {selector} absent"
-    return {
-        name: " ".join(value.split())
-        for name, value in re.findall(r"(--[\w-]+)\s*:\s*([^;]+);", block.group(1))
-    }
-
-
-def token_drift(css: str, design: dict) -> list[str]:
-    """Écarts entre `tokens.css` et le front matter de DESIGN.md (vide = identiques)."""
-    light = css_variables(css, ":root")
-    dark = css_variables(css, ':root[data-theme="dark"]')
-    problems: list[str] = []
-
-    def compare(where: dict[str, str], name: str, expected: str, label: str) -> None:
-        actual = where.get(name)
-        if actual is None:
-            problems.append(f"{label} : {name} absent de tokens.css")
-        elif actual.upper() != expected.upper():
-            problems.append(f"{label} : {name} vaut {actual}, DESIGN.md dit {expected}")
-
-    for key, value in design["colors"].items():
-        if key.endswith("-dark"):
-            compare(dark, f"--color-{key.removesuffix('-dark')}", value, f"couleur {key}")
-        else:
-            compare(light, f"--color-{key}", value, f"couleur {key}")
-    compare(light, "--radius", design["rounded"]["DEFAULT"], "rayon DEFAULT")
-    compare(light, "--radius-full", design["rounded"]["full"], "rayon full")
-    for role in ("body", "heading", "metric-value", "caption"):
-        compare(light, f"--font-{role}", design["typography"][role]["fontFamily"], f"police {role}")
-    return problems
-
-
-def test_tokens_css_mirrors_design_md():
-    css = (STATIC / "tokens.css").read_text(encoding="utf-8")
-    design = design_tokens(DESIGN.read_text(encoding="utf-8"))
-    assert token_drift(css, design) == []
-    # Le miroir est complet : 4 séries de graphique, clair et sombre.
-    assert {f"chart-{n}" for n in range(1, 5)} <= set(design["colors"])
-
-
-@pytest.mark.parametrize(
-    ("old", "new", "fragment"),
-    [
-        ("--color-primary: #0B6B78", "--color-primary: #0B6B79", "--color-primary"),
-        ("--color-surface-alt: #161D21", "--color-surface-alt: #161D22", "--color-surface-alt"),
-        ("--radius: 12px", "--radius: 10px", "rayon DEFAULT"),
-        (
-            "--font-body: Inter, system-ui, sans-serif",
-            "--font-body: Inter, sans-serif",
-            "police body",
-        ),
-    ],
-)
-def test_the_drift_test_fails_when_a_value_differs(old, new, fragment):
-    css = (STATIC / "tokens.css").read_text(encoding="utf-8")
-    assert old in css
-    design = design_tokens(DESIGN.read_text(encoding="utf-8"))
-    drift = token_drift(css.replace(old, new, 1), design)
-    assert drift and any(fragment in line for line in drift), drift
-
-
-def test_the_drift_test_fails_when_a_token_is_missing():
-    css = (STATIC / "tokens.css").read_text(encoding="utf-8")
-    design = design_tokens(DESIGN.read_text(encoding="utf-8"))
-    drift = token_drift(css.replace("--color-risk: #B42318;", "", 1), design)
-    assert any("--color-risk" in line and "absent" in line for line in drift)
+# --- Jetons de la charte : tests/v2/unit/test_charte.py (valeurs, contrastes, couleurs en dur) ---
 
 
 def test_css_outside_tokens_has_no_hard_coded_color():
@@ -163,9 +82,9 @@ def test_vendor_directory_exists_and_third_party_code_carries_its_license():
 
 
 def test_fonts_and_icons_ship_their_licenses():
-    assert "SIL Open Font License" in (STATIC / "fonts/LICENSE.txt").read_text(encoding="utf-8")
+    assert "SIL Open Font License" in (STATIC / "fonts/OFL-sora.txt").read_text(encoding="utf-8")
     assert "Apache License" in (STATIC / "icons.LICENSE.txt").read_text(encoding="utf-8")
-    assert (STATIC / "fonts/InterVariable.woff2").stat().st_size > 10_000
+    assert (STATIC / "fonts/sora-latin-600-normal.woff2").stat().st_size > 10_000
 
 
 # --- index.html : références, textes -----------------------------------------------------------
@@ -636,20 +555,25 @@ def test_the_switch_css_follows_the_wl_switch_tokens_of_design_md():
     track = rule(".switch input")
     assert "var(--color-ink-secondary)" in track and "var(--color-surface-alt)" in track
     assert "var(--radius-full)" in track
-    assert "var(--color-primary-fill)" in rule(".switch input:checked")
+    assert "var(--color-button)" in rule(".switch input:checked")
     assert "var(--color-surface)" in rule(".switch input::before")
 
 
-def test_the_theme_module_offers_light_dark_and_system_with_light_as_the_default():
+def test_the_theme_module_offers_light_dark_and_system_and_falls_back_to_dark():
     text = (STATIC / "core/theme.js").read_text(encoding="utf-8")
     assert 'THEMES = ["light", "dark", "system"]' in text
-    assert "prefers-color-scheme: dark" in text and '"change"' in text
-    assert 'return THEMES.includes(stored) ? stored : "light"' in text
+    # Règle de la charte : choix mémorisé, sinon préférence du système, sinon sombre.
+    assert "prefers-color-scheme: light" in text and '"change"' in text
+    assert 'return THEMES.includes(stored) ? stored : "system"' in text
+    assert 'systemMedia()?.matches ? "light" : "dark"' in text
+    assert 'return choice === "light" ? "light" : "dark"' in text
     html = (STATIC / "index.html").read_text(encoding="utf-8")
     assert re.findall(r'name="theme" value="(\w+)"', html) == ["light", "dark", "system"]
-    # Aucun troisième jeu de jetons : `tokens.css` n'a que `:root` et `data-theme="dark"`.
+    # Aucun troisième jeu de jetons : `tokens.css` a le sombre (`:root`) et le clair, une fois sous
+    # `prefers-color-scheme` (sans data-theme) et une fois sous `data-theme="light"`.
     tokens = (STATIC / "tokens.css").read_text(encoding="utf-8")
-    assert 'data-theme="system"' not in tokens and "prefers-color-scheme" not in tokens
+    assert 'data-theme="system"' not in tokens
+    assert tokens.count("@media (prefers-color-scheme: light)") == 1
 
 
 def test_every_stylesheet_has_balanced_braces():

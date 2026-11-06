@@ -71,7 +71,7 @@ _PALETTE_OPTIONS = (
 
 
 def palette_size() -> int:
-    """Nombre de couleurs de la palette catégorielle configurée (4 pour la charte), la plus
+    """Nombre de couleurs de la palette catégorielle configurée (6 pour la charte v2.1), la plus
     courte des palettes claire et sombre ; 10 (palette par défaut de Streamlit) sinon."""
     sizes = []
     for option in _PALETTE_OPTIONS:

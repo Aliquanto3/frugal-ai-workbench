@@ -282,7 +282,7 @@ def confirm_email_dialog() -> None:
 
     col_send, col_cancel = st.columns(2)
     with col_send:
-        send = st.button(EMAIL_SEND_LABEL, type="primary", icon=":material/send:", width="stretch")
+        send = st.button(EMAIL_SEND_LABEL, icon=":material/send:", width="stretch")
     with col_cancel:
         cancel = st.button(EMAIL_CANCEL_LABEL, width="stretch")
 

@@ -125,7 +125,7 @@ def test_the_chart_is_styled_from_tokens_only_and_the_css_is_linked():
         r"#[0-9a-fA-F]{3,8}\b", chart
     )  # segments et graphique : aucune couleur en dur
     assert "var(--color-chart-" in source("components/wl-chart-svg.js")
-    assert "var(--color-primary-fill)" in chart and "var(--color-on-primary)" in chart  # A19
+    assert "var(--color-button)" in chart and "var(--color-on-button)" in chart  # A19
     assert '<link rel="stylesheet" href="/static/arena-results.css">' in source("index.html")
     assert "WlChartSvg" in source("components/index.js")
 

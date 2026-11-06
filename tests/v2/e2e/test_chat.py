@@ -397,7 +397,7 @@ def render(page, *sources):
 
 
 def test_the_markdown_subset(chat):
-    (title, html, link, items, fence, plain, quote) = render(
+    title, html, link, items, fence, plain, quote = render(
         chat,
         "# Titre\n\nTexte **gras**, *italique* et `code`.",
         "<img src=x onerror=alert(1)> & <b>gras</b>",
@@ -426,15 +426,13 @@ def test_the_markdown_subset(chat):
 def test_a_pathological_link_pattern_renders_in_linear_time(chat):
     # « [a](b » répété : sans borne sur le libellé et l'adresse, le rendu était quadratique
     # (environ 260 ms pour 50 Ko, à chaque rendu de 150 ms pendant le flux).
-    elapsed = chat.evaluate(
-        """async () => {
+    elapsed = chat.evaluate("""async () => {
         const { renderMarkdown } = await import('/static/core/markdown.js');
         const source = '[a](b'.repeat(10000);
         const started = performance.now();
         renderMarkdown(source);
         return performance.now() - started;
-    }"""
-    )
+    }""")
     assert elapsed < 60, elapsed
 
 
@@ -796,7 +794,7 @@ def test_every_request_stays_on_127_0_0_1(chat, server, traffic):
     assert traffic.urls and all(url.startswith("http://127.0.0.1") for url in traffic.urls)
 
 
-# --- A19 : le bouton plein est sur `primary-fill` (décision Q1) ---------------------------------
+# --- A19 : le bouton plein est sur `button` (décision Q1) ---------------------------------
 
 
 def contrast_violations(page):
@@ -805,9 +803,9 @@ def contrast_violations(page):
 
 
 @pytest.mark.parametrize(
-    ("theme", "fill"), [("light", "rgb(11, 107, 120)"), ("dark", "rgb(79, 193, 207)")]
+    ("theme", "fill"), [("light", "rgb(18, 24, 33)"), ("dark", "rgb(232, 236, 242)")]
 )
-def test_the_first_filled_button_uses_primary_fill_with_white_text_and_passes_color_contrast(
+def test_the_first_filled_button_uses_button_fill_with_white_text_and_passes_color_contrast(
     chat, theme, fill
 ):
     chat.evaluate(f"document.documentElement.setAttribute('data-theme', '{theme}')")
@@ -815,7 +813,7 @@ def test_the_first_filled_button_uses_primary_fill_with_white_text_and_passes_co
     style = send.evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color]; }"
     )
-    on_primary = "rgb(255, 255, 255)" if theme == "light" else "rgb(5, 34, 39)"
+    on_primary = "rgb(255, 255, 255)" if theme == "light" else "rgb(15, 19, 24)"
     assert style == [fill, on_primary]
     count, report = contrast_violations(chat)  # sans exclusion
     assert count == 0, report
@@ -830,7 +828,7 @@ def test_a_disabled_filled_button_is_told_by_colors_not_by_opacity(chat, server)
     style = send.evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color, s.opacity]; }"
     )
-    assert style == ["rgb(22, 29, 33)", "rgb(162, 175, 183)", "1"]
+    assert style == ["rgb(30, 36, 44)", "rgb(163, 173, 186)", "1"]
     count, report = contrast_violations(chat)
     assert count == 0, report
 

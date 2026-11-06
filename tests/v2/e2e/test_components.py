@@ -40,13 +40,12 @@ def test_every_badge_carries_a_text_and_the_icon_of_its_origin(components):
 
 
 def test_badge_tones_follow_the_origin(components):
-    tones = components.evaluate(
-        """() => [...document.querySelectorAll('#badges wl-badge')].map(
-            (badge) => getComputedStyle(badge).getPropertyValue('--badge-tone').trim())"""
-    )
-    # Local = chart-2 (vert), Cloud = chart-4 (or), inconnu et étiquettes = gris.
-    assert tones[0] == "#1D7337" and tones[1] == "#9A7400"
-    assert tones[2] == tones[3] == tones[4] == tones[7] == "#737E85"
+    tones = components.evaluate("""() => [...document.querySelectorAll('#badges wl-badge')].map(
+            (badge) => getComputedStyle(badge).getPropertyValue('--badge-tone').trim())""")
+    # Local = accent-green (succès), Cloud = alert (alerte), inconnu et étiquettes = neutre.
+    # Thème clair de la charte v2.1 (casse : celle du CSS).
+    assert [tones[0].upper(), tones[1].upper()] == ["#1B7043", "#9A4A00"]
+    assert tones[2].upper() == tones[3].upper() == tones[4].upper() == tones[7].upper() == "#6E7886"
 
 
 def test_badge_follows_its_attribute(components):
@@ -112,11 +111,9 @@ def test_error_without_content_is_hidden_and_a_new_error_replaces_it(components)
     error = components.locator("#error")
     components.evaluate("document.getElementById('error').error = null")
     assert error.is_hidden()
-    components.evaluate(
-        """document.getElementById('error').error = {
+    components.evaluate("""document.getElementById('error').error = {
             code: 'ollama_down', message: 'Ollama ne répond pas sur ce poste.',
-            action: 'Lancez Ollama, puis réessayez.', detail: null }"""
-    )
+            action: 'Lancez Ollama, puis réessayez.', detail: null }""")
     assert error.locator("p").all_inner_texts() == [
         "Ollama ne répond pas sur ce poste.",
         "Lancez Ollama, puis réessayez.",

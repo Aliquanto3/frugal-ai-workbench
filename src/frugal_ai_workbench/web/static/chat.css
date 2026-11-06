@@ -296,16 +296,16 @@ wl-chat-thread + wl-run-status {
   margin-top: 0.5rem;
 }
 
-/* Bouton plein (A19) : l'aplat violet qui porte du texte blanc est `primary-fill`. */
+/* Bouton plein (A19) : l'aplat neutre `button` porte `on-button`. */
 .chat-send {
-  border-color: var(--color-primary-fill);
-  background: var(--color-primary-fill);
-  color: var(--color-on-primary);
+  border-color: var(--color-button);
+  background: var(--color-button);
+  color: var(--color-on-button);
   font-weight: 600;
 }
 
 .chat-send:hover {
-  background: var(--color-primary-fill);
+  background: var(--color-button-hover);
 }
 
 /* Désactivé : jamais par la seule opacité. */

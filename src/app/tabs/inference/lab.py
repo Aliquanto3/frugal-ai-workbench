@@ -154,7 +154,7 @@ def render_lab_tab(
         )
 
         # Bouton Action
-        if st.button("Lancer le test", type="primary", width="stretch"):
+        if st.button("Lancer le test", width="stretch"):
             if lab_model_tag:
                 st.session_state.lab_trigger = True
             else:

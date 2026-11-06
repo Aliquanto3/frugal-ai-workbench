@@ -77,7 +77,6 @@ def open_download_modal(installed_names: list):
     # Bouton d'action
     if st.button(
         "Ajouter le modèle",
-        type="primary",
         icon=":material/download:",
         width="stretch",
         disabled=not target_tag,
@@ -271,6 +270,6 @@ def render_manager_tab(installed_models_list: list):
 
     # BOUTON D'AJOUT (En dessous du titre mais logique définie ici pour utiliser installed_names)
     with c_add:
-        if st.button("Ajouter un modèle", type="primary", icon=":material/add:", width="stretch"):
+        if st.button("Ajouter un modèle", icon=":material/add:", width="stretch"):
             # On passe la liste des noms installés au modal pour filtrage
             open_download_modal(installed_friendly_names)

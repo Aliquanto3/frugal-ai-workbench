@@ -53,7 +53,6 @@ from src.app.ui import (
     render_badge,
     weak_judge_text,
 )
-
 from src.core.answer_carbon import answer_carbon_mg
 from src.core.eval_engine import EvalResult
 from src.core.inference_service import retry_interrupted
@@ -267,7 +266,7 @@ def render_rag_eval_tab(
             height=100,
         )
 
-        run_btn = st.button("Lancer l'évaluation", type="primary", width="stretch")
+        run_btn = st.button("Lancer l'évaluation", width="stretch")
 
     # 2. LOGIQUE D'EXÉCUTION
     if run_btn:

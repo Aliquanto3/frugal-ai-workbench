@@ -105,12 +105,12 @@
   border-inline-start-width: 4px;
 }
 
-/* Passage surligné (D-21) : aplat violet sous texte blanc (A19), en plus du gras. */
+/* Passage surligné (D-21) : aplat léger `action-tint` sous l'encre, en plus du gras. */
 .wl-source-mark {
   padding: 0 0.125rem;
   border-radius: 4px;
-  background: var(--color-primary-fill);
-  color: var(--color-on-primary);
+  background: var(--color-action-tint);
+  color: var(--color-ink);
   font-weight: 600;
 }
 

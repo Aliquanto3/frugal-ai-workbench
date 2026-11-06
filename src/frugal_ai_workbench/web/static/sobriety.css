@@ -34,7 +34,7 @@
 }
 
 .sob-card:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--color-focus);
 }
 
 .sob-card .wl-metric-value {
@@ -78,7 +78,7 @@
 }
 
 .sob-warn .icon {
-  color: var(--color-chart-4);
+  color: var(--color-alert);
 }
 
 .sob-card .btn {
@@ -168,7 +168,7 @@
 }
 
 .sob-section-head h2:focus-visible {
-  outline: 3px solid var(--color-primary);
+  outline: 3px solid var(--color-focus);
 }
 
 .sob-reset {
@@ -189,7 +189,7 @@
 
 /* Désactivé : jamais par la seule opacité, la raison est écrite dessous. */
 .sob-reset-button:disabled {
-  border-color: var(--color-line);
+  border-color: var(--color-line-strong);
   background: var(--color-surface-alt);
   color: var(--color-ink-secondary);
   cursor: not-allowed;

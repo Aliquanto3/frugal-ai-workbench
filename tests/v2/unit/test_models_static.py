@@ -122,7 +122,7 @@ def test_the_stylesheet_has_no_color_of_its_own_and_the_files_stay_under_the_siz
     css = read_static("models.css")
     assert not re.search(r"#[0-9a-fA-F]{3,8}\b|\b(rgb|hsl)a?\(", css)
     block = re.search(r"\.models-install-named \{(.*?)\}", css, re.DOTALL)
-    assert block and "var(--color-primary-fill)" in block.group(1)
-    assert "var(--color-on-primary)" in block.group(1)
+    assert block and "var(--color-button)" in block.group(1)
+    assert "var(--color-on-button)" in block.group(1)
     for name in (*FILES, "models.css"):
         assert len(read_static(name).splitlines()) <= 600, name

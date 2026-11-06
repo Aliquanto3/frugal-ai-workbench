@@ -180,7 +180,7 @@ def test_the_stylesheet_is_linked_after_the_components_and_has_no_hard_coded_col
     css = source("evaluation.css")
     assert "@import" not in css
     assert not re.search(r"#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(", css)
-    assert "var(--color-primary-fill)" in css and "var(--color-on-primary)" in css
+    assert "var(--color-button)" in css and "var(--color-on-button)" in css
     # Un état ne tient jamais à la couleur seule : l'état d'une étape est un texte.
     assert "eval-step-state" in code("screens/eval-steps.js")
 

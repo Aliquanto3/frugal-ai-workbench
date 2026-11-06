@@ -63,10 +63,8 @@ def row(page, name: str):
 
 
 def table_rows(page) -> list[list[str]]:
-    return page.evaluate(
-        """() => [...document.querySelectorAll('wl-data-table tbody tr')]
-            .map((tr) => [...tr.children].map((cell) => cell.innerText.trim()))"""
-    )
+    return page.evaluate("""() => [...document.querySelectorAll('wl-data-table tbody tr')]
+            .map((tr) => [...tr.children].map((cell) => cell.innerText.trim()))""")
 
 
 # --- Écran : zone de dépôt, état vide, onglets -------------------------------------------------
@@ -256,13 +254,11 @@ def test_the_single_cancel_button_sits_above_the_rows_and_only_shows_during_an_i
     choose(page, txt("a.txt"), txt("b.txt", "Un autre."))
     row(page, "a.txt").locator(".docs-import-state").filter(has_text="Vectorisation 0/5").wait_for()
     assert cancel.is_visible()
-    above = page.evaluate(
-        """() => {
+    above = page.evaluate("""() => {
           const button = document.querySelector('.docs-imports-cancel').getBoundingClientRect();
           const list = document.querySelector('.docs-imports').getBoundingClientRect();
           return button.bottom <= list.top;
-        }"""
-    )
+        }""")
     assert above
     cancel.focus()  # le lot finit pendant que le focus est sur le bouton, qui disparaît
     wait_summary(page, "6 extraits ajoutés depuis 2 documents.")
@@ -338,8 +334,7 @@ def test_cancelling_once_the_files_are_sent_stops_the_run_the_server_started(doc
     # interception Playwright couperait la progression d'envoi.
     page, server = docs
     script_embedder(server, page, {"sleep_s": 30})
-    page.evaluate(
-        """() => {
+    page.evaluate("""() => {
           window.__hold = new Promise((resolve) => { window.__release = resolve; });
           const base = Object.getOwnPropertyDescriptor(XMLHttpRequestEventTarget.prototype, "onload");
           Object.defineProperty(XMLHttpRequest.prototype, "onload", {
@@ -349,8 +344,7 @@ def test_cancelling_once_the_files_are_sent_stops_the_run_the_server_started(doc
               base.set.call(this, handler && ((event) => window.__hold.then(() => handler.call(this, event))));
             },
           });
-        }"""
-    )
+        }""")
     choose(page, txt("a.txt"), txt("b.txt", "Un autre."))
     line = row(page, "a.txt")
     line.locator(".docs-import-state").filter(has_text="Envoi 100").wait_for()
@@ -382,8 +376,7 @@ def test_a_lost_upload_response_after_cancel_still_stops_the_run_the_server_star
     wait_ready(page)
     page.locator(".docs-card").wait_for()
     script_embedder(server, page, {"sleep_s": 30})
-    page.evaluate(
-        """() => {
+    page.evaluate("""() => {
           window.__hold = new Promise((resolve) => { window.__release = resolve; });
           const base = Object.getOwnPropertyDescriptor(XMLHttpRequestEventTarget.prototype, "onload");
           Object.defineProperty(XMLHttpRequest.prototype, "onload", {
@@ -393,8 +386,7 @@ def test_a_lost_upload_response_after_cancel_still_stops_the_run_the_server_star
               base.set.call(this, handler && ((event) => window.__hold.then(() => this.onerror(event))));
             },
           });
-        }"""
-    )
+        }""")
     choose(page, txt("a.txt"))
     row(page, "a.txt").locator(".docs-import-state").filter(has_text="Envoi 100").wait_for()
     listed = f"{server.base_url}/api/rag/documents"
@@ -566,15 +558,15 @@ def test_a_failed_document_is_in_the_table_but_not_in_the_ready_count(docs):
 
 
 @pytest.mark.parametrize(
-    ("theme", "fill"), [("light", "rgb(11, 107, 120)"), ("dark", "rgb(79, 193, 207)")]
+    ("theme", "fill"), [("light", "rgb(18, 24, 33)"), ("dark", "rgb(232, 236, 242)")]
 )
-def test_the_filled_button_uses_primary_fill_with_white_text(docs, theme, fill):
+def test_the_filled_button_uses_the_neutral_button_with_its_own_text(docs, theme, fill):
     page, _ = docs
     page.evaluate(f"document.documentElement.setAttribute('data-theme', '{theme}')")
     style = page.get_by_role("button", name="Importer des documents").evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color]; }"
     )
-    on_primary = "rgb(255, 255, 255)" if theme == "light" else "rgb(5, 34, 39)"
+    on_primary = "rgb(255, 255, 255)" if theme == "light" else "rgb(15, 19, 24)"
     assert style == [fill, on_primary]
 
 

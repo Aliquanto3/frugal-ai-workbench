@@ -1,47 +1,55 @@
-/* Jetons de DESIGN.md (UX-DR1). Miroir : tests/v2/unit/test_shell_static.py échoue si une couleur,
-   un rayon ou une famille de police diffère. Thème clair par défaut ; le sombre s'applique par
-   data-theme="dark" sur <html> (core/theme.js). Aucune autre couleur en dur dans le CSS. */
+/* Jetons de la charte générique v2.1 (skills/charte/dist/charte.css), rattachés aux noms de
+   variables du dépôt. Sombre d'abord : le sombre est en :root ; le clair vient de
+   prefers-color-scheme (sans data-theme) ou de data-theme="light", posé par core/theme.js ;
+   data-theme="dark" force le sombre. tests/v2/unit/test_charte.py vérifie les valeurs, les
+   contrastes et l'absence de couleur en dur ailleurs. */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
-  --color-primary: #0B6B78;
-  --color-primary-fill: #0B6B78;
-  --color-on-primary: #FFFFFF;
-  --color-surface: #FFFFFF;
-  --color-surface-alt: #EEF1F0;
-  --color-ink: #141A1F;
-  --color-ink-secondary: #4B5560;
-  --color-gray-graphic: #737E85;
-  --color-line: #C9D1D3;
-  --color-link: #0B6B78;
-  --color-accent-green: #1D7337;
-  --color-risk: #B42318;
-  --color-chart-1: #0B7A86;
-  --color-chart-2: #1D7337;
-  --color-chart-3: #2F68D0;
-  --color-chart-4: #9A7400;
+  --color-primary: #8DB0F7; /* primaire : liens, icônes, texte d'accent */
+  --color-button: #E8ECF2; /* bouton : aplat neutre, jamais le bleu */
+  --color-button-hover: #FFFFFF;
+  --color-on-button: #0F1318;
+  --color-focus: #9EC0FF;
+  --color-surface: #0F1318; /* fond de page */
+  --color-surface-alt: #1E242C;
+  --color-ink: #E8ECF2;
+  --color-ink-secondary: #A3ADBA;
+  --color-gray-graphic: #8792A0; /* neutre : pastilles et traits non textuels */
+  --color-line: #333B46; /* trait : séparateurs et cartes */
+  --color-line-strong: #67717E; /* trait-fort : contour des contrôles, 3:1 */
+  --color-link: #8DB0F7;
+  --color-accent-green: #8CC7A0; /* succes */
+  --color-risk: #EE8C84; /* erreur */
+  --color-alert: #F0A35E; /* alerte-texte */
+  --color-accent: #E3C26B; /* accent */
+  --color-accent-fill: #E3C26B; /* accent-aplat : grands aplats seulement, jamais un filet ni une marque fine */
+  --color-chart-1: #8DB0F7;
+  --color-chart-2: #E3C26B;
+  --color-chart-3: #8CC7A0;
+  --color-chart-4: #E58FB8;
 
   /* Couleur d'icône par module (story 9.7, maquette docs/maquette-v2-mise-en-page/). */
   --color-icon-arena: var(--color-chart-1);
   --color-icon-bench: var(--color-chart-3);
-  --color-icon-documents: var(--color-chart-2);
-  --color-amber-strong: #A66E00; /* dédié : chart-4 clair ne tient pas 3:1, voir DECISIONS.md */
-  --color-icon-models: var(--color-amber-strong);
+  --color-icon-documents: var(--color-accent-green);
+  --color-icon-models: var(--color-accent);
 
-  /* Aplat léger de la primaire sur les zones d'action (nav courante, bandeau du juge, carte choisie). */
-  --color-action-tint: rgba(11, 107, 120, 0.08);
+  /* Aplat léger de la primaire sur les zones d'action (nav courante, bandeau du juge, carte choisie) :
+     primaire-doux. */
+  --color-action-tint: #1A2742;
 
-  --radius: 12px;
-  --radius-full: 9999px;
+  --radius: 10px;
+  --radius-full: 999px;
 
-  /* Inter servie par base.css, sinon la police du système, sinon sans-serif. */
-  --font-body: Inter, system-ui, sans-serif;
-  --font-heading: Inter, system-ui, sans-serif;
-  --font-metric-value: Inter, system-ui, sans-serif;
-  --font-caption: Inter, system-ui, sans-serif;
+  /* Polices de la charte servies par base.css, sans CDN. */
+  --font-body: 'Atkinson Hyperlegible', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: Sora, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-metric-value: Sora, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-caption: 'Atkinson Hyperlegible', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-code: 'JetBrains Mono', 'Cascadia Mono', Consolas, ui-monospace, monospace;
 
-  /* Rampe typographique (absente de DESIGN.md sauf section-label/field-label, non comparée par le
-     test de dérive pour les autres). */
+  /* Rampe typographique (taille-legende à taille-titre de la charte, rem). */
   --text-section-label: 0.8125rem; /* intertitres "Réglages", "Scénario"... */
   --text-body: 1rem;
   --text-field-label: 1.0625rem; /* libellé des champs mis en avant (prompt, modèle) */
@@ -50,28 +58,60 @@
   --text-metric-value: 2.5rem;
 }
 
-:root[data-theme="dark"] {
-  color-scheme: dark;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
 
-  --color-primary: #4FC1CF;
-  --color-primary-fill: #4FC1CF;
-  --color-on-primary: #052227;
-  --color-surface: #0E1316;
-  --color-surface-alt: #161D21;
-  --color-ink: #E7ECEE;
-  --color-ink-secondary: #A2AFB7;
-  --color-line: #56605F;
-  --color-link: #86D8E2;
-  --color-accent-green: #7CC59B;
-  --color-risk: #F28B82;
-  --color-chart-1: #4FC1CF;
-  --color-chart-2: #7CC59B;
-  --color-chart-3: #7FA8F5;
-  --color-chart-4: #E2BE45;
-  --color-icon-arena: var(--color-chart-1);
-  --color-icon-bench: var(--color-chart-3);
-  --color-icon-documents: var(--color-chart-2);
-  --color-amber-strong: #E2BE45;
-  --color-icon-models: var(--color-amber-strong);
-  --color-action-tint: rgba(79, 193, 207, 0.10);
+    --color-primary: #1D5BC2;
+    --color-button: #121821;
+    --color-button-hover: #2A3442;
+    --color-on-button: #FFFFFF;
+    --color-focus: #1F5FD1;
+    --color-surface: #F6F8FB;
+    --color-surface-alt: #ECF0F5;
+    --color-ink: #121821;
+    --color-ink-secondary: #4F5A68;
+    --color-gray-graphic: #6E7886;
+    --color-line: #CED5DF;
+    --color-line-strong: #808A97;
+    --color-link: #1D5BC2;
+    --color-accent-green: #1B7043;
+    --color-risk: #B3261E;
+    --color-alert: #9A4A00;
+    --color-accent: #8F6300;
+    --color-accent-fill: #E0B54A;
+    --color-chart-1: #1D5BC2;
+    --color-chart-2: #A87A00;
+    --color-chart-3: #1F8155;
+    --color-chart-4: #B83A75;
+    --color-action-tint: #E1EAFA;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-primary: #1D5BC2;
+  --color-button: #121821;
+  --color-button-hover: #2A3442;
+  --color-on-button: #FFFFFF;
+  --color-focus: #1F5FD1;
+  --color-surface: #F6F8FB;
+  --color-surface-alt: #ECF0F5;
+  --color-ink: #121821;
+  --color-ink-secondary: #4F5A68;
+  --color-gray-graphic: #6E7886;
+  --color-line: #CED5DF;
+  --color-line-strong: #808A97;
+  --color-link: #1D5BC2;
+  --color-accent-green: #1B7043;
+  --color-risk: #B3261E;
+  --color-alert: #9A4A00;
+  --color-accent: #8F6300;
+  --color-accent-fill: #E0B54A;
+  --color-chart-1: #1D5BC2;
+  --color-chart-2: #A87A00;
+  --color-chart-3: #1F8155;
+  --color-chart-4: #B83A75;
+  --color-action-tint: #E1EAFA;
 }

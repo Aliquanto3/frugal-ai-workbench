@@ -113,12 +113,12 @@ def test_the_panel_is_always_open_from_1024px_without_a_fold_button():
     assert re.search(r"@media \(min-width: 1024px\) \{\s*\.docs-chat-layout \{", docs)
 
 
-def test_the_passage_highlight_is_a_violet_fill_under_white_text_without_hard_coded_color():
+def test_the_passage_highlight_is_a_light_tint_under_the_ink_without_hard_coded_color():
     css = source("components.css")
     block = re.search(r"\.wl-source-mark \{(.*?)\}", css, re.DOTALL)
     assert block
-    assert "var(--color-primary-fill)" in block.group(1)
-    assert "var(--color-on-primary)" in block.group(1)
+    assert "var(--color-action-tint)" in block.group(1)
+    assert "var(--color-ink)" in block.group(1)
 
 
 def test_the_screen_is_registered_as_available_and_the_panel_is_a_shared_component():

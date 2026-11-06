@@ -22,6 +22,9 @@ from frugal_ai_workbench.agents.tools.workspace import Workspace
 
 CHART_TYPES = ("bar", "line", "pie")
 MAX_CHART_POINTS = 1000
+# Séries des graphiques d'outils : palette claire de la charte générique v2.1 (cat-1 à cat-6),
+# dans l'ordre ; images destinées à un document, donc sur fond clair.
+CHART_COLORS = ("#1D5BC2", "#A87A00", "#1F8155", "#B83A75", "#C24D1B", "#0E7C8C")
 
 
 def _stamp() -> str:
@@ -183,14 +186,14 @@ def generate_chart(
         FigureCanvasAgg(fig)
         ax = fig.subplots()
         if chart_type == "bar":
-            ax.bar(labels, values, color="#3498db")
+            ax.bar(labels, values, color=CHART_COLORS[0])
             ax.set_ylabel("Valeurs")
         elif chart_type == "line":
-            ax.plot(labels, values, marker="o", linewidth=2, color="#2ecc71")
+            ax.plot(labels, values, marker="o", linewidth=2, color=CHART_COLORS[2])
             ax.set_ylabel("Valeurs")
             ax.grid(True, alpha=0.3)
         else:
-            ax.pie(values, labels=labels, autopct="%1.1f%%", startangle=90)
+            ax.pie(values, labels=labels, autopct="%1.1f%%", startangle=90, colors=CHART_COLORS)
         ax.set_title(str(title), fontsize=14, fontweight="bold")
         fig.tight_layout()
         fig.savefig(target, format="png", dpi=150, bbox_inches="tight")

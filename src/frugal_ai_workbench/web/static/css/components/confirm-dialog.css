@@ -21,7 +21,7 @@
 .wl-dialog-consequence {
   margin: 0 0 1rem;
   padding: 0.5rem 0.75rem;
-  border-inline-start: 6px solid var(--color-chart-4);
+  border-inline-start: 6px solid var(--color-alert);
   border-radius: var(--radius);
   background: var(--color-surface-alt);
 }

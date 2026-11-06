@@ -51,8 +51,7 @@ def registry_modules(page) -> list[dict]:
     `id`, `entry` (chemin du premier écran `available`, `None` s'il n'en a aucun), `available` et
     `planned` (nombre de leurs écrans). Les tests de la coquille lisent leurs comptes ici (décision
     du 2026-10-19) : livrer un écran ne les change pas."""
-    return page.evaluate(
-        """async () => {
+    return page.evaluate("""async () => {
             const registry = await import('/static/core/registry.js');
             return registry.MODULES.map((module) => ({
                 id: module.id,
@@ -60,8 +59,7 @@ def registry_modules(page) -> list[dict]:
                 available: module.screens.filter((s) => s.status === 'available').length,
                 planned: module.screens.filter((s) => s.status === 'planned').length,
             }));
-        }"""
-    )
+        }""")
 
 
 def open_display_menu(page):
@@ -91,8 +89,7 @@ def shell_timings(page, url: str) -> dict:
     # Mesuré depuis `responseStart` (Navigation Timing), pas depuis le début de la navigation
     # (décision du 2026-10-23) : on retranche le temps de réponse du serveur de test, pour que le
     # budget garantisse le rendu du front sans attendre l'API, pas la vitesse du serveur de test.
-    return page.evaluate(
-        """() => {
+    return page.evaluate("""() => {
             const nav = performance.getEntriesByType('navigation')[0];
             return {
                 fcp: performance.getEntriesByName('first-contentful-paint')[0].startTime
@@ -100,8 +97,7 @@ def shell_timings(page, url: str) -> dict:
                 ready: performance.getEntriesByName('shell-ready')[0].startTime
                     - nav.responseStart,
             };
-        }"""
-    )
+        }""")
 
 
 # Décision du 2026-10-23 : en CI, le budget n'est vérifié que sur Ubuntu (20 manches vertes dans
@@ -121,8 +117,7 @@ def test_shell_renders_under_300_ms_without_waiting_for_the_api_ollama_stopped(p
     # (deuxième meilleur 333 ms, au-dessus du budget) à cause du temps de réponse du serveur de test,
     # pas du rendu du front. Une seule manche : la relance d'un test instable revient à l'outillage,
     # pas au test. Chaque appel `fetch` vers `/api/` note si `shell-ready` était posé.
-    page.add_init_script(
-        """(() => {
+    page.add_init_script("""(() => {
             const original = window.fetch.bind(window);
             window.__apiCalls = [];
             window.fetch = (input, init) => {
@@ -132,8 +127,7 @@ def test_shell_renders_under_300_ms_without_waiting_for_the_api_ollama_stopped(p
                 });
                 return original(input, init);
             };
-        })()"""
-    )
+        })()""")
     best, runs = second_best_of_five_many(lambda: shell_timings(page, f"{server.base_url}/"))
     assert best["fcp"] < SHELL_BUDGET_MS and best["ready"] < SHELL_BUDGET_MS, runs
     assert len(module_links(page).all()) == len(MODULES) == len(registry_modules(page))
@@ -241,8 +235,7 @@ def test_unknown_route_goes_back_to_home(page, server, route):
 
 def test_each_route_sets_title_focuses_the_h1_announces_and_is_fast(shell):
     # Écran de test branché sur le registre réel : le routeur est celui de l'application.
-    shell.evaluate(
-        """async () => {
+    shell.evaluate("""async () => {
             const registry = await import('/static/core/registry.js');
             const screen = registry.SCREENS.find((s) => s.id === 'arena-compare');
             window.__calls = [];
@@ -259,8 +252,7 @@ def test_each_route_sets_title_focuses_the_h1_announces_and_is_fast(shell):
                     },
                 };
             };
-        }"""
-    )
+        }""")
     measure = """(hash) => new Promise((resolve) => {
         const started = performance.now();
         location.hash = hash;
@@ -346,7 +338,7 @@ def test_dark_theme_applies_without_reload_and_is_remembered(shell):
     assert shell.evaluate("window.__same_page") is True  # aucun rechargement
     assert shell.evaluate("localStorage.getItem('wl.theme')") == "dark"
     background = shell.evaluate("getComputedStyle(document.body).backgroundColor")
-    assert background == "rgb(14, 19, 22)"  # surface-dark #0E1316
+    assert background == "rgb(15, 19, 24)"  # fond sombre #0F1318
 
     shell.reload()
     wait_ready(shell)
@@ -390,16 +382,17 @@ def test_the_system_theme_follows_prefers_color_scheme_live_and_is_remembered(sh
     shell.keyboard.press("Escape")
 
     set_system_scheme(shell, "dark")
+    choose_theme(shell, "Clair")  # « Système » est déjà le défaut : un autre choix d'abord
     choose_theme(shell, "Système")
     assert shell.get_attribute("html", "data-theme") == "dark"
     assert shell.get_attribute("html", "data-theme-choice") == "system"
     assert shell.evaluate("localStorage.getItem('wl.theme')") == "system"
-    assert shell.evaluate("getComputedStyle(document.body).backgroundColor") == "rgb(14, 19, 22)"
+    assert shell.evaluate("getComputedStyle(document.body).backgroundColor") == "rgb(15, 19, 24)"
 
     # Le réglage du système change pendant que la page est ouverte : le thème suit, sans recharger.
     set_system_scheme(shell, "light")
     wait_for(shell, "() => document.documentElement.dataset.theme === 'light'")
-    assert shell.evaluate("getComputedStyle(document.body).backgroundColor") == "rgb(255, 255, 255)"
+    assert shell.evaluate("getComputedStyle(document.body).backgroundColor") == "rgb(246, 248, 251)"
     set_system_scheme(shell, "dark")
     wait_for(shell, "() => document.documentElement.dataset.theme === 'dark'")
     assert shell.evaluate("window.__same_page") is True
@@ -412,15 +405,41 @@ def test_the_system_theme_follows_prefers_color_scheme_live_and_is_remembered(sh
     assert shell.get_by_label("Système").is_checked()
 
 
-def test_an_explicit_choice_ignores_the_system_and_light_stays_the_default(page, server):
-    set_system_scheme(page, "dark")  # un système sombre ne change pas le défaut : Clair
+def test_without_any_system_preference_system_gives_dark(page, server):
+    # Chromium assimile « no-preference » au clair : on retire la préférence du système en faisant
+    # répondre `matchMedia` « aucune correspondance » aux requêtes `prefers-color-scheme`.
+    page.add_init_script("""
+        const real = window.matchMedia.bind(window);
+        window.matchMedia = (query) => {
+          const media = real(query);
+          if (!/prefers-color-scheme/.test(query)) return media;
+          return { matches: false, media: query, onchange: null,
+            addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {},
+            dispatchEvent() { return false; } };
+        };
+        """)
     page.goto(f"{server.base_url}/")
     wait_ready(page)
-    assert page.get_attribute("html", "data-theme") == "light"
-    assert page.get_attribute("html", "data-theme-choice") == "light"
+    assert page.get_attribute("html", "data-theme") == "dark"
+    assert page.get_attribute("html", "data-theme-choice") == "system"
     open_display_menu(page)
-    assert page.get_by_label("Clair").is_checked()
+    assert page.get_by_label("Système").is_checked()
+
+
+def test_an_explicit_choice_ignores_the_system_and_system_follows_it(page, server):
+    # Charte : sans choix mémorisé, « Système » suit la préférence du système.
+    set_system_scheme(page, "dark")
+    page.goto(f"{server.base_url}/")
+    wait_ready(page)
+    assert page.get_attribute("html", "data-theme") == "dark"
+    assert page.get_attribute("html", "data-theme-choice") == "system"
+    open_display_menu(page)
+    assert page.get_by_label("Système").is_checked()
     page.keyboard.press("Escape")
+    set_system_scheme(page, "light")
+    wait_for(page, "() => document.documentElement.dataset.theme === 'light'")
+    set_system_scheme(page, "dark")
+    wait_for(page, "() => document.documentElement.dataset.theme === 'dark'")
 
     choose_theme(page, "Clair")
     set_system_scheme(page, "light")
@@ -486,13 +505,13 @@ def test_projection_and_cloud_are_switches_with_the_same_wl_switch_rendering(she
     assert {k: cloud[k] for k in shared} == {k: projection[k] for k in shared}
     assert (cloud["label"], projection["label"]) == ("Autoriser le cloud", "Mode projection")
     # Éteint : piste surface-alt bordée ink-secondary, curseur surface, icône cachée.
-    assert cloud["background"] == "rgb(238, 241, 240)" and cloud["border"] == "rgb(75, 85, 96)"
-    assert cloud["thumb"] == "rgb(255, 255, 255)" and cloud["check"] == "0"
+    assert cloud["background"] == "rgb(236, 240, 245)" and cloud["border"] == "rgb(79, 90, 104)"
+    assert cloud["thumb"] == "rgb(246, 248, 251)" and cloud["check"] == "0"
     assert cloud["radius"] != "0px" and cloud["width"] == "44px" and cloud["height"] == "24px"
 
 
 @pytest.mark.parametrize(
-    ("theme", "fill"), [("light", "rgb(11, 107, 120)"), ("dark", "rgb(79, 193, 207)")]
+    ("theme", "fill"), [("light", "rgb(18, 24, 33)"), ("dark", "rgb(232, 236, 242)")]
 )
 def test_switch_state_reads_in_the_shape_not_only_in_the_color(shell, theme, fill):
     if theme == "dark":
@@ -552,12 +571,13 @@ def test_theme_still_applies_when_storage_is_blocked(page, server):
     assert page.get_attribute("html", "data-theme") == "dark"
 
 
-def test_font_stack_is_local_inter_then_system_then_sans_serif(shell, server):
+def test_font_stack_is_the_charte_one_served_locally(shell, server):
     stack = shell.evaluate("getComputedStyle(document.body).fontFamily")
-    assert stack == "Inter, system-ui, sans-serif"
+    assert stack.startswith('"Atkinson Hyperlegible", system-ui')
     families = shell.evaluate("[...document.fonts].map((face) => face.family.replaceAll('\"', ''))")
-    assert families.count("Inter") == 2  # droite et italique
-    font = shell.request.get(f"{server.base_url}/static/fonts/InterVariable.woff2")
+    assert families.count("Atkinson Hyperlegible") == 2  # 400 et 700
+    assert "Sora" in families and "JetBrains Mono" in families
+    font = shell.request.get(f"{server.base_url}/static/fonts/sora-latin-600-normal.woff2")
     assert font.ok and font.headers["content-type"] == "font/woff2"
 
 

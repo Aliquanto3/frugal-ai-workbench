@@ -69,12 +69,9 @@ def render_thinking_block(
         expanded: État initial (ouvert/fermé)
     """
     with st.expander(title, expanded=expanded):
-        st.markdown(
-            f'<div style="background-color: #f0f0f0; padding: 10px; '
-            f'border-radius: 5px; font-style: italic; color: #555;">'
-            f"{thought}</div>",
-            unsafe_allow_html=True,
-        )
+        # Couleurs du thème Streamlit (charte), sans style en ligne. Texte brut : un `*` ou un saut de
+        # ligne dans la réflexion du modèle ne casse pas le rendu, aucun Markdown ni HTML interprété.
+        st.text(thought)
 
 
 def render_streaming_message(

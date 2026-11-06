@@ -388,8 +388,7 @@ def test_a_second_install_while_one_runs_joins_it_without_an_error(models_lenien
     ollama.scripts.append(
         [manifest(), layer("sha256:ccdd", 4 * GB, GB), resume, {"status": "success"}]
     )
-    models.evaluate(
-        """async () => {
+    models.evaluate("""async () => {
             await fetch('/api/models/pull', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -398,8 +397,7 @@ def test_a_second_install_while_one_runs_joins_it_without_an_error(models_lenien
             const input = document.getElementById('models-install-name');
             input.value = 'small:1b';
             input.form.requestSubmit();
-        }"""
-    )
+        }""")
     wait_for(
         models,
         "() => /Téléchargement/.test(document.querySelector('.models-catalog .wl-progress-text')?.textContent ?? '')",
@@ -458,17 +456,16 @@ def test_axe_finds_nothing_on_the_lists_the_progress_and_the_error(models, ollam
     assert_no_axe_violations(models, f"échec, thème {theme}")
 
 
-def test_the_filled_install_button_uses_primary_fill_with_white_text(models):
+def test_the_filled_install_button_uses_the_neutral_button_with_its_own_text(models):
     style = models.locator(".models-install-named").evaluate(
         "n => { const s = getComputedStyle(n); return [s.backgroundColor, s.color]; }"
     )
-    assert style == ["rgb(11, 107, 120)", "rgb(255, 255, 255)"]
+    assert style == ["rgb(18, 24, 33)", "rgb(255, 255, 255)"]
 
 
 def test_no_api_call_leaves_before_the_shell_is_ready(page, models_server, ollama):
     ollama.reset({"here:2b": GB})
-    page.add_init_script(
-        """(() => {
+    page.add_init_script("""(() => {
             const original = window.fetch.bind(window);
             window.__apiCalls = [];
             window.fetch = (input, init) => {
@@ -478,8 +475,7 @@ def test_no_api_call_leaves_before_the_shell_is_ready(page, models_server, ollam
                 });
                 return original(input, init);
             };
-        })()"""
-    )
+        })()""")
     page.goto(f"{models_server.base_url}/#/modeles")
     wait_ready(page)
     wait_for(

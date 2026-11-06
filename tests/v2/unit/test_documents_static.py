@@ -83,11 +83,11 @@ def test_the_screen_is_registered_as_available_and_its_stylesheet_is_linked():
     assert '<link rel="stylesheet" href="/static/documents.css">' in source("index.html")
 
 
-def test_the_filled_button_is_on_primary_fill_and_the_css_has_no_color_of_its_own():
+def test_the_filled_button_is_on_button_fill_and_the_css_has_no_color_of_its_own():
     css = source("documents.css")
     block = re.search(r"\.docs-primary \{(.*?)\}", css, re.DOTALL)
-    assert block and "var(--color-primary-fill)" in block.group(1)
-    assert "var(--color-on-primary)" in block.group(1)
+    assert block and "var(--color-button)" in block.group(1)
+    assert "var(--color-on-button)" in block.group(1)
     assert not re.search(r"#[0-9a-fA-F]{3,8}\b|\b(rgb|hsl)a?\(", css)
 
 

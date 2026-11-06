@@ -15,7 +15,7 @@ Démonstrateur Streamlit de petits modèles de langage locaux (Ollama), avec mes
 - Ne jamais commiter, vider ou réinitialiser `data/` (Chroma, logs, `models.json` local). Le dépôt est public : aucun document client, extrait de réponse RAG ou capture montrant du contenu indexé dans un commit ou une PR.
 - Ne jamais éditer `_bmad/` ni `.claude/skills/bmad-*`, régénérés par l'installeur : personnaliser via `_bmad/custom/*.toml`.
 - Ne jamais figer une version de dépendance de mémoire : la vérifier sur PyPI ou npm, ou par une installation réelle.
-- Toute évolution visuelle suit la charte générique (primaire `#0B6B78`, icônes Material, aucun emoji décoratif ; jetons dans `DESIGN.md`).
+- Toute évolution visuelle suit la charte générique (v2.1, sombre d'abord : jetons de `charte-generique`, boutons neutres jamais `type="primary"`, icônes Material, aucun emoji décoratif ; jetons web dans `tokens.css`).
 - Docs, messages de commit, PR et textes d'interface en français ; identifiants de code en anglais.
 
 ## Where things are
