@@ -256,7 +256,14 @@ def test_focus_ring_uses_the_focus_token():
 def test_the_home_title_carries_the_gold_rule():
     screens = (STATIC / "screens.css").read_text(encoding="utf-8")
     block = re.search(r"\.home-title::after \{(.*?)\}", screens, re.S)
-    assert block and "var(--color-accent-fill)" in block.group(1)
+    assert block
+    used = re.search(r"background(?:-color)?:\s*var\((--color-[\w-]+)\)", block.group(1))
+    assert used, "le filet doit prendre sa couleur d'un jeton"
+    token = used.group(1)
+    assert token == "--color-accent"  # jamais accent-aplat : 1,9:1 sur fond clair
+    for theme, values in (("dark", DARK), ("light", LIGHT)):
+        ratio = contrast(values[token], values["--color-surface"])
+        assert ratio >= 3, f"{theme} : filet or {values[token]} = {ratio:.2f}:1"
     assert 'element("h1", "home-title"' in (STATIC / "screens/home.js").read_text(encoding="utf-8")
 
 

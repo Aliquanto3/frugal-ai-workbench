@@ -23,7 +23,7 @@
   --color-risk: #EE8C84; /* erreur */
   --color-alert: #F0A35E; /* alerte-texte */
   --color-accent: #E3C26B; /* accent */
-  --color-accent-fill: #E3C26B; /* accent-aplat : filet or */
+  --color-accent-fill: #E3C26B; /* accent-aplat : grands aplats seulement, jamais un filet ni une marque fine */
   --color-chart-1: #8DB0F7;
   --color-chart-2: #E3C26B;
   --color-chart-3: #8CC7A0;
