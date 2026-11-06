@@ -408,8 +408,7 @@ def test_the_system_theme_follows_prefers_color_scheme_live_and_is_remembered(sh
 def test_without_any_system_preference_system_gives_dark(page, server):
     # Chromium assimile « no-preference » au clair : on retire la préférence du système en faisant
     # répondre `matchMedia` « aucune correspondance » aux requêtes `prefers-color-scheme`.
-    page.add_init_script(
-        """
+    page.add_init_script("""
         const real = window.matchMedia.bind(window);
         window.matchMedia = (query) => {
           const media = real(query);
@@ -418,8 +417,7 @@ def test_without_any_system_preference_system_gives_dark(page, server):
             addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {},
             dispatchEvent() { return false; } };
         };
-        """
-    )
+        """)
     page.goto(f"{server.base_url}/")
     wait_ready(page)
     assert page.get_attribute("html", "data-theme") == "dark"
